@@ -1,0 +1,161 @@
+﻿@model IEnumerable<OrderManagementSystem.Models.FreightOutbound>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProductQuantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreationDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EstimatedDeliveryDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrderShipDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cost)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Currency)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Recipient)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RecipientPostCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DestinationType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Platform)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ShippingCompany)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TransportDays)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RelatedAdjustmentOrder)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TrackingNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReferenceOrderNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FBAShipmentId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FBATrackingNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OutboundMethod)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Warehouse)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductQuantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreationDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstimatedDeliveryDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrderShipDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Currency)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Recipient)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RecipientPostCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DestinationType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Platform)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ShippingCompany)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TransportDays)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RelatedAdjustmentOrder)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TrackingNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReferenceOrderNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FBAShipmentId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FBATrackingNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OutboundMethod)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.UserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Warehouse.Warehouse_ID)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.OutboundOrderId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.OutboundOrderId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.OutboundOrderId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,139 @@
+﻿@model OrderManagementSystem.Models.FreightOutbound
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>FreightOutbound</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="OutboundOrderId" />
+            <div class="form-group">
+                <label asp-for="OrderType" class="control-label"></label>
+                <input asp-for="OrderType" class="form-control" />
+                <span asp-validation-for="OrderType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OrderStatus" class="control-label"></label>
+                <input asp-for="OrderStatus" class="form-control" />
+                <span asp-validation-for="OrderStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label"></label>
+                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Warehouse_ID" class="control-label"></label>
+                <select asp-for="Warehouse_ID" class="form-control" asp-items="ViewBag.Warehouse_ID"></select>
+                <span asp-validation-for="Warehouse_ID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductQuantity" class="control-label"></label>
+                <input asp-for="ProductQuantity" class="form-control" />
+                <span asp-validation-for="ProductQuantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreationDate" class="control-label"></label>
+                <input asp-for="CreationDate" class="form-control" />
+                <span asp-validation-for="CreationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EstimatedDeliveryDate" class="control-label"></label>
+                <input asp-for="EstimatedDeliveryDate" class="form-control" />
+                <span asp-validation-for="EstimatedDeliveryDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OrderShipDate" class="control-label"></label>
+                <input asp-for="OrderShipDate" class="form-control" />
+                <span asp-validation-for="OrderShipDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cost" class="control-label"></label>
+                <input asp-for="Cost" class="form-control" />
+                <span asp-validation-for="Cost" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Currency" class="control-label"></label>
+                <input asp-for="Currency" class="form-control" />
+                <span asp-validation-for="Currency" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Recipient" class="control-label"></label>
+                <input asp-for="Recipient" class="form-control" />
+                <span asp-validation-for="Recipient" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RecipientPostCode" class="control-label"></label>
+                <input asp-for="RecipientPostCode" class="form-control" />
+                <span asp-validation-for="RecipientPostCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DestinationType" class="control-label"></label>
+                <input asp-for="DestinationType" class="form-control" />
+                <span asp-validation-for="DestinationType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Platform" class="control-label"></label>
+                <input asp-for="Platform" class="form-control" />
+                <span asp-validation-for="Platform" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ShippingCompany" class="control-label"></label>
+                <input asp-for="ShippingCompany" class="form-control" />
+                <span asp-validation-for="ShippingCompany" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TransportDays" class="control-label"></label>
+                <input asp-for="TransportDays" class="form-control" />
+                <span asp-validation-for="TransportDays" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RelatedAdjustmentOrder" class="control-label"></label>
+                <input asp-for="RelatedAdjustmentOrder" class="form-control" />
+                <span asp-validation-for="RelatedAdjustmentOrder" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TrackingNumber" class="control-label"></label>
+                <input asp-for="TrackingNumber" class="form-control" />
+                <span asp-validation-for="TrackingNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReferenceOrderNumber" class="control-label"></label>
+                <input asp-for="ReferenceOrderNumber" class="form-control" />
+                <span asp-validation-for="ReferenceOrderNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FBAShipmentId" class="control-label"></label>
+                <input asp-for="FBAShipmentId" class="form-control" />
+                <span asp-validation-for="FBAShipmentId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FBATrackingNumber" class="control-label"></label>
+                <input asp-for="FBATrackingNumber" class="form-control" />
+                <span asp-validation-for="FBATrackingNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OutboundMethod" class="control-label"></label>
+                <input asp-for="OutboundMethod" class="form-control" />
+                <span asp-validation-for="OutboundMethod" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Freight_Outbound_All">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

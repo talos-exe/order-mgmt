@@ -1,0 +1,940 @@
+﻿@model IEnumerable<OrderManagementSystem.Models.FreightOutbound>
+
+@{
+    ViewData["Title"] = "Freight Outbound All";
+}
+
+
+<script src="~/js/chunk-lingxingUI.js"></script>
+<script src="~/js/chunk-libs.js"></script>
+<script src="~/js/app.js"></script>
+
+<div data-v-b3d0b4c2="" data-v-441fc658="" class="layout-container">
+    <div data-v-b3d0b4c2="" class="layout-left">
+        <div data-v-6a3d8818="" data-v-b3d0b4c2="" class="siderbar-container">
+            <div data-v-6a3d8818="" class="siderbar-logo">
+                <a data-v-6a3d8818="" href="/" class="router-link-active">
+                    <div data-v-4e5e9e7a="" data-v-6a3d8818="" class="logo-wrapper">
+                        <svg data-v-50a7d372="" data-v-4e5e9e7a="" aria-hidden="true" class="logo svg-icon">
+                            <use data-v-50a7d372="" xlink:href="#icon-logo">
+
+                            </use>
+                        </svg>
+                        <span data-v-4e5e9e7a="" class="title">
+                            领星 OMS
+                        </span>
+                    </div>
+                </a>
+            </div>
+            <div data-v-6a3d8818="" class="siderbar-menu">
+                <div data-v-6a3d8818="" class="el-scrollbar " style="height: 100%;">
+                    <div class="el-scrollbar__wrap" style="margin-bottom: -11px; margin-right: -11px;">
+                        <div class="el-scrollbar__view">
+                            <ul data-v-6a3d8818="" role="menubar" class="el-menu" style="height: 400px;">
+                                <li data-v-6a3d8818="" role="menuitem" tabindex="-1" class="el-menu-item" style="padding-left: 20px;">
+                                    <i data-v-6a3d8818="" class="xl-font xl_nav_home menu-icon">
+
+                                    </i>
+                                    <span data-v-6a3d8818="">
+                                        <span data-v-6a3d8818="">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                        </span>
+                                    </span>
+                                </li>
+
+                                <li data-v-6a3d8818="" role="menuitem" tabindex="-1" class="el-menu-item" style="padding-left: 20px;">
+                                    <i data-v-6a3d8818="" class="xl-font menu-icon xl_nav_order">
+
+                                    </i>
+                                    <span data-v-6a3d8818="">
+                                        <span data-v-6a3d8818="">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="PlatformOrder" asp-action="Platfrom_Order_All">Platform Orders</a>
+                                        </span>
+                                    </span>
+                                </li>
+
+                                <li data-v-6a3d8818="" role="menuitem" aria-haspopup="true" class="el-submenu">
+                                    <div class="el-submenu__title" style="padding-left: 20px;">
+                                        <i data-v-6a3d8818="" class="xl-font menu-icon xl_nav_operation">
+
+                                        </i>
+                                        <span data-v-6a3d8818="" class="submenu-title oneLine">
+                                            Warehouse
+                                        </span>
+                                        <i class="el-submenu__icon-arrow iconfont lx_arrow_down_rev">
+
+                                        </i>
+                                    </div>
+                                    <ul role="menu" class="el-menu el-menu--inline">
+                                        <li data-v-6a3d8818="" role="menuitem" tabindex="-1" class="el-menu-item" style="padding-left: 40px;">
+                                            <span data-v-6a3d8818="" class="submenu-title oneLine" style="overflow: hidden; text-overflow: ellipsis;">
+                                                <a class="nav-link text-dark" asp-area="" asp-controller="InboundOrder" asp-action="Inbound_All">Inbound</a>
+                                            </span>
+                                        </li>
+
+
+
+                                        <li data-v-6a3d8818="" role="menuitem" tabindex="-1" class="el-menu-item" style="padding-left: 40px;">
+                                            <span data-v-6a3d8818="" class="submenu-title oneLine" style="overflow: hidden; text-overflow: ellipsis;">
+                                                <a class="nav-link text-dark" asp-area="" asp-controller="ParcelOutbound" asp-action="Parcel_Outbound_All">Parcel Outbound</a>
+                                            </span>
+                                        </li>
+
+
+
+                                        <li data-v-6a3d8818="" role="menuitem" tabindex="-1" class="el-menu-item is-active" style="padding-left: 40px;">
+                                            <span data-v-6a3d8818="" class="submenu-title oneLine" style="overflow: hidden; text-overflow: ellipsis;">
+                                                <a class="nav-link text-dark" asp-area="" asp-controller="FreightOutbound" asp-action="Freight_Outbound_All">Freight Outbound</a>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li data-v-6a3d8818="" role="menuitem" aria-haspopup="true" class="el-submenu">
+                                    <div class="el-submenu__title" style="padding-left: 20px;">
+                                        <i data-v-6a3d8818="" class="xl-font menu-icon xl_nav_inventory">
+
+                                        </i>
+                                        <span data-v-6a3d8818="" class="submenu-title oneLine">
+                                            Inventory
+                                        </span>
+                                        <i class="el-submenu__icon-arrow iconfont lx_arrow_down_rev">
+
+                                        </i>
+                                    </div>
+                                    <ul role="menu" class="el-menu el-menu--inline" style="display: none;">
+                                        <li data-v-6a3d8818="" role="menuitem" tabindex="-1" class="el-menu-item" style="padding-left: 40px;">
+                                            <span data-v-6a3d8818="" class="submenu-title oneLine" style="overflow: hidden; text-overflow: ellipsis;">
+                                                Parcel Stock
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li data-v-6a3d8818="" role="menuitem" tabindex="-1" class="el-menu-item" style="padding-left: 20px;">
+                                    <i data-v-6a3d8818="" class="xl-font menu-icon xl_nav_product"></i><span data-v-6a3d8818="">
+                                        <span data-v-6a3d8818="">
+                                            <a class="nav-link text-dark" asp-area="" asp-controller="Inventory" asp-action="Products">Product</a>
+                                        </span>
+                                    </span>
+                                </li>
+
+                                <li data-v-6a3d8818="" role="menuitem" aria-haspopup="true" class="el-submenu">
+                                    <div class="el-submenu__title" style="padding-left: 20px;">
+                                        <i data-v-6a3d8818="" class="xl-font menu-icon xl_nav_bill">
+
+                                        </i>
+                                        <span data-v-6a3d8818="" class="submenu-title oneLine">
+                                            Accounting
+                                        </span>
+                                        <i class="el-submenu__icon-arrow iconfont lx_arrow_down_rev">
+
+                                        </i>
+                                    </div>
+                                    <ul role="menu" class="el-menu el-menu--inline" style="display: none;">
+                                        <li data-v-6a3d8818="" role="menuitem" tabindex="-1" class="el-menu-item" style="padding-left: 40px;">
+                                            <span data-v-6a3d8818="" class="submenu-title oneLine" style="overflow: hidden; text-overflow: ellipsis;">
+                                                My Account
+                                            </span>
+                                        </li>
+                                        <li data-v-6a3d8818="" role="menuitem" tabindex="-1" class="el-menu-item" style="padding-left: 40px;">
+                                            <span data-v-6a3d8818="" class="submenu-title oneLine" style="overflow: hidden; text-overflow: ellipsis;">
+                                                Funds Flow
+                                            </span>
+                                        </li>
+
+
+
+                                    </ul>
+                                </li>
+
+                                <li data-v-6a3d8818="" role="menuitem" aria-haspopup="true" class="el-submenu">
+                                    <div class="el-submenu__title" style="padding-left: 20px;">
+                                        <i data-v-6a3d8818="" class="xl-font menu-icon xl_nav_setting"></i>
+                                        <span data-v-6a3d8818="" class="submenu-title oneLine">
+                                            Setting
+                                        </span>
+                                        <i class="el-submenu__icon-arrow iconfont lx_arrow_down_rev"></i>
+                                    </div>
+                                    <ul role="menu" class="el-menu el-menu--inline">
+                                        <li data-v-6a3d8818="" role="menuitem" tabindex="-1" class="el-menu-item" style="padding-left: 40px;">
+                                            <span data-v-6a3d8818="" class="submenu-title oneLine" style="overflow: hidden; text-overflow: ellipsis;">
+                                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="User_Managment">User Managment</a>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="el-scrollbar__bar is-horizontal">
+                        <div class="el-scrollbar__thumb" style="transform: translateX(0%);">
+                        </div>
+                    </div>
+                    <div class="el-scrollbar__bar is-vertical">
+                        <div class="el-scrollbar__thumb" style="transform: translateY(0%);">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div data-v-6a3d8818="" class="siderbar-operation">
+                <div data-v-a48d311e="" data-v-6a3d8818="" class="hamburger-container" style="padding: 0px 15px;">
+                    <i data-v-a48d311e="" class="xl-font hamburger xl_nav_close_rev">
+
+                    </i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div data-v-b3d0b4c2="" class="layout-right">
+        <div data-v-b3d0b4c2="" class="layout-content">
+            <div data-v-03f6d477="" data-v-b3d0b4c2="" class="nav-header">
+                <div data-v-03f6d477="" class="views-tag">
+                    <div data-v-0f8ef51b="" data-v-03f6d477="" class="tags-view-container">
+                        <div data-v-0f8ef51b="" class="slick-list-fixed">
+                            <div data-v-0f8ef51b="" class="tags-view-item active" style="width: 100px;">
+                                <span data-v-0f8ef51b="" class="route-title">
+                                    Home
+                                </span>
+                            </div>
+                        </div>
+                        <div data-v-0f8ef51b="" id="slick-list-fixed" class="tags-view-wrapper">
+                        </div>
+
+                        <ul data-v-0f8ef51b="" class="contextmenu" style="left: 0px; top: 0px; display: none;">
+                            <li data-v-0f8ef51b="">Refresh</li>
+                            <li data-v-0f8ef51b=""> Close </li>
+                            <li data-v-0f8ef51b="">Close others</li>
+                            <li data-v-0f8ef51b="">Close all</li>
+                        </ul>
+                    </div>
+                </div>
+                <div data-v-03f6d477="" class="user-operation">
+                    <span data-v-578b1599="" data-v-03f6d477="" class="el-tooltip calc-freight item" aria-describedby="el-tooltip-4257" tabindex="-1">
+                        <i data-v-578b1599="" class="xl-font xl_calculator"></i>
+                        Trial
+                    </span>
+                    <span data-v-b2917530="" data-v-03f6d477="" class="help-span" inelement="0">
+                        <svg data-v-50a7d372="" data-v-b2917530="" aria-hidden="true" class="svg-icon question-icon" style="font-size: 18px;">
+                            <use data-v-50a7d372="" xlink:href="#icon-robot"></use>
+                        </svg>
+                    </span>
+                    <span data-v-03f6d477="" class="el-popover-span">
+
+                        <span class="el-popover__reference-wrapper">
+                            <i class="xl-font xl_tab_download task-icon el-popover__reference" aria-describedby="el-popover-7575" tabindex="0"></i>
+                        </span>
+                    </span>
+                    <div data-v-03f6d477="" class="international el-dropdown">
+                        <span class="user-operation-icon el-dropdown-selfdefine" aria-haspopup="list" aria-controls="dropdown-menu-1568" role="button" tabindex="0">
+                            <i class="xl-font xl_set"></i>
+                        </span>
+                        <ul class="el-dropdown-menu el-popper header-dropdown" style="display: none;" id="dropdown-menu-1568">
+                            <li tabindex="-1" class="el-dropdown-menu__item">
+
+                                Platform Account
+                            </li>
+                            <li tabindex="-1" class="el-dropdown-menu__item">
+
+                                Platform order rules
+                            </li>
+                            <li tabindex="-1" class="el-dropdown-menu__item">
+
+                                Product Mapping
+                            </li>
+                            <li tabindex="-1" class="el-dropdown-menu__item">
+
+                                Account
+                            </li>
+                            <li tabindex="-1" class="el-dropdown-menu__item">
+
+                                Role
+                            </li>
+                            <li tabindex="-1" class="el-dropdown-menu__item">
+
+                                Address Book
+                            </li>
+                            <li tabindex="-1" class="el-dropdown-menu__item">
+
+                                Login Log
+                            </li>
+                            <li tabindex="-1" class="el-dropdown-menu__item">
+
+                                Unit Preference
+                            </li>
+                        </ul>
+                    </div>
+                    <i data-v-0eb9df68="" data-v-03f6d477="" class="xl-font xl_table_data doc-icon" inelement="0"></i>
+                    <div data-v-03f6d477="" class="international el-dropdown">
+                        <span class="lang-dropdown-title el-dropdown-selfdefine" aria-haspopup="list" aria-controls="dropdown-menu-1726" role="button" tabindex="0">
+                            English
+                            <i class="xl-font xl_collapse_arrow_down_rev"></i>
+                        </span>
+                        <ul class="el-dropdown-menu el-popper" style="display: none;" id="dropdown-menu-1726">
+                            <li tabindex="-1" class="el-dropdown-menu__item">
+
+                                中文
+                            </li>
+                            <li aria-disabled="true" class="el-dropdown-menu__item is-disabled">
+
+                                English
+                            </li>
+                        </ul>
+                    </div>
+                    <div data-v-03f6d477="" class="avatar-container right-menu-item hover-effect el-dropdown">
+                        <div data-v-03f6d477="" class="avatar-wrapper el-dropdown-selfdefine" aria-haspopup="list" aria-controls="dropdown-menu-5408" role="button" tabindex="0">
+                            <i data-v-03f6d477="" class="xl-font xl_avatar user-avatar"></i>
+                            <span data-v-03f6d477="" class="user-name">ak001</span>
+                        </div>
+                        <ul data-v-03f6d477="" class="el-dropdown-menu el-popper" style="display: none;" id="dropdown-menu-5408">
+                            <a data-v-03f6d477="" href="/userCenter/profile" class="">
+                            <li data-v-03f6d477="" tabindex="-1" class="el-dropdown-menu__item">
+
+                                Profile
+                            </li>
+                            </a>
+                            <a data-v-03f6d477="" href="/userCenter/apiKeys" class="">
+                            <li data-v-03f6d477="" tabindex="-1" class="el-dropdown-menu__item el-dropdown-menu__item--divided">
+
+                                API Keys
+                            </li>
+                            </a>
+                            <li data-v-03f6d477="" tabindex="-1" class="el-dropdown-menu__item el-dropdown-menu__item--divided">
+
+                                <span data-v-03f6d477="" style="display: block;">
+                                    Log out
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+
+            <div data-v-94c756de="" data-v-59474a12="" data-v-6d8e2e5b="" class="list-container">
+                <div data-v-94c756de="" class="el-tabs el-tabs--top">
+                    <div class="el-tabs__header is-top">
+                        <div class="el-tabs__nav-wrap is-top">
+                            <div class="el-tabs__nav-scroll">
+                                <div role="tablist" class="el-tabs__nav is-top" style="transform: translateX(0px);">
+                                    <div class="el-tabs__active-bar is-top" style="width: 19px; transform: translateX(0px);">
+                                    </div>
+                                    <div id="tab--1" aria-controls="pane--1" role="tab" tabindex="0" class="el-tabs__item is-top is-active" style="overflow: hidden; text-overflow: ellipsis;" inelement="0" aria-selected="true">
+                                        <span data-v-94c756de=""> <a class="nav-link text-dark" asp-area="" asp-controller="FreightOutbound" asp-action="Freight_Outbound_All">All</a> </span>
+                                    </div>
+                                    <div id="tab-0" aria-controls="pane-0" role="tab" tabindex="-1" class="el-tabs__item is-top" style="overflow: hidden; text-overflow: ellipsis;" inelement="0">
+                                        <span data-v-94c756de=""> <span data-v-94c756de=""> <a class="nav-link text-dark" asp-area="" asp-controller="FreightOutbound" asp-action="Freight_Outbound_Drafts">Drafts</a> </span> </span>
+                                    </div>
+                                    <div id="tab-1" aria-controls="pane-1" role="tab" tabindex="-1" class="el-tabs__item is-top" style="overflow: hidden; text-overflow: ellipsis;">
+                                        <span data-v-94c756de=""> <span data-v-94c756de=""> <a class="nav-link text-dark" asp-area="" asp-controller="FreightOutbound" asp-action="Freight_Outbound_Awaiting">Awaiting</a> </span> </span>
+                                    </div>
+                                    <div id="tab-2" aria-controls="pane-2" role="tab" tabindex="-1" class="el-tabs__item is-top" style="overflow: hidden; text-overflow: ellipsis;">
+                                        <span data-v-94c756de=""> <span data-v-94c756de=""> <a class="nav-link text-dark" asp-area="" asp-controller="FreightOutbound" asp-action="Freight_Outbound_Completed">Completed</a> </span> </span>
+                                    </div>
+                                    <div id="tab-3" aria-controls="pane-3" role="tab" tabindex="-1" class="el-tabs__item is-top" style="overflow: hidden; text-overflow: ellipsis;" inelement="0">
+                                        <span data-v-94c756de=""> <span data-v-94c756de=""> <a class="nav-link text-dark" asp-area="" asp-controller="FreightOutbound" asp-action="Freight_Outbound_Void">Void</a> </span> </span>
+                                    </div>
+                                    <div id="tab-4" aria-controls="pane-4" role="tab" tabindex="-1" class="el-tabs__item is-top" style="overflow: hidden; text-overflow: ellipsis;" inelement="0">
+                                        <span data-v-94c756de=""> <span data-v-94c756de=""> <a class="nav-link text-dark" asp-area="" asp-controller="FreightOutbound" asp-action="Freight_Outbound_Exceptions">Exceptions</a> </span> </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="el-tabs__content">
+                        <div data-v-94c756de="" role="tabpanel" id="pane--1" aria-labelledby="tab--1" class="el-tab-pane" style="">
+                        </div>
+                        <div data-v-94c756de="" role="tabpanel" id="pane-0" aria-labelledby="tab-0" class="el-tab-pane" aria-hidden="true" style="display: none;">
+                        </div>
+                        <div data-v-94c756de="" role="tabpanel" aria-hidden="true" id="pane-1" aria-labelledby="tab-1" class="el-tab-pane" style="display: none;">
+                        </div>
+                        <div data-v-94c756de="" role="tabpanel" aria-hidden="true" id="pane-2" aria-labelledby="tab-2" class="el-tab-pane" style="display: none;">
+                        </div>
+                        <div data-v-94c756de="" role="tabpanel" aria-hidden="true" id="pane-3" aria-labelledby="tab-3" class="el-tab-pane" style="display: none;">
+                        </div>
+                        <div data-v-94c756de="" role="tabpanel" aria-hidden="true" id="pane-4" aria-labelledby="tab-4" class="el-tab-pane" style="display: none;">
+                        </div>
+                        <div data-v-94c756de="" role="tabpanel" aria-hidden="true" id="pane-5" aria-labelledby="tab-5" class="el-tab-pane" style="display: none;">
+                        </div>
+                    </div>
+                </div>
+                <div data-v-94c756de="" class="ak-search-wrapper">
+                    <div data-v-94c756de="" class="date-picker">
+                        <div data-v-94c756de="" class="el-select search-time-field el-select--small" style="width: 136px;">
+                            <div class="el-input el-input--small el-input--prefix el-input--suffix">
+                                <input type="text" readonly="readonly" autocomplete="off" placeholder="Created Time" class="el-input__inner">
+                                <span class="el-input__prefix">
+                                    <span class="fake-placeholder" style="display: none;"></span>
+                                    <span class="fake-select-label" style="display: none; overflow: hidden; text-overflow: ellipsis;">
+                                        Created time
+                                    </span>
+                                    <span class="fake-placeholder fake-placeholder-hidden">Created time</span>
+                                    <span class="el-input__follow" style="overflow: hidden; text-overflow: ellipsis;"></span>
+                                </span>
+                                <span class="el-input__suffix">
+                                    <span class="el-input__suffix-inner">
+                                        <i class="el-select__caret el-input__icon iconfont lx_arrow_down_rev is-reverse"></i>
+                                    </span>
+                                </span>
+                            </div>
+                            <div class="el-select-dropdown el-popper" style="width: unset; display: none; min-width: 136px;">
+                                <div class="el-scrollbar" style="">
+                                    <div class="el-select-dropdown__wrap el-scrollbar__wrap" style="margin-bottom: -11px; margin-right: -11px;">
+                                        <ul class="el-scrollbar__view el-select-dropdown__list">
+                                            <li data-v-94c756de="" class="el-select-dropdown__item selected">
+                                                <span></span>
+                                                <span class="checkBox" style="--color: undefined;"></span>
+                                                <span>Created time</span>
+                                            </li>
+                                            <li data-v-94c756de="" class="el-select-dropdown__item">
+                                                <span></span>
+                                                <span class="checkBox" style="--color: undefined;"></span>
+                                                <span>Submission time</span>
+                                            </li>
+                                            <li data-v-94c756de="" class="el-select-dropdown__item">
+                                                <span></span>
+                                                <span class="checkBox" style="--color: undefined;"></span>
+                                                <span>Receiving time</span>
+                                            </li>
+                                            <li data-v-94c756de="" class="el-select-dropdown__item">
+                                                <span></span>
+                                                <span class="checkBox" style="--color: undefined;"></span>
+                                                <span>Shelf time</span>
+                                            </li>
+                                            <li data-v-94c756de="" class="el-select-dropdown__item">
+                                                <span></span>
+                                                <span class="checkBox" style="--color: undefined;"></span>
+                                                <span>Cancellation Time</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="el-scrollbar__bar is-horizontal">
+                                        <div class="el-scrollbar__thumb" style="transform: translateX(0%);"></div>
+                                    </div>
+                                    <div class="el-scrollbar__bar is-vertical">
+                                        <div class="el-scrollbar__thumb" style="transform: translateY(0%);"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div data-v-94c756de="" class="el-date-editor el-range-editor el-input__inner el-date-editor--daterange el-range-editor--small" style="width: 202px;">
+                            <i class="el-input__icon el-range__icon iconfont lx_combo_date"></i>
+                            <input autocomplete="off" placeholder="Start Date" name="" class="el-range-input" style="width: 72px;">
+                            <span class="el-range-separator">-</span>
+                            <input autocomplete="off" placeholder="End date" name="" class="el-range-input" style="width: 72px;">
+                            <i class="el-input__icon el-range__close-icon iconfont"></i>
+                        </div>
+                    </div>
+                    <div data-v-94c756de="" class="search-last-item">
+                        <div data-v-94c756de="" id="advanced-input" class="ak-advanced-input">
+                            <div class="search-block ak-align-center">
+                                <div class="ak-relative ak-advanced-input__multi">
+                                    <div class="search-input el-input el-input-group el-input-group--prepend el-input--suffix" style="width: 320px;">
+                                        <div class="el-input-group__prepend">
+                                            <span>
+                                                <div class="el-select el-select--small" style="width: 171px;">
+                                                    <div class="el-input el-input--small el-input--prefix el-input--suffix">
+                                                        <input type="text" readonly="readonly" autocomplete="off" placeholder="Inbound order No." class="el-input__inner">
+                                                        <span class="el-input__prefix">
+                                                            <span class="fake-placeholder" style="display: none;"></span>
+                                                            <span class="fake-select-label" style="display: none; overflow: hidden; text-overflow: ellipsis;">
+                                                                Inbound order No.
+                                                            </span>
+                                                            <span class="fake-placeholder fake-placeholder-hidden">Inbound order No.</span>
+                                                            <span class="el-input__follow" style="overflow: hidden; text-overflow: ellipsis;"></span>
+                                                        </span>
+                                                        <span class="el-input__suffix">
+                                                            <span class="el-input__suffix-inner">
+                                                                <i class="el-select__caret el-input__icon iconfont lx_arrow_down_rev is-reverse"></i>
+                                                            </span>
+                                                        </span>
+                                                    </div>
+                                                    <div class="el-select-dropdown el-popper" style="width: unset; display: none; min-width: 171px;">
+                                                        <div class="el-scrollbar" style="">
+                                                            <div class="el-select-dropdown__wrap el-scrollbar__wrap" style="margin-bottom: -11px; margin-right: -11px;">
+                                                                <ul class="el-scrollbar__view el-select-dropdown__list">
+                                                                    <li class="el-select-dropdown__item selected">
+                                                                        <span></span>
+                                                                        <span class="checkBox" style="--color: undefined;"></span>
+                                                                        <span>Inbound order No.</span>
+                                                                    </li>
+                                                                    <li class="el-select-dropdown__item">
+                                                                        <span></span>
+                                                                        <span class="checkBox" style="--color: undefined;"></span>
+                                                                        <span>Reference order No.</span>
+                                                                    </li>
+                                                                    <li class="el-select-dropdown__item">
+                                                                        <span></span>
+                                                                        <span class="checkBox" style="--color: undefined;"></span>
+                                                                        <span>Tracking No.</span>
+                                                                    </li>
+                                                                    <li class="el-select-dropdown__item">
+                                                                        <span></span>
+                                                                        <span class="checkBox" style="--color: undefined;"></span>
+                                                                        <span>Remark</span>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="el-scrollbar__bar is-horizontal">
+                                                                <div class="el-scrollbar__thumb" style="transform: translateX(0%);"></div>
+                                                            </div>
+                                                            <div class="el-scrollbar__bar is-vertical">
+                                                                <div class="el-scrollbar__thumb" style="transform: translateY(0%);"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <input type="text" autocomplete="off" placeholder="Search content" class="el-input__inner">
+                                    </div>
+                                    <i class="iconfont lx_combo_search"></i>
+                                    <span class="el-popover-span">
+                                        <span class="el-popover__reference-wrapper">
+                                            <div class="el-popover__reference" aria-describedby="el-popover-8745" tabindex="0">
+                                                <span class="el-tooltip wrapper-icon ak-pointer" aria-describedby="el-tooltip-5758" tabindex="-1">
+                                                    <i class="advanced-input-icon iconfont lx_combo_filter"></i>
+                                                </span>
+                                            </div>
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <button data-v-94c756de="" type="button" class="el-button el-button--resetting el-button--small is-round">
+                            <span class="text-wrap">Reset</span>
+                        </button>
+                    </div>
+                </div>
+                <div data-v-94c756de="" class="ak-operate-wrapper">
+                    <div data-v-94c756de="" class="ak-operate-section">
+                        <div data-v-94c756de="" class="xl-tab-btn">
+                            <a asp-action="Create" class="el-button el-button--primary el-button--small is-round">
+                                <button type="button" class="el-button el-button--primary el-button--small is-round">
+                                    <span class="text-wrap">Add </span>
+                                </button>
+                            </a>
+                        </div>
+                        <span data-v-94c756de="" class="ak-dropdown" style="margin-left: 8px;">
+                            <span tabindex="0" class="el-popover-span">
+                                <div class="ak-dropdown-slot">
+                                    <button type="button" class="el-button single-btn el-button--normal el-button--small is-round is-focus">
+                                        <span class="text-wrap">
+                                            <span>Export</span><i class="iconfont lx_arrow_down_rev"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                                <span class="el-popper el-popover global-pop ak-button-group-popover" style="display: none;">
+                                    <ul class="ak-table-action el-dropdown-menu--small" style="min-width: 75px;">
+                                        <li class="ak-dropdown-item"> Export selected orders </li>
+                                        <li class="ak-dropdown-item"> Export all filtered orders </li>
+                                    </ul>
+                                </span>
+                            </span>
+                        </span>
+                    </div>
+                    <div data-v-94c756de="" class="ak-table-btn">
+                        <div data-v-94c756de="" class="ak-refresh-page">
+                            <button type="button" class="el-button refresh-icon el-button--default el-button--small is-round is-icon">
+                                <i class="xl-font xl_mail_cogradient"></i>
+                            </button>
+                        </div>
+                        <span data-v-5bb57ef8="" data-v-94c756de="" class="help-doc">
+                            <i data-v-5bb57ef8="" class="xl-font xl_table_data doc-icon"></i>
+                        </span>
+                        <span data-v-bb7682fe="" data-v-94c756de="" class="el-popover-span custom-popover-reference">
+                            <div role="tooltip" id="el-popover-6491" aria-hidden="true" class="el-popover el-popper global-pop custom-column-popover" style="width: 680px; display: none;" tabindex="0">
+                                <div data-v-bb7682fe="" class="column-panel-wapper el-row el-row--flex">
+                                    <div data-v-bb7682fe="" class="el-col el-col-16">
+                                        <div data-v-3ee0058c="" data-v-bb7682fe="" class="scroll-wapper">
+                                            <div data-v-3ee0058c="" class="checkbox-section-wapper el-scrollbar">
+                                                <div class="el-scrollbar__wrap" style="margin-bottom: -11px; margin-right: -11px;">
+                                                    <div class="el-scrollbar__view">
+                                                        <div data-v-3ee0058c="" class="checkbox-section">
+                                                            <div data-v-3ee0058c="" class="ak-align-center ak-mg-bottom-8">
+                                                                <div data-v-3ee0058c="" class="ak-primary-text font-bold ak-fz-12 ak-mg-right-2">Field information.</div>
+                                                                <button data-v-3ee0058c="" type="button" class="el-button all-select-btn el-button--text el-button--tiny is-round">
+                                                                    <span class="text-wrap"> Deselect all. </span>
+                                                                </button>
+                                                            </div>
+                                                            <div data-v-3ee0058c="" class="ak-flex-wrap el-checkbox-wapper">
+                                                                <label data-v-3ee0058c="" class="el-checkbox ak-flex check-item is-disabled is-checked">
+                                                                    <span class="el-checkbox__input is-disabled is-checked">
+                                                                        <span class="el-checkbox__inner"></span>
+                                                                        <input type="checkbox" aria-hidden="false" disabled="disabled" class="el-checkbox__original" value="Inbound order No.">
+                                                                    </span>
+                                                                    <span class="el-checkbox__label">Inbound order No.</span>
+                                                                </label>
+                                                                <label data-v-3ee0058c="" class="el-checkbox ak-flex check-item is-checked">
+                                                                    <span class="el-checkbox__input is-checked">
+                                                                        <span class="el-checkbox__inner"></span>
+                                                                        <input type="checkbox" aria-hidden="false" class="el-checkbox__original" value="Product quantity">
+                                                                    </span>
+                                                                    <span class="el-checkbox__label">Product quantity</span>
+                                                                </label>
+                                                                <label data-v-3ee0058c="" class="el-checkbox ak-flex check-item is-checked">
+                                                                    <span class="el-checkbox__input is-checked">
+                                                                        <span class="el-checkbox__inner"></span>
+                                                                        <input type="checkbox" aria-hidden="false" class="el-checkbox__original" value="SKU * Qty">
+                                                                    </span>
+                                                                    <span class="el-checkbox__label">SKU * Qty</span>
+                                                                </label>
+                                                                <label data-v-3ee0058c="" class="el-checkbox ak-flex check-item is-checked">
+                                                                    <span class="el-checkbox__input is-checked">
+                                                                        <span class="el-checkbox__inner"></span>
+                                                                        <input type="checkbox" aria-hidden="false" class="el-checkbox__original" value="Boxes">
+                                                                    </span>
+                                                                    <span class="el-checkbox__label">Boxes</span>
+                                                                </label>
+                                                                <label data-v-3ee0058c="" class="el-checkbox ak-flex check-item is-checked">
+                                                                    <span class="el-checkbox__input is-checked">
+                                                                        <span class="el-checkbox__inner"></span>
+                                                                        <input type="checkbox" aria-hidden="false" class="el-checkbox__original" value="Warehouse">
+                                                                    </span>
+                                                                    <span class="el-checkbox__label">Warehouse</span>
+                                                                </label>
+                                                                <label data-v-3ee0058c="" class="el-checkbox ak-flex check-item is-checked">
+                                                                    <span class="el-checkbox__input is-checked">
+                                                                        <span class="el-checkbox__inner"></span>
+                                                                        <input type="checkbox" aria-hidden="false" class="el-checkbox__original" value="Cost">
+                                                                    </span>
+                                                                    <span class="el-checkbox__label">Cost</span>
+                                                                </label>
+                                                                <label data-v-3ee0058c="" class="el-checkbox ak-flex check-item is-checked">
+                                                                    <span class="el-checkbox__input is-checked">
+                                                                        <span class="el-checkbox__inner"></span>
+                                                                        <input type="checkbox" aria-hidden="false" class="el-checkbox__original" value="Currency">
+                                                                    </span>
+                                                                    <span class="el-checkbox__label">Currency</span>
+                                                                </label>
+                                                                <label data-v-3ee0058c="" class="el-checkbox ak-flex check-item is-checked">
+                                                                    <span class="el-checkbox__input is-checked">
+                                                                        <span class="el-checkbox__inner"></span>
+                                                                        <input type="checkbox" aria-hidden="false" class="el-checkbox__original" value="Inbound type">
+                                                                    </span>
+                                                                    <span class="el-checkbox__label">Inbound type</span>
+                                                                </label>
+                                                                <label data-v-3ee0058c="" class="el-checkbox ak-flex check-item is-checked">
+                                                                    <span class="el-checkbox__input is-checked">
+                                                                        <span class="el-checkbox__inner"></span>
+                                                                        <input type="checkbox" aria-hidden="false" class="el-checkbox__original" value="Tracking number">
+                                                                    </span>
+                                                                    <span class="el-checkbox__label">Tracking number</span>
+                                                                </label>
+                                                                <label data-v-3ee0058c="" class="el-checkbox ak-flex check-item is-checked">
+                                                                    <span class="el-checkbox__input is-checked">
+                                                                        <span class="el-checkbox__inner"></span>
+                                                                        <input type="checkbox" aria-hidden="false" class="el-checkbox__original" value="Reference order No.">
+                                                                    </span>
+                                                                    <span class="el-checkbox__label">Reference order No.</span>
+                                                                </label>
+                                                                <label data-v-3ee0058c="" class="el-checkbox ak-flex check-item is-checked">
+                                                                    <span class="el-checkbox__input is-checked">
+                                                                        <span class="el-checkbox__inner"></span>
+                                                                        <input type="checkbox" aria-hidden="false" class="el-checkbox__original" value="Arrival method">
+                                                                    </span>
+                                                                    <span class="el-checkbox__label">Arrival method</span>
+                                                                </label>
+                                                                <label data-v-3ee0058c="" class="el-checkbox ak-flex check-item is-checked">
+                                                                    <span class="el-checkbox__input is-checked">
+                                                                        <span class="el-checkbox__inner"></span>
+                                                                        <input type="checkbox" aria-hidden="false" class="el-checkbox__original" value="Estimated date of arrival">
+                                                                    </span>
+                                                                    <span class="el-checkbox__label">Estimated date of arrival</span>
+                                                                </label>
+                                                                <label data-v-3ee0058c="" class="el-checkbox ak-flex check-item is-checked">
+                                                                    <span class="el-checkbox__input is-checked">
+                                                                        <span class="el-checkbox__inner"></span>
+                                                                        <input type="checkbox" aria-hidden="false" class="el-checkbox__original" value="Actual arrival date">
+                                                                    </span>
+                                                                    <span class="el-checkbox__label">Actual arrival date</span>
+                                                                </label>
+                                                                <label data-v-3ee0058c="" class="el-checkbox ak-flex check-item is-checked">
+                                                                    <span class="el-checkbox__input is-checked">
+                                                                        <span class="el-checkbox__inner"></span>
+                                                                        <input type="checkbox" aria-hidden="false" class="el-checkbox__original" value="Actual storage date">
+                                                                    </span>
+                                                                    <span class="el-checkbox__label">Actual storage date</span>
+                                                                </label>
+                                                                <label data-v-3ee0058c="" class="el-checkbox ak-flex check-item is-checked">
+                                                                    <span class="el-checkbox__input is-checked">
+                                                                        <span class="el-checkbox__inner"></span>
+                                                                        <input type="checkbox" aria-hidden="false" class="el-checkbox__original" value="Landed cost">
+                                                                    </span>
+                                                                    <span class="el-checkbox__label">Landed cost</span>
+                                                                </label>
+                                                                <label data-v-3ee0058c="" class="el-checkbox ak-flex check-item is-checked">
+                                                                    <span class="el-checkbox__input is-checked">
+                                                                        <span class="el-checkbox__inner"></span>
+                                                                        <input type="checkbox" aria-hidden="false" class="el-checkbox__original" value="Warehouse cost">
+                                                                    </span>
+                                                                    <span class="el-checkbox__label">Warehouse cost</span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div data-v-bb7682fe="" class="el-col el-col-8">
+                                        <button data-v-bb7682fe="" type="button" class="el-button el-button--primary el-button--small is-round">
+                                            <span class="text-wrap"> Confirm </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+                <div data-v-94c756de="" class="ak-table-section">
+                    <div data-v-94c756de="" class="vxe-table-container">
+                        <div data-v-94c756de="" class="table-pagination one-line-height vxe-table vxe-table--render-default tid_26 border--default row--highlight is--header is--fixed-left is--fixed-right is--animat is--round is--scroll-y is--scroll-x">
+                            <div class="vxe-table-slots">
+                                <div data-v-94c756de=""></div>
+                                <div data-v-94c756de=""></div>
+                                <div data-v-94c756de=""></div>
+                                <div data-v-94c756de=""></div>
+                                <div data-v-94c756de=""></div>
+                                <div data-v-94c756de=""></div>
+                                <div data-v-94c756de=""></div>
+                                <div data-v-94c756de=""></div>
+                                <div data-v-94c756de=""></div>
+                                <div data-v-94c756de=""></div>
+                                <div data-v-94c756de=""></div>
+                                <div data-v-94c756de=""></div>
+                                <div data-v-94c756de=""></div>
+                                <div data-v-94c756de=""></div>
+                                <div data-v-94c756de=""></div>
+                                <div data-v-94c756de=""></div>
+                                <div data-v-94c756de=""></div>
+                                <div data-v-94c756de=""></div>
+                                <div data-v-94c756de=""></div>
+                            </div>
+                            <div class="vxe-table--render-wrapper">
+                                <div class="vxe-table--main-wrapper">
+                                    <div xid="5" class="vxe-table--header-wrapper body--wrapper">
+                                        <div class="vxe-body--x-space">
+                                        </div>
+                                        <table xid="5" cellspacing="0" cellpadding="0" border="0" class="vxe-table--header" style="width: 900px;">
+                                            <colgroup>
+                                                <col name="col_6" style="width: 140px;">
+                                                <col name="col_7" style="width: 120px;">
+                                                <col name="col_8" style="width: 120px;">
+                                                <col name="col_9" style="width: 90px;">
+                                                <col name="col_10" style="width: 130px;">
+                                                <col name="col_11" style="width: 80px;">
+                                                <col name="col_12" style="width: 130px;">
+                                                <col name="col_13" style="width: 120px;">
+                                                <col name="col_16" style="width: 175px;">
+                                            </colgroup>
+                                            <thead>
+
+                                                <tr class="vxe-header--row">
+                                                    <th colid="col_6" class="vxe-header--column col_6 col--ellipsis">
+                                                        @Html.DisplayNameFor(model => model.OutboundOrderId)
+                                                    </th>
+                                                    <th colid="col_7" class="vxe-header--column col_7 col--ellipsis">
+                                                        @Html.DisplayNameFor(model => model.ProductQuantity)
+                                                    </th>
+                                                    <th colid="col_8" class="vxe-header--column col_8 col--ellipsis">
+                                                        @Html.DisplayNameFor(model => model.DestinationType)
+                                                    </th>
+                                                    <th colid="col_9" class="vxe-header--column col_9 col--ellipsis">
+                                                        @Html.DisplayNameFor(model => model.Warehouse)
+                                                    </th>
+                                                    <th colid="col_10" class="vxe-header--column col_10 col--ellipsis">
+                                                        @Html.DisplayNameFor(model => model.ShippingCompany)
+                                                    </th>
+                                                    <th colid="col_11" class="vxe-header--column col_10 col--ellipsis">
+                                                        @Html.DisplayNameFor(model => model.Recipient)
+                                                    </th>
+                                                    <th colid="col_12" class="vxe-header--column col_10 col--ellipsis">
+                                                        @Html.DisplayNameFor(model => model.OutboundMethod)
+                                                    </th>
+                                                    <th colid="col_13" class="vxe-header--column col_10 col--ellipsis">
+                                                        @Html.DisplayNameFor(model => model.EstimatedDeliveryDate)
+                                                    </th>
+                                                    <th colid="col_16" class="vxe-header--column col_16 col--ellipsis is--sortable">
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                        <div class="vxe-table--header-border-line" style="width: 900px;">
+                                        </div>
+                                    </div>
+                                    <div xid="5" class="vxe-table--body-wrapper body--wrapper" style="height: 314px;">
+                                        <div class="vxe-body--x-space">
+                                        </div>
+                                        <div class="vxe-body--y-space">
+                                        </div>
+                                        <table xid="5" cellspacing="0" cellpadding="0" border="0" class="vxe-table--body" style="width: 900px;">
+                                            <colgroup>
+                                                <col name="col_2" style="width: 140px;">
+                                                <col name="col_3" style="width: 120px;">
+                                                <col name="col_4" style="width: 120px;">
+                                                <col name="col_5" style="width: 90px;">
+                                                <col name="col_6" style="width: 130px;">
+                                                <col name="col_7" style="width: 80px;">
+                                                <col name="col_8" style="width: 130px;">
+                                                <col name="col_9" style="width: 175px;">
+                                                <col name="col_10" style="width: 175px;">
+                                            </colgroup>
+                                            <tbody>
+
+                                                @foreach (var item in Model)
+                                                {
+                                                    <tr rowid="row_14" class="vxe-body--row row--current">
+                                                        <td colid="col_2" class="vxe-body--column col_2 col--ellipsis" style="height: 48px;">
+                                                            @Html.DisplayNameFor(model => model.OutboundOrderId)
+                                                        </td>
+                                                        <td colid="col_3" class="vxe-body--column col_3 col--ellipsis" style="height: 48px;">
+                                                            @Html.DisplayNameFor(model => model.ProductQuantity)
+                                                        </td>
+                                                        <td colid="col_4" class="vxe-body--column col_4 col--ellipsis" style="height: 48px;">
+                                                            @Html.DisplayNameFor(model => model.DestinationType)
+                                                        </td>
+                                                        <td colid="col_5" class="vxe-body--column col_5 col--ellipsis" style="height: 48px;">
+                                                            @Html.DisplayNameFor(model => model.Warehouse)
+                                                        </td>
+                                                        <td colid="col_6" class="vxe-body--column col_6 col--ellipsis" style="height: 48px;">
+                                                            @Html.DisplayNameFor(model => model.ShippingCompany)
+                                                        </td>
+                                                        <td colid="col_7" class="vxe-body--column col_6 col--ellipsis" style="height: 48px;">
+                                                            @Html.DisplayNameFor(model => model.Recipient)
+                                                        </td>
+                                                        <td colid="col_8" class="vxe-body--column col_7 col--ellipsis" style="height: 48px;">
+                                                            @Html.DisplayNameFor(model => model.OutboundMethod)
+                                                        </td>
+                                                        <td colid="col_9" class="vxe-body--column col_8 col--ellipsis" style="height: 48px;">
+                                                            @Html.DisplayNameFor(model => model.EstimatedDeliveryDate)
+                                                        </td>
+                                                        <td colid="col_10" class="vxe-body--column col_9 col--ellipsis" style="height: 48px;">
+                                                            <a asp-action="Edit" asp-route-id="@item.OutboundOrderId">Edit</a> |
+                                                            <a asp-action="Details" asp-route-id="@item.OutboundOrderId">Details</a> |
+                                                            <a asp-action="Delete" asp-route-id="@item.OutboundOrderId">Delete</a>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                        <div class="vxe-table--checkbox-range">
+                                        </div>
+                                        <div class="vxe-table--empty-block" style="width: 900px;">
+                                            <div class="vxe-table--empty-content">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="vxe-table--empty-placeholder" style="top: 40px; height: 292px;">
+                                <div class="vxe-table--empty-content">
+                                </div>
+                            </div>
+                            <div class="vxe-table--border-line">
+                            </div>
+                            <div class="vxe-table--resizable-bar" style="padding-bottom: 11px;">
+                            </div>
+                            <div class="vxe-table--loading vxe-loading">
+                                <div class="vxe-loading--spinner">
+                                </div>
+                            </div>
+                            <div class="el-loading-mask" style="display: none;">
+                                <div class="el-loading-spinner">
+                                    <svg viewBox="25 25 50 50" class="circular">
+                                        <circle cx="50" cy="50" r="20" fill="none" class="path"></circle>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-v-94c756de="" class="pagination-container el-row">
+                        <div data-v-94c756de="" class="el-pagination">
+                            <span class="el-pagination__total">Total 0</span>
+
+                            <button type="button" disabled="disabled" class="btn-prev">
+                                <i class="iconfont lx_arrow_down_rev ak-rotate-90"></i>
+                            </button>
+
+                            <ul class="el-pager">
+                                <li class="number active">1</li>
+                            </ul>
+
+                            <button type="button" class="btn-next">
+                                <i class="iconfont lx_arrow_down_rev ak-rotate-270"></i>
+                            </button>
+
+                            <span class="el-pagination__sizes">
+                                <div class="el-select el-select--small">
+                                    <div class="el-input el-input--small el-input--prefix el-input--suffix">
+                                        <input type="text" readonly="readonly" autocomplete="off" placeholder="" class="el-input__inner">
+                                        <span class="el-input__prefix">
+                                            <span class="fake-placeholder" style="display: none;"></span>
+                                            <span class="fake-select-label" style="display: none; overflow: hidden; text-overflow: ellipsis;">
+                                                20/page
+                                            </span>
+                                            <span class="fake-placeholder fake-placeholder-hidden">20/page</span>
+                                            <span class="el-input__follow" style="overflow: hidden; text-overflow: ellipsis;"></span>
+                                        </span>
+                                        <span class="el-input__suffix">
+                                            <span class="el-input__suffix-inner">
+                                                <i class="el-select__caret el-input__icon iconfont lx_arrow_down_rev is-reverse"></i>
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="el-select-dropdown el-popper" style="width: unset; display: none; min-width: 100px;">
+                                        <div class="el-scrollbar">
+                                            <div class="el-select-dropdown__wrap el-scrollbar__wrap" style="margin-bottom: -11px; margin-right: -11px;">
+                                                <ul class="el-scrollbar__view el-select-dropdown__list">
+                                                    <li class="el-select-dropdown__item selected">
+                                                        <span></span>
+                                                        <span class="checkBox" style="--color: undefined;"></span>
+                                                        <span>20/page</span>
+                                                    </li>
+                                                    <li class="el-select-dropdown__item">
+                                                        <span></span>
+                                                        <span class="checkBox" style="--color: undefined;"></span>
+                                                        <span>50/page</span>
+                                                    </li>
+                                                    <li class="el-select-dropdown__item">
+                                                        <span></span>
+                                                        <span class="checkBox" style="--color: undefined;"></span>
+                                                        <span>100/page</span>
+                                                    </li>
+                                                    <li class="el-select-dropdown__item">
+                                                        <span></span>
+                                                        <span class="checkBox" style="--color: undefined;"></span>
+                                                        <span>200/page</span>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="el-scrollbar__bar is-horizontal">
+                                                <div class="el-scrollbar__thumb" style="transform: translateX(0%);"></div>
+                                            </div>
+                                            <div class="el-scrollbar__bar is-vertical">
+                                                <div class="el-scrollbar__thumb" style="transform: translateY(0%);"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </span>
+
+                            <span class="el-pagination__jump">
+                                Go to
+                                <div class="el-input el-input--small el-pagination__editor is-in-pagination">
+                                    <input type="number" autocomplete="off" min="1" max="32" class="el-input__inner">
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div data-v-94c756de="" class="xl-dialog-warpper">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

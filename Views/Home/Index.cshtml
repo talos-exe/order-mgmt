@@ -1,0 +1,376 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <link rel="icon" href="/favicon.ico">
+        <title>Home - OMS</title>
+        <style>
+            .preloading-wapper {
+                height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .preloading {
+                height: 40px;
+            }
+
+            .preloading span {
+                display: inline-block;
+                width: 8px;
+                height: 100%;
+                border-radius: 4px;
+                background: #95abf9;
+                animation: loadsaven 1.04s ease infinite;
+            }
+    
+            .preloading span:nth-child(2) {
+                animation-delay: 0.13s;
+            }
+
+            .preloading span:nth-child(3) {
+                animation-delay: 0.26s;
+            }
+
+            .preloading span:nth-child(4) {
+                animation-delay: 0.39s;
+            }
+
+            .preloading span:nth-child(5) {
+                animation-delay: 0.52s;
+            }
+        </style>
+        <link href="~/Content/chunk-lingxingUI.css" rel="stylesheet" type="text/css" />
+        <link href="~/Content/chunk-libs.css" rel="stylesheet" type="text/css" />
+        <link href="~/Content/app.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" async="" src="https://www.google-analytics.com/analytics.js"></script>
+        <script type="text/javascript" async="" src="https://www.googletagmanager.com/gtag/js?id=G-NRLS16EKKE&amp;l=dataLayer&amp;cx=c"></script>
+        <script type="text/javascript" async="" src="https://www.googletagmanager.com/gtag/js?id=UA-213536485-3&amp;l=dataLayer&amp;cx=c"></script>
+        <script async="" src="https://static.hotjar.com/c/hotjar-3119560.js?sv=6"></script>
+        <script async="" src="https://script.hotjar.com/modules.0721e7cf944cf9d78a0b.js" charset="utf-8"></script>
+        <script charset="utf-8" src="/./js/chunk-2d0f0b9f.js?v=2d0d0964"></script>
+        <script charset="utf-8" src="/./js/vendors~dashboard.js?v=9731241f"></script>
+        <link rel="stylesheet" type="text/css" href="/css/dashboard.css?v=9e71a62f">
+        <script charset="utf-8" src="/./js/dashboard.js?v=bfa80633"></script>
+        <script src="~/js/chunk-lingxingUI.js"></script>
+        <script src="~/js/chunk-libs.js"></script>
+        <script src="~/js/app.js"></script>
+    </head>
+
+    <div data-v-441fc658="" id="app">
+        <div data-v-b3d0b4c2="" data-v-441fc658="" class="layout-container">
+            <div data-v-b3d0b4c2="" class="layout-left">
+            <div data-v-6a3d8818="" data-v-b3d0b4c2="" class="siderbar-container">
+                <div data-v-6a3d8818="" class="siderbar-logo">
+                    <a data-v-6a3d8818="" href="/" class="router-link-active">
+                        <div data-v-4e5e9e7a="" data-v-6a3d8818="" class="logo-wrapper">
+                            <svg data-v-50a7d372="" data-v-4e5e9e7a="" aria-hidden="true" class="logo svg-icon">
+                                <use data-v-50a7d372="" xlink:href="#icon-logo">
+
+                                </use>
+                            </svg>
+                            <span data-v-4e5e9e7a="" class="title">
+                                领星 OMS
+                            </span>
+                        </div>
+                    </a>
+                </div>
+                <div data-v-6a3d8818="" class="siderbar-menu">
+                    <div data-v-6a3d8818="" class="el-scrollbar " style="height: 100%;">
+                        <div class="el-scrollbar__wrap" style="margin-bottom: -11px; margin-right: -11px;">
+                            <div class="el-scrollbar__view">
+                                <ul data-v-6a3d8818="" role="menubar" class="el-menu" style="height: 400px;">
+                                    <li data-v-6a3d8818="" role="menuitem" tabindex="-1" class="el-menu-item is-active" style="padding-left: 20px;">
+                                        <i data-v-6a3d8818="" class="xl-font xl_nav_home menu-icon">
+
+                                        </i>
+                                        <span data-v-6a3d8818="">
+                                            <span data-v-6a3d8818="">
+                                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                            </span>
+                                        </span>
+                                    </li>
+                                    
+                                    <li data-v-6a3d8818="" role="menuitem" tabindex="-1" class="el-menu-item" style="padding-left: 20px;">
+                                        <i data-v-6a3d8818="" class="xl-font menu-icon xl_nav_order">
+
+                                        </i>
+                                        <span data-v-6a3d8818="">
+                                            <span data-v-6a3d8818="">
+                                                <a class="nav-link text-dark" asp-area="" asp-controller="PlatformOrder" asp-action="Platfrom_Order_All">Platform Orders</a>
+                                            </span>
+                                        </span>
+                                    </li>
+                                    
+                                    <li data-v-6a3d8818="" role="menuitem" aria-haspopup="true" class="el-submenu">
+                                        <div class="el-submenu__title" style="padding-left: 20px;">
+                                            <i data-v-6a3d8818="" class="xl-font menu-icon xl_nav_operation">
+
+                                            </i>
+                                            <span data-v-6a3d8818="" class="submenu-title oneLine">
+                                                Warehouse
+                                            </span>
+                                            <i class="el-submenu__icon-arrow iconfont lx_arrow_down_rev">
+
+                                            </i>
+                                        </div>
+                                        <ul role="menu" class="el-menu el-menu--inline">
+                                            <li data-v-6a3d8818="" role="menuitem" tabindex="-1" class="el-menu-item" style="padding-left: 40px;">
+                                                <span data-v-6a3d8818="" class="submenu-title oneLine" style="overflow: hidden; text-overflow: ellipsis;">
+                                                    <a class="nav-link text-dark" asp-area="" asp-controller="InboundOrder" asp-action="Inbound_All">Inbound</a>
+                                                </span>
+                                            </li>
+                                            
+                                            
+                                            
+                                            <li data-v-6a3d8818="" role="menuitem" tabindex="-1" class="el-menu-item" style="padding-left: 40px;">
+                                                <span data-v-6a3d8818="" class="submenu-title oneLine" style="overflow: hidden; text-overflow: ellipsis;">
+                                                    <a class="nav-link text-dark" asp-area="" asp-controller="ParcelOutbound" asp-action="Parcel_Outbound_All">Parcel Outbound</a>
+                                                </span>
+                                            </li>
+                                            
+                                            
+                                            
+                                            <li data-v-6a3d8818="" role="menuitem" tabindex="-1" class="el-menu-item" style="padding-left: 40px;">
+                                                <span data-v-6a3d8818="" class="submenu-title oneLine" style="overflow: hidden; text-overflow: ellipsis;">
+                                                    <a class="nav-link text-dark" asp-area="" asp-controller="FreightOutbound" asp-action="Freight_Outbound_All">Freight Outbound</a>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    
+                                    <li data-v-6a3d8818="" role="menuitem" aria-haspopup="true" class="el-submenu">
+                                        <div class="el-submenu__title" style="padding-left: 20px;">
+                                            <i data-v-6a3d8818="" class="xl-font menu-icon xl_nav_inventory">
+
+                                            </i>
+                                            <span data-v-6a3d8818="" class="submenu-title oneLine">
+                                                Inventory
+                                            </span>
+                                            <i class="el-submenu__icon-arrow iconfont lx_arrow_down_rev">
+
+                                            </i>
+                                        </div>
+                                        <ul role="menu" class="el-menu el-menu--inline" style="display: none;">
+                                            <li data-v-6a3d8818="" role="menuitem" tabindex="-1" class="el-menu-item" style="padding-left: 40px;">
+                                                <span data-v-6a3d8818="" class="submenu-title oneLine" style="overflow: hidden; text-overflow: ellipsis;">
+                                                    Parcel Stock
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    
+                                    <li data-v-6a3d8818="" role="menuitem" tabindex="-1" class="el-menu-item" style="padding-left: 20px;">
+                                        <i data-v-6a3d8818="" class="xl-font menu-icon xl_nav_product"></i><span data-v-6a3d8818="">
+                                            <span data-v-6a3d8818="">
+                                                <a class="nav-link text-dark" asp-area="" asp-controller="Inventory" asp-action="Products">Product</a>
+                                            </span>
+                                        </span>
+                                    </li>
+                                    
+                                    <li data-v-6a3d8818="" role="menuitem" aria-haspopup="true" class="el-submenu">
+                                        <div class="el-submenu__title" style="padding-left: 20px;">
+                                            <i data-v-6a3d8818="" class="xl-font menu-icon xl_nav_bill">
+
+                                            </i>
+                                            <span data-v-6a3d8818="" class="submenu-title oneLine">
+                                                Accounting
+                                            </span>
+                                            <i class="el-submenu__icon-arrow iconfont lx_arrow_down_rev">
+
+                                            </i>
+                                        </div>
+                                        <ul role="menu" class="el-menu el-menu--inline" style="display: none;">
+                                            <li data-v-6a3d8818="" role="menuitem" tabindex="-1" class="el-menu-item" style="padding-left: 40px;">
+                                                <span data-v-6a3d8818="" class="submenu-title oneLine" style="overflow: hidden; text-overflow: ellipsis;">
+                                                    My Account
+                                                </span>
+                                            </li>
+                                            <li data-v-6a3d8818="" role="menuitem" tabindex="-1" class="el-menu-item" style="padding-left: 40px;">
+                                                <span data-v-6a3d8818="" class="submenu-title oneLine" style="overflow: hidden; text-overflow: ellipsis;">
+                                                    Funds Flow
+                                                </span>
+                                            </li>
+                                            
+                                            
+                                            
+                                        </ul>
+                                    </li>
+                                    
+                                    <li data-v-6a3d8818="" role="menuitem" aria-haspopup="true" class="el-submenu">
+                                        <div class="el-submenu__title" style="padding-left: 20px;">
+                                            <i data-v-6a3d8818="" class="xl-font menu-icon xl_nav_setting"></i>
+                                            <span data-v-6a3d8818="" class="submenu-title oneLine">
+                                                Setting
+                                            </span>
+                                            <i class="el-submenu__icon-arrow iconfont lx_arrow_down_rev"></i>
+                                        </div>
+                                        <ul role="menu" class="el-menu el-menu--inline">
+                                            <li data-v-6a3d8818="" role="menuitem" tabindex="-1" class="el-menu-item" style="padding-left: 40px;">
+                                                <span data-v-6a3d8818="" class="submenu-title oneLine" style="overflow: hidden; text-overflow: ellipsis;">
+                                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="User_Managment">User Managment</a>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="el-scrollbar__bar is-horizontal">
+                            <div class="el-scrollbar__thumb" style="transform: translateX(0%);">
+                            </div>
+                        </div>
+                        <div class="el-scrollbar__bar is-vertical">
+                            <div class="el-scrollbar__thumb" style="transform: translateY(0%);">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div data-v-6a3d8818="" class="siderbar-operation">
+                    <div data-v-a48d311e="" data-v-6a3d8818="" class="hamburger-container" style="padding: 0px 15px;">
+                        <i data-v-a48d311e="" class="xl-font hamburger xl_nav_close_rev">
+
+                        </i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <div data-v-b3d0b4c2="" class="layout-right">
+                <div data-v-b3d0b4c2="" class="layout-content">
+                    <div data-v-03f6d477="" data-v-b3d0b4c2="" class="nav-header">
+                    <div data-v-03f6d477="" class="views-tag">
+                        <div data-v-0f8ef51b="" data-v-03f6d477="" class="tags-view-container">
+                            <div data-v-0f8ef51b="" class="slick-list-fixed">
+                                <div data-v-0f8ef51b="" class="tags-view-item active" style="width: 100px;">
+                                    <span data-v-0f8ef51b="" class="route-title">
+                                        Home
+                                    </span>
+                                </div>
+                            </div>
+                            <div data-v-0f8ef51b="" id="slick-list-fixed" class="tags-view-wrapper">
+                            </div>
+                            
+                            <ul data-v-0f8ef51b="" class="contextmenu" style="left: 0px; top: 0px; display: none;">
+                                <li data-v-0f8ef51b="">Refresh</li>
+                                <li data-v-0f8ef51b=""> Close </li>
+                                <li data-v-0f8ef51b="">Close others</li>
+                                <li data-v-0f8ef51b="">Close all</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div data-v-03f6d477="" class="user-operation">
+                        <span data-v-578b1599="" data-v-03f6d477="" class="el-tooltip calc-freight item" aria-describedby="el-tooltip-4257" tabindex="-1">
+                            <i data-v-578b1599="" class="xl-font xl_calculator"></i>
+                            Trial
+                        </span>
+                        <span data-v-b2917530="" data-v-03f6d477="" class="help-span" inelement="0">
+                            <svg data-v-50a7d372="" data-v-b2917530="" aria-hidden="true" class="svg-icon question-icon" style="font-size: 18px;">
+                                <use data-v-50a7d372="" xlink:href="#icon-robot"></use>
+                            </svg>
+                        </span>
+                        <span data-v-03f6d477="" class="el-popover-span">
+                            
+                            <span class="el-popover__reference-wrapper">
+                                <i class="xl-font xl_tab_download task-icon el-popover__reference" aria-describedby="el-popover-7575" tabindex="0"></i>
+                            </span>
+                        </span>
+                        <div data-v-03f6d477="" class="international el-dropdown">
+                            <span class="user-operation-icon el-dropdown-selfdefine" aria-haspopup="list" aria-controls="dropdown-menu-1568" role="button" tabindex="0">
+                                <i class="xl-font xl_set"></i>
+                            </span>
+                            <ul class="el-dropdown-menu el-popper header-dropdown" style="display: none;" id="dropdown-menu-1568">
+                                <li tabindex="-1" class="el-dropdown-menu__item">
+                                    
+                                    Platform Account
+                                </li>
+                                <li tabindex="-1" class="el-dropdown-menu__item">
+                                    
+                                    Platform order rules
+                                </li>
+                                <li tabindex="-1" class="el-dropdown-menu__item">
+                                    
+                                    Product Mapping
+                                </li>
+                                <li tabindex="-1" class="el-dropdown-menu__item">
+                                    
+                                    Account
+                                </li>
+                                <li tabindex="-1" class="el-dropdown-menu__item">
+                                    
+                                    Role
+                                </li>
+                                <li tabindex="-1" class="el-dropdown-menu__item">
+                                    
+                                    Address Book
+                                </li>
+                                <li tabindex="-1" class="el-dropdown-menu__item">
+                                    
+                                    Login Log
+                                </li>
+                                <li tabindex="-1" class="el-dropdown-menu__item">
+                                    
+                                    Unit Preference
+                                </li>
+                            </ul>
+                        </div>
+                        <i data-v-0eb9df68="" data-v-03f6d477="" class="xl-font xl_table_data doc-icon" inelement="0"></i>
+                        <div data-v-03f6d477="" class="international el-dropdown">
+                            <span class="lang-dropdown-title el-dropdown-selfdefine" aria-haspopup="list" aria-controls="dropdown-menu-1726" role="button" tabindex="0">
+                                English
+                                <i class="xl-font xl_collapse_arrow_down_rev"></i>
+                            </span>
+                            <ul class="el-dropdown-menu el-popper" style="display: none;" id="dropdown-menu-1726">
+                                <li tabindex="-1" class="el-dropdown-menu__item">
+                                    
+                                    中文
+                                </li>
+                                <li aria-disabled="true" class="el-dropdown-menu__item is-disabled">
+                                    
+                                    English
+                                </li>
+                            </ul>
+                        </div>
+                        <div data-v-03f6d477="" class="avatar-container right-menu-item hover-effect el-dropdown">
+                            <div data-v-03f6d477="" class="avatar-wrapper el-dropdown-selfdefine" aria-haspopup="list" aria-controls="dropdown-menu-5408" role="button" tabindex="0">
+                                <i data-v-03f6d477="" class="xl-font xl_avatar user-avatar"></i>
+                                <span data-v-03f6d477="" class="user-name">ak001</span>
+                            </div>
+                            <ul data-v-03f6d477="" class="el-dropdown-menu el-popper" style="display: none;" id="dropdown-menu-5408">
+                                <a data-v-03f6d477="" href="/userCenter/profile" class="">
+                                <li data-v-03f6d477="" tabindex="-1" class="el-dropdown-menu__item">
+                                    
+                                    Profile
+                                </li>
+                                </a>
+                                <a data-v-03f6d477="" href="/userCenter/apiKeys" class="">
+                                <li data-v-03f6d477="" tabindex="-1" class="el-dropdown-menu__item el-dropdown-menu__item--divided">
+                                    
+                                    API Keys
+                                </li>
+                                </a>
+                                <li data-v-03f6d477="" tabindex="-1" class="el-dropdown-menu__item el-dropdown-menu__item--divided">
+                                    
+                                    <span data-v-03f6d477="" style="display: block;">
+                                        Log out
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>

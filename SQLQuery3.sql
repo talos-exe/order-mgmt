@@ -1,0 +1,5 @@
+﻿
+
+ALTER TABLE Inventories
+ADD Price DECIMAL(10, 2) NOT NULL DEFAULT 0,
+    Quantity INT NOT NULL DEFAULT 0;

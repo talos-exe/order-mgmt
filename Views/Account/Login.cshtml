@@ -1,0 +1,64 @@
+﻿@* Views/Account/Login.cshtml *@
+
+<p style="color:red">@ViewBag.Error</p>
+
+    <link href="~/css/chunk-lingxingUI.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/chunk-libs.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/app.css" rel="stylesheet" type="text/css" />
+
+
+<div data-v-441fc658="" id="app">
+    <div data-v-08d9a5aa="" data-v-441fc658="" class="login-container">
+        <form data-v-08d9a5aa="" class="el-form login-form el-form--label-left" autocomplete="on"  asp-action="Login" method="post">
+            <div data-v-08d9a5aa="" class="title-container">
+                <div data-v-4e5e9e7a="" data-v-08d9a5aa="" class="logo-wrapper lager">
+                    <svg data-v-50a7d372="" data-v-4e5e9e7a="" aria-hidden="true" class="logo svg-icon">
+                        <use data-v-50a7d372="" xlink:href="#icon-logo"></use>
+                    </svg>
+                    <span data-v-4e5e9e7a="" class="title"> 领星 OMS </span>
+                </div>
+                <div data-v-08d9a5aa="" class="international set-language el-dropdown">
+                    <span class="lang-dropdown-title el-dropdown-selfdefine" aria-haspopup="list" aria-controls="dropdown-menu-4979" role="button" tabindex="0">
+                        English 
+                        <i class="xl-font xl_collapse_arrow_down_rev"></i>
+                    </span>
+                    <ul class="el-dropdown-menu el-popper" id="dropdown-menu-4979" style="display: none;">
+                        <li tabindex="-1" class="el-dropdown-menu__item"><!---->中文</li>
+                        <li aria-disabled="true" class="el-dropdown-menu__item is-disabled"><!---->English</li>
+                    </ul>
+                </div>
+            </div>
+            <div data-v-08d9a5aa="" class="second-title">Login</div>
+            <!---->
+            <div data-v-08d9a5aa="" class="el-form-item el-form-item--small"><!---->
+                <div class="el-form-item__content">
+                    <div data-v-08d9a5aa="" class="el-input el-input--small">
+                        <!---->
+                        <input tabindex="1" type="text" autocomplete="on" placeholder="Enter Account" name="username" class="el-input__inner">
+                        <!----><!----><!----><!----><!---->
+                    </div><!---->
+                </div>
+            </div>
+            <div data-v-08d9a5aa="" class="el-form-item el-tooltip el-form-item--small" aria-describedby="el-tooltip-7430" tabindex="-1">
+                <!---->
+                <div class="el-form-item__content">
+                    <div data-v-08d9a5aa="" class="el-input el-input--small">
+                        <!---->
+                        <input tabindex="2" type="password" autocomplete="on" placeholder="Enter Password" name="password" class="el-input__inner">
+                        <!----><!----><!----><!----><!---->
+                    </div>
+                    <span data-v-08d9a5aa="" class="show-pwd">
+                        <svg data-v-50a7d372="" data-v-08d9a5aa="" aria-hidden="true" class="svg-icon">
+                            <use data-v-50a7d372="" xlink:href="#icon-eye"></use>
+                        </svg>
+                    </span>
+                    <!---->
+                </div>
+            </div>
+            <button data-v-08d9a5aa="" type="submit" class="el-button login-btn el-button--primary el-button--small is-round">
+                <!----><!---->
+                <span class="text-wrap"> Login </span>
+            </button>
+        </form>
+    </div>
+</div>

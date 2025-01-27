@@ -1,0 +1,86 @@
+﻿@{
+    ViewData["Title"] = "Generate Shipping Label";
+}
+
+<h2>Generate Shipping Label</h2>
+
+<!-- A button to trigger the label creation -->
+<button id="generateLabelBtn">Generate Shipping Label</button>
+
+<!-- Placeholder to show the result -->
+<div id="labelResult" style="margin-top:20px;"></div>
+
+@section Scripts {
+    <script>
+        document.getElementById('generateLabelBtn').addEventListener('click', async () => {
+            // Hardcode request data for testing - in production, gather from form fields
+            const requestData = {
+                "OriginAddress": {
+                    "StreetLines": ["123 Elm St"],
+                    "City": "Memphis",
+                    "StateOrProvinceCode": "TN",
+                    "PostalCode": "38116",
+                    "CountryCode": "US",
+                    "Contact": {
+                        "PersonName": "John Doe",
+                        "CompanyName": "ABC Corp",
+                        "PhoneNumber": "1234567890"
+                    }
+                },
+                "DestinationAddress": {
+                    "StreetLines": ["456 Maple Ave"],
+                    "City": "Chicago",
+                    "StateOrProvinceCode": "IL",
+                    "PostalCode": "60601",
+                    "CountryCode": "US",
+                    "Contact": {
+                        "PersonName": "Jane Smith",
+                        "CompanyName": "XYZ Inc",
+                        "PhoneNumber": "9876543210"
+                    }
+                },
+                "PackageDetails": {
+                    "Weight": 10,
+                    "Dimensions": {
+                        "Length": 10,
+                        "Width": 5,
+                        "Height": 5
+                    }
+                },
+                "ServiceType": "FEDEX_GROUND",
+                "PackagingType": "YOUR_PACKAGING",
+                "PickupType": "DROPOFF_AT_FEDEX_LOCATION",
+                "ShipDateStamp": "2024-12-15T10:00:00",
+                "AccountNumber": "123456789"
+            };
+
+            try {
+                const response = await fetch('/api/shipping/CreateShippingLabel', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    document.getElementById('labelResult').innerHTML = `<p style="color:red;">Error: ${errorText}</p>`;
+                    return;
+                }
+
+                const result = await response.json();
+                if (result.labelUrl) {
+                    document.getElementById('labelResult').innerHTML = `
+                        <p>Label generated!</p>
+                        <a href="${result.labelUrl}" target="_blank">View Label (PDF)</a>
+                    `;
+                } else {
+                    document.getElementById('labelResult').innerHTML = `<p style="color:red;">Label URL not found.</p>`;
+                }
+            } catch (err) {
+                document.getElementById('labelResult').innerHTML = `<p style="color:red;">Exception: ${err.message}</p>`;
+            }
+        });
+    </script>
+}

@@ -1,0 +1,94 @@
+﻿@model OrderManagementSystem.Models.InboundOrder
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>InboundOrder</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="InboundOrderId" />
+            <div class="form-group">
+                <label asp-for="OrderStatus" class="control-label"></label>
+                <input asp-for="OrderStatus" class="form-control" />
+                <span asp-validation-for="OrderStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="User_ID" class="control-label"></label>
+                <select asp-for="User_ID" class="form-control" asp-items="ViewBag.UserId"></select>
+                <span asp-validation-for="User_ID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Warehouse_ID" class="control-label"></label>
+                <select asp-for="Warehouse_ID" class="form-control" asp-items="ViewBag.Warehouse_ID"></select>
+                <span asp-validation-for="Warehouse_ID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EstimatedArrival" class="control-label"></label>
+                <input asp-for="EstimatedArrival" class="form-control" />
+                <span asp-validation-for="EstimatedArrival" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProductQuantity" class="control-label"></label>
+                <input asp-for="ProductQuantity" class="form-control" />
+                <span asp-validation-for="ProductQuantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreationDate" class="control-label"></label>
+                <input asp-for="CreationDate" class="form-control" />
+                <span asp-validation-for="CreationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cost" class="control-label"></label>
+                <input asp-for="Cost" class="form-control" />
+                <span asp-validation-for="Cost" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Currency" class="control-label"></label>
+                <input asp-for="Currency" class="form-control" />
+                <span asp-validation-for="Currency" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Boxes" class="control-label"></label>
+                <input asp-for="Boxes" class="form-control" />
+                <span asp-validation-for="Boxes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="InboundType" class="control-label"></label>
+                <input asp-for="InboundType" class="form-control" />
+                <span asp-validation-for="InboundType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TrackingNumber" class="control-label"></label>
+                <input asp-for="TrackingNumber" class="form-control" />
+                <span asp-validation-for="TrackingNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReferenceOrderNumber" class="control-label"></label>
+                <input asp-for="ReferenceOrderNumber" class="form-control" />
+                <span asp-validation-for="ReferenceOrderNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ArrivalMethod" class="control-label"></label>
+                <input asp-for="ArrivalMethod" class="form-control" />
+                <span asp-validation-for="ArrivalMethod" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Inbound_All">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
