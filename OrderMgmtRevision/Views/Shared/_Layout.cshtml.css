@@ -46,3 +46,47 @@ button.accept-policy {
   white-space: nowrap;
   line-height: 60px;
 }
+
+
+.main-container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar-container {
+  width: 200px;
+}
+
+.sidebar-header {
+  background-color: #07183D;
+  color: #ffffff;
+  font-size: 26px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sidebar-content {
+  background-color: #121C25;
+  color: #BFCBD9;
+  height: 100%;
+}
+
+.sidebar-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.sidebar-link {
+  padding: 20px;
+}
+
+.sidebar-link:hover {
+  background-color: #0077cc;
+}
+
+.bi {
+  padding-right: 8px;
+}
