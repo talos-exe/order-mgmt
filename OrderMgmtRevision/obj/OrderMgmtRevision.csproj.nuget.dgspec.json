@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\L\\source\\repos\\OrderMgmtRevision\\OrderMgmtRevision\\OrderMgmtRevision.csproj": {}
+    "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\OrderMgmtRevision.csproj": {}
   },
   "projects": {
-    "C:\\Users\\L\\source\\repos\\OrderMgmtRevision\\OrderMgmtRevision\\OrderMgmtRevision.csproj": {
+    "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\OrderMgmtRevision.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\L\\source\\repos\\OrderMgmtRevision\\OrderMgmtRevision\\OrderMgmtRevision.csproj",
+        "projectUniqueName": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\OrderMgmtRevision.csproj",
         "projectName": "OrderMgmtRevision",
-        "projectPath": "C:\\Users\\L\\source\\repos\\OrderMgmtRevision\\OrderMgmtRevision\\OrderMgmtRevision.csproj",
+        "projectPath": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\OrderMgmtRevision.csproj",
         "packagesPath": "C:\\Users\\L\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\L\\source\\repos\\OrderMgmtRevision\\OrderMgmtRevision\\obj\\",
+        "outputPath": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -50,7 +50,15 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Authentication.Cookies": {
+              "target": "Package",
+              "version": "[2.3.0, )"
+            },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.1, )"
+            },
+            "Microsoft.AspNetCore.Identity.UI": {
               "target": "Package",
               "version": "[9.0.1, )"
             },
@@ -67,6 +75,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.1, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[9.0.0, )"
             }
           },
           "imports": [
