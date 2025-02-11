@@ -1,4 +1,13 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+
+@{
+    var user = User.Identity.IsAuthenticated ? await UserManager.GetUserAsync(User) : null;
+    var isAdmin = user != null && await UserManager.IsInRoleAsync(user, "Admin");
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -63,6 +72,16 @@
                             Settings
                         </a>
                     </li>
+
+                    <!-- Only show for Admins -->
+                    @if (isAdmin) {
+                        <li class="sidebar-link">
+                            <a asp-controller="UserManagement" asp-action="Index">
+                                <i class="bi bi-gear-fill"></i>
+                                User Management
+                            </a>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>
@@ -85,7 +104,7 @@
                     <div class="right-item">
                         <i class="bi bi-person-circle"></i>
 
-                        @if (User.Identity != null && User.Identity.IsAuthenticated == true)
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
                             <span>@User.Identity.Name</span>
                             <i class="bi bi-caret-down-fill"></i>

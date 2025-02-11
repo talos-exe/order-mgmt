@@ -43,11 +43,18 @@ namespace OrderMgmtRevision.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
+
             var user = new User { UserName = model.UserName, Email = model.Email, FullName = model.FullName };
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(user, "User");
+                if (User.IsInRole("Admin"))
+                {
+                    // For admin-created users, do not sign in as the new user.
+                    return RedirectToAction("Index", "UserManagement");
+                }
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 return RedirectToAction("Index", "Home");
             }
