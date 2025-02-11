@@ -11,9 +11,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 <body>
-    <header>
+    @* <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
-            @* <div class="container-fluid">
+            <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">OrderMgmtRevision</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -29,9 +29,9 @@
                         </li>
                     </ul>
                 </div>
-            </div> *@
+            </div>
         </nav>
-    </header>
+    </header> *@
     <div class="main-container">
         <div class="sidebar-container">
             <div class="sidebar-header">
@@ -66,9 +66,33 @@
                 </ul>
             </div>
         </div>
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        <div class="main-content">
+            <div class="topbar">
+                <div class="tab-group">
+                    <div class="tab">
+                        Dashboard
+                        <i class="bi bi-x"></i>
+                    </div>
+                </div>
+                <div class="topbar-right">
+                    <div class="right-item"> 
+                        English
+                        <i class="bi bi-caret-down-fill"></i>
+                    </div>
+                    <div class="right-item">
+                        <i class="bi bi-question-circle"></i>
+                    </div>
+                    <div class="right-item">
+                        <i class="bi bi-person-circle"></i>
+                        Username
+                        <i class="bi bi-caret-down-fill"></i>
+                    </div>
+                </div>
+            </div>
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
     </div>
 
     @* <footer class="border-top footer text-muted">
