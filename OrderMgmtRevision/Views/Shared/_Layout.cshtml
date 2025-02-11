@@ -84,8 +84,17 @@
                     </div>
                     <div class="right-item">
                         <i class="bi bi-person-circle"></i>
-                        Username
-                        <i class="bi bi-caret-down-fill"></i>
+
+                        @if (User.Identity != null && User.Identity.IsAuthenticated == true)
+                        {
+                            <span>@User.Identity.Name</span>
+                            <i class="bi bi-caret-down-fill"></i>
+                            <a class="nav-link d-inline" asp-controller="Account" asp-action="Logout">Logout</a>
+                        }
+                        else
+                        {
+                            <a class="nav-link d-inline" asp-controller="Account" asp-action="Login">Login</a>
+                        }
                     </div>
                 </div>
             </div>

@@ -23,21 +23,18 @@ namespace OrderMgmtRevision.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            if (user == null) { ModelState.AddModelError("", "Invalid login attempt."); return View("Error"); }
+            var user = await _userManager.FindByNameAsync(model.UserName);
+
+            if (user == null) { ModelState.AddModelError("", "User account not found."); return View(model); }
 
             var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, false);
             if (result.Succeeded)
             {
                 return RedirectToAction("Index", "Home");
             }
-            else
-            {
-                ModelState.AddModelError("", "Invalid login attempt.");
-                return View(model);
-            }
-            
 
+            ModelState.AddModelError("", "Invalid login attempt.");
+            return View(model);
         }
 
         public IActionResult Register() => View();
