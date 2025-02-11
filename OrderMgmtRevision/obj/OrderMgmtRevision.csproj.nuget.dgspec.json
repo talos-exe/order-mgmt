@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/rachelbasinski/Desktop/order-mgmt/OrderMgmtRevision/OrderMgmtRevision.csproj": {}
+    "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\OrderMgmtRevision.csproj": {}
   },
   "projects": {
-    "/Users/rachelbasinski/Desktop/order-mgmt/OrderMgmtRevision/OrderMgmtRevision.csproj": {
+    "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\OrderMgmtRevision.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/rachelbasinski/Desktop/order-mgmt/OrderMgmtRevision/OrderMgmtRevision.csproj",
+        "projectUniqueName": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\OrderMgmtRevision.csproj",
         "projectName": "OrderMgmtRevision",
-        "projectPath": "/Users/rachelbasinski/Desktop/order-mgmt/OrderMgmtRevision/OrderMgmtRevision.csproj",
-        "packagesPath": "/Users/rachelbasinski/.nuget/packages/",
-        "outputPath": "/Users/rachelbasinski/Desktop/order-mgmt/OrderMgmtRevision/obj/",
+        "projectPath": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\OrderMgmtRevision.csproj",
+        "packagesPath": "C:\\Users\\L\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/rachelbasinski/.nuget/NuGet/NuGet.Config"
@@ -43,6 +43,38 @@
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Authentication.Cookies": {
+              "target": "Package",
+              "version": "[2.3.0, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.1, )"
+            },
+            "Microsoft.AspNetCore.Identity.UI": {
+              "target": "Package",
+              "version": "[9.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[9.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[9.0.1, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[9.0.1, )"
+            },
+            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
