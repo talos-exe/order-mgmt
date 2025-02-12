@@ -56,19 +56,11 @@ namespace OrderMgmtRevision.Controllers
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
-            {
-                return Json(new { success = true });
-            }
-            else
-            {
-                var errors = result.Errors.Select(e => e.Description).ToList();
-                return Json(new { success = false, error = string.Join("<br/>", errors) });
-            }
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditConfirm(UserViewModel model)
+        public async Task<IActionResult> EditConfirm(string id, UserViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -79,10 +71,10 @@ namespace OrderMgmtRevision.Controllers
                 return Json(new { success = false, error = string.Join("<br/>", errors) });
             }
 
-            var user = await _userManager.FindByNameAsync(model.UserName);
+            var user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
-                return Json(new { success = false, error = "User not found." });
+                return NotFound();
             }
 
             user.UserName = model.UserName;
@@ -90,15 +82,8 @@ namespace OrderMgmtRevision.Controllers
             user.FullName = model.FullName;
 
             var result = await _userManager.UpdateAsync(user);
-            if (result.Succeeded)
-            {
-                return Json(new { success = true });
-            }
-            else
-            {
-                var errors = result.Errors.Select(e => e.Description).ToList();
-                return Json(new { success = false, error = string.Join("<br/>", errors) });
-            }
+
+            return RedirectToAction("Index");
         }
 
         //Delete User (POST)
