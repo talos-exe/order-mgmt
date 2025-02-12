@@ -1,45 +1,53 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\",
+  "WorkspaceRootPath": "C:\\Users\\source\\Desktop\\order-mgmt\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Migrations\\20250212101107_DataSeederRecreation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:OrderMgmtRevision\\Migrations\\20250212101107_DataSeederRecreation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\source\\desktop\\order-mgmt\\ordermgmtrevision\\views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|solutionrelative:ordermgmtrevision\\views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\l\\desktop\\ordermgmtrevision\\order-mgmt\\ordermgmtrevision\\data\\dataseeder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|solutionrelative:ordermgmtrevision\\data\\dataseeder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\source\\desktop\\order-mgmt\\ordermgmtrevision\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|solutionrelative:ordermgmtrevision\\views\\account\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\l\\desktop\\ordermgmtrevision\\order-mgmt\\ordermgmtrevision\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\source\\desktop\\order-mgmt\\ordermgmtrevision\\migrations\\20250212101107_dataseederrecreation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|solutionrelative:ordermgmtrevision\\migrations\\20250212101107_dataseederrecreation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\source\\desktop\\order-mgmt\\ordermgmtrevision\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|solutionrelative:ordermgmtrevision\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\l\\desktop\\ordermgmtrevision\\order-mgmt\\ordermgmtrevision\\wwwroot\\css\\dashboard.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\source\\desktop\\order-mgmt\\ordermgmtrevision\\data\\dataseeder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|solutionrelative:ordermgmtrevision\\data\\dataseeder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\source\\desktop\\order-mgmt\\ordermgmtrevision\\wwwroot\\css\\dashboard.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
       "RelativeMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|solutionrelative:ordermgmtrevision\\wwwroot\\css\\dashboard.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\l\\desktop\\ordermgmtrevision\\order-mgmt\\ordermgmtrevision\\views\\shared\\_layout.cshtml.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\source\\desktop\\order-mgmt\\ordermgmtrevision\\views\\shared\\_layout.cshtml.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
       "RelativeMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|solutionrelative:ordermgmtrevision\\views\\shared\\_layout.cshtml.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\l\\desktop\\ordermgmtrevision\\order-mgmt\\ordermgmtrevision\\views\\usermanagement\\_createuser.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\source\\desktop\\order-mgmt\\ordermgmtrevision\\views\\usermanagement\\_createuser.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|solutionrelative:ordermgmtrevision\\views\\usermanagement\\_createuser.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\l\\desktop\\ordermgmtrevision\\order-mgmt\\ordermgmtrevision\\views\\usermanagement\\_edituser.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\source\\desktop\\order-mgmt\\ordermgmtrevision\\views\\usermanagement\\_edituser.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|solutionrelative:ordermgmtrevision\\views\\usermanagement\\_edituser.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\l\\desktop\\ordermgmtrevision\\order-mgmt\\ordermgmtrevision\\views\\usermanagement\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\source\\desktop\\order-mgmt\\ordermgmtrevision\\views\\usermanagement\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|solutionrelative:ordermgmtrevision\\views\\usermanagement\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\l\\desktop\\ordermgmtrevision\\order-mgmt\\ordermgmtrevision\\views\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\source\\desktop\\order-mgmt\\ordermgmtrevision\\views\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|solutionrelative:ordermgmtrevision\\views\\dashboard\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\l\\desktop\\ordermgmtrevision\\order-mgmt\\ordermgmtrevision\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\source\\desktop\\order-mgmt\\ordermgmtrevision\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|solutionrelative:ordermgmtrevision\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
@@ -50,15 +58,45 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Views\\Account\\Login.cshtml",
+              "RelativeDocumentMoniker": "OrderMgmtRevision\\Views\\Account\\Login.cshtml",
+              "ToolTip": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Views\\Account\\Login.cshtml",
+              "RelativeToolTip": "OrderMgmtRevision\\Views\\Account\\Login.cshtml",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-12T16:51:56.899Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Register.cshtml",
+              "DocumentMoniker": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Views\\Account\\Register.cshtml",
+              "RelativeDocumentMoniker": "OrderMgmtRevision\\Views\\Account\\Register.cshtml",
+              "ToolTip": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Views\\Account\\Register.cshtml",
+              "RelativeToolTip": "OrderMgmtRevision\\Views\\Account\\Register.cshtml",
+              "ViewState": "AgIAABYAAAAAAAAAAAAQwCIAAABKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-12T16:40:57.244Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "20250212101107_DataSeederRecreation.cs",
-              "DocumentMoniker": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Migrations\\20250212101107_DataSeederRecreation.cs",
+              "DocumentMoniker": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Migrations\\20250212101107_DataSeederRecreation.cs",
               "RelativeDocumentMoniker": "OrderMgmtRevision\\Migrations\\20250212101107_DataSeederRecreation.cs",
-              "ToolTip": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Migrations\\20250212101107_DataSeederRecreation.cs",
+              "ToolTip": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Migrations\\20250212101107_DataSeederRecreation.cs",
               "RelativeToolTip": "OrderMgmtRevision\\Migrations\\20250212101107_DataSeederRecreation.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -67,28 +105,23 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "DataSeeder.cs",
-              "DocumentMoniker": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Data\\DataSeeder.cs",
+              "DocumentMoniker": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Data\\DataSeeder.cs",
               "RelativeDocumentMoniker": "OrderMgmtRevision\\Data\\DataSeeder.cs",
-              "ToolTip": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Data\\DataSeeder.cs",
+              "ToolTip": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Data\\DataSeeder.cs",
               "RelativeToolTip": "OrderMgmtRevision\\Data\\DataSeeder.cs",
               "ViewState": "AgIAAFEAAAAAAAAAAAAowGAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-12T10:09:53.19Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+              "WhenOpened": "2025-02-12T10:09:53.19Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "AccountController.cs",
-              "DocumentMoniker": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Controllers\\AccountController.cs",
+              "DocumentMoniker": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Controllers\\AccountController.cs",
               "RelativeDocumentMoniker": "OrderMgmtRevision\\Controllers\\AccountController.cs",
-              "ToolTip": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Controllers\\AccountController.cs",
+              "ToolTip": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Controllers\\AccountController.cs",
               "RelativeToolTip": "OrderMgmtRevision\\Controllers\\AccountController.cs",
               "ViewState": "AgIAADQAAAAAAAAAAAAcwEQAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
@@ -97,89 +130,83 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "dashboard.css",
-              "DocumentMoniker": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\wwwroot\\css\\dashboard.css",
+              "DocumentMoniker": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\wwwroot\\css\\dashboard.css",
               "RelativeDocumentMoniker": "OrderMgmtRevision\\wwwroot\\css\\dashboard.css",
-              "ToolTip": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\wwwroot\\css\\dashboard.css",
+              "ToolTip": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\wwwroot\\css\\dashboard.css",
               "RelativeToolTip": "OrderMgmtRevision\\wwwroot\\css\\dashboard.css",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-02-12T10:05:31.168Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-12T10:05:31.168Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Views\\Dashboard\\Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Views\\Dashboard\\Index.cshtml",
               "RelativeDocumentMoniker": "OrderMgmtRevision\\Views\\Dashboard\\Index.cshtml",
-              "ToolTip": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Views\\Dashboard\\Index.cshtml",
+              "ToolTip": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Views\\Dashboard\\Index.cshtml",
               "RelativeToolTip": "OrderMgmtRevision\\Views\\Dashboard\\Index.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAC8AAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-12T09:54:31.473Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Views\\UserManagement\\Index.cshtml",
-              "RelativeDocumentMoniker": "OrderMgmtRevision\\Views\\UserManagement\\Index.cshtml",
-              "ToolTip": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Views\\UserManagement\\Index.cshtml",
-              "RelativeToolTip": "OrderMgmtRevision\\Views\\UserManagement\\Index.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAArAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-12T09:46:44.043Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "_EditUser.cshtml",
-              "DocumentMoniker": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Views\\UserManagement\\_EditUser.cshtml",
-              "RelativeDocumentMoniker": "OrderMgmtRevision\\Views\\UserManagement\\_EditUser.cshtml",
-              "ToolTip": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Views\\UserManagement\\_EditUser.cshtml",
-              "RelativeToolTip": "OrderMgmtRevision\\Views\\UserManagement\\_EditUser.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-12T09:38:10.291Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "_CreateUser.cshtml",
-              "DocumentMoniker": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Views\\UserManagement\\_CreateUser.cshtml",
-              "RelativeDocumentMoniker": "OrderMgmtRevision\\Views\\UserManagement\\_CreateUser.cshtml",
-              "ToolTip": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Views\\UserManagement\\_CreateUser.cshtml",
-              "RelativeToolTip": "OrderMgmtRevision\\Views\\UserManagement\\_CreateUser.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-12T09:37:46.202Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "_Layout.cshtml.css",
-              "DocumentMoniker": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Views\\Shared\\_Layout.cshtml.css",
-              "RelativeDocumentMoniker": "OrderMgmtRevision\\Views\\Shared\\_Layout.cshtml.css",
-              "ToolTip": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Views\\Shared\\_Layout.cshtml.css",
-              "RelativeToolTip": "OrderMgmtRevision\\Views\\Shared\\_Layout.cshtml.css",
-              "ViewState": "AgIAAB4AAAAAAAAAAAAAAG4AAAADAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
-              "WhenOpened": "2025-02-12T09:23:42.921Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-12T09:54:31.473Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Views\\UserManagement\\Index.cshtml",
+              "RelativeDocumentMoniker": "OrderMgmtRevision\\Views\\UserManagement\\Index.cshtml",
+              "ToolTip": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Views\\UserManagement\\Index.cshtml",
+              "RelativeToolTip": "OrderMgmtRevision\\Views\\UserManagement\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-12T09:46:44.043Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "_EditUser.cshtml",
+              "DocumentMoniker": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Views\\UserManagement\\_EditUser.cshtml",
+              "RelativeDocumentMoniker": "OrderMgmtRevision\\Views\\UserManagement\\_EditUser.cshtml",
+              "ToolTip": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Views\\UserManagement\\_EditUser.cshtml",
+              "RelativeToolTip": "OrderMgmtRevision\\Views\\UserManagement\\_EditUser.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-12T09:38:10.291Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "_CreateUser.cshtml",
+              "DocumentMoniker": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Views\\UserManagement\\_CreateUser.cshtml",
+              "RelativeDocumentMoniker": "OrderMgmtRevision\\Views\\UserManagement\\_CreateUser.cshtml",
+              "ToolTip": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Views\\UserManagement\\_CreateUser.cshtml",
+              "RelativeToolTip": "OrderMgmtRevision\\Views\\UserManagement\\_CreateUser.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-12T09:37:46.202Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "_Layout.cshtml.css",
+              "DocumentMoniker": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Views\\Shared\\_Layout.cshtml.css",
+              "RelativeDocumentMoniker": "OrderMgmtRevision\\Views\\Shared\\_Layout.cshtml.css",
+              "ToolTip": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Views\\Shared\\_Layout.cshtml.css",
+              "RelativeToolTip": "OrderMgmtRevision\\Views\\Shared\\_Layout.cshtml.css",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAAAG4AAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-02-12T09:23:42.921Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
               "Title": "_Layout.cshtml",
-              "DocumentMoniker": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Views\\Shared\\_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Views\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "OrderMgmtRevision\\Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\source\\Desktop\\order-mgmt\\OrderMgmtRevision\\Views\\Shared\\_Layout.cshtml",
               "RelativeToolTip": "OrderMgmtRevision\\Views\\Shared\\_Layout.cshtml",
               "ViewState": "AgIAAGYAAAAAAAAAAAAAAG0AAABEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",

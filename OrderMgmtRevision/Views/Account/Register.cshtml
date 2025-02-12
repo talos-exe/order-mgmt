@@ -15,27 +15,23 @@
     <style>
         body {
             background-color: #07183D;
-            position: relative;
-            overflow: hidden;
         }
+
         .background-brand {
             font-size: calc(2rem + 2vw);
             color: white;
-            margin-bottom: 1rem;
+            white-space: nowrap;
+            position: absolute;
+            left: 10%;
+            top: 50%;
+            transform: translateY(-50%);
         }
 
-        .register-card {
-            position: relative;
-            z-index: 1;
-        }
-        .vertical-shift {
-            margin-top: -50px;
-        }
     </style>
 </head>
 <body>
-    <div class="d-flex flex-column justify-content-center align-items-center min-vh-100 vertical-shift">
-        <div class="background-brand">领星 OMS</div>
+    <div class="background-brand">领星 OMS</div>
+    <div class="d-flex min-vh-100 justify-content-center align-items-center">
         <div class="card register-card p-4 shadow-sm" style="width: 450px;">
             <h2 class="text-center text-dark">Register</h2>
             <form method="post">
@@ -77,7 +73,6 @@
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Register</button>
             </form>
-
             <div class="mt-3 text-center">
                 <p>Back to <a href="@Url.Action("Login", "Account")">login page</a>.</p>
             </div>
