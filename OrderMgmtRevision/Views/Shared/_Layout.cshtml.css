@@ -1,6 +1,6 @@
 ﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
-
+/* 
 a.navbar-brand {
   white-space: normal;
   text-align: center;
@@ -21,9 +21,9 @@ a {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
-}
+} */
 
-.border-top {
+/* .border-top {
   border-top: 1px solid #e5e5e5;
 }
 .border-bottom {
@@ -37,16 +37,7 @@ a {
 button.accept-policy {
   font-size: 1rem;
   line-height: inherit;
-}
-
-/* .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
 } */
-
 
 .main-container {
   display: flex;
@@ -54,43 +45,46 @@ button.accept-policy {
 }
 
 .sidebar-container {
-  min-width: 200px;
-}
-
-.sidebar-header {
-  background-color: #07183D;
-  color: #ffffff;
-  font-size: 26px;
-  height: 60px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 600;
-}
-
-.sidebar-content {
-  background-color: #121C25;
-  color: #BFCBD9;
-  height: 100%;
-}
-
-.sidebar-list {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-}
-
-.sidebar-link {
-  padding: 20px;
-  font-size: 16px;
-  font-weight: 600;
-  .bi {
-    padding-right: 8px;
+  width: 200px !important;
+  .sidebar-header {
+    background-color: #07183D;
+    color: #ffffff;
+    font-size: 16px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
   }
-}
-
-.sidebar-link:hover {
-  background-color: #0077cc;
+  .sidebar-content {
+    background-color: #060d1e;
+    color: #BFCBD9;
+    height: 100%;
+    .sidebar-list {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+      .sidebar-link {
+        font-size: 16px;
+        font-weight: 600;
+        .sidebar-anchor {
+          padding: 20px;
+          color: #BFCBD9;
+          text-decoration: none;
+          display: flex;
+          height: 100%;
+          width: 100%;
+          .bi {
+            padding-right: 8px;
+          }
+        }
+        
+      }
+      .sidebar-link:hover {
+        background-color: #0077cc;
+      }
+    }
+  }
 }
 
 .main-content {
@@ -102,24 +96,24 @@ button.accept-policy {
 }
 
 .topbar {
+  background-color: #07183D;
+  color: #ffffffcc;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #07183D;
   font-size: 14px;
-}
-
-.tab {
-  border: 1px solid #07183D;
-  padding: 4px 8px;
-}
-
-.topbar-right {
-  display: flex;
-}
-
-.right-item {
-  padding: 0 8px; 
+  height: 50px;
+  .tab-item {
+    border-right: 1px solid #07183D;
+    padding: 4px 8px;
+  }
+  .topbar-right {
+    display: flex;
+    padding-right: 8px;
+    .right-item {
+      padding: 0 8px; 
+    }
+  }
 }
 
 .bi-caret-down-fill {

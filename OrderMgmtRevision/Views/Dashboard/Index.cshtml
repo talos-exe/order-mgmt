@@ -2,4 +2,45 @@
     ViewBag.Title = "Dashboard";
 }
 
-<h1>Hello World</h1>
+@section Styles {
+    <link rel="stylesheet" href="~/css/dashboard.css" />
+}
+
+@model List<SummaryItem>
+
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <div class="timestamp">
+            Last Updated 
+            <span class="timestamp-bold">
+                Feb 11 5:14:34 PM
+            </span>
+        </div>
+        <div class="help-center">
+            <i class="bi bi-play-btn-fill"></i>
+        </div>
+    </div>
+    <div class="summary-container">
+        @foreach (var item in Model)
+        {
+            <div class="summary-item">
+                <div class="item-title">
+                    @item.Title
+                </div>
+                <div class="item-content">
+                    @foreach (var labelValue in item.LabelValues)
+                    {
+                        <div class="label-value-block">
+                            <div class="item-label">
+                                @labelValue.Label
+                            </div>
+                            <div class="item-value">
+                                @labelValue.Value
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
