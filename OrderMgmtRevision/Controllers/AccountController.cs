@@ -27,10 +27,14 @@ namespace OrderMgmtRevision.Controllers
 
             if (user == null) { ModelState.AddModelError("", "User account not found."); return View(model); }
 
-            var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, false);
+            var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, true, false);
             if (result.Succeeded)
             {
                 return RedirectToAction("Index", "Home");
+            }
+            else if (result.IsLockedOut)
+            {
+                ModelState.AddModelError("", "Your account is locked out.");
             }
 
             ModelState.AddModelError("", "Invalid login attempt.");

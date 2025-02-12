@@ -49,25 +49,25 @@
             <div class="sidebar-content">
                 <ul class="sidebar-list">
                     <li class="sidebar-link">
-                        <a>
+                        <a asp-controller="Dashboard" asp-action="Index">
                             <i class="bi bi-house-fill"></i>
                             Dashboard
                         </a>
                     </li>
                     <li class="sidebar-link">
-                        <a>
+                        <a asp-controller="Warehouse" asp-action="Index">
                             <i class="bi bi-building-fill"></i>
                             Warehouse
                         </a>
                     </li>
                     <li class="sidebar-link">
-                        <a>
+                        <a asp-controller="Inventory" asp-action="Index">
                             <i class="bi bi-box-seam-fill"></i>
                             Inventory
                         </a>
                     </li>
                     <li class="sidebar-link">
-                        <a>
+                        <a asp-controller="Settings" asp-action="Index">
                             <i class="bi bi-gear-fill"></i>
                             Settings
                         </a>
@@ -77,7 +77,7 @@
                     @if (isAdmin) {
                         <li class="sidebar-link">
                             <a asp-controller="UserManagement" asp-action="Index">
-                                <i class="bi bi-gear-fill"></i>
+                                <i class="bi bi-person-circle"></i>
                                 User Management
                             </a>
                         </li>
@@ -94,25 +94,51 @@
                     </div>
                 </div>
                 <div class="topbar-right">
-                    <div class="right-item"> 
-                        English
-                        <i class="bi bi-caret-down-fill"></i>
+                    <div class="right-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            🌐 <span id="language-display">English</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="?lang=en" onclick="updateLanguage('English')">English</a></li>
+                            <li><a class="dropdown-item" href="?lang=zh" onclick="updateLanguage('中文')">中文 (Chinese)</a></li>
+                        </ul>
                     </div>
-                    <div class="right-item">
-                        <i class="bi bi-question-circle"></i>
-                    </div>
-                    <div class="right-item">
-                        <i class="bi bi-person-circle"></i>
+                    <script>
+                        // Function to update the displayed language
+                        function updateLanguage(language) {
+                            document.getElementById('language-display').textContent = language;
+                        }
 
+                        // Set default language on page load
+                        window.onload = function() {
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const lang = urlParams.get('lang');
+                            if (lang === 'zh') {
+                                updateLanguage('中文');
+                            } else {
+                                updateLanguage('English');
+                            }
+                        };
+                    </script>
+
+                    <div class="right-item d-flex align-items-center">
+                        <i class="bi bi-person-circle"></i>
                         @if (User.Identity != null && User.Identity.IsAuthenticated)
                         {
-                            <span>@User.Identity.Name</span>
-                            <i class="bi bi-caret-down-fill"></i>
-                            <a class="nav-link d-inline" asp-controller="Account" asp-action="Logout">Logout</a>
+                            <div class="dropdown ms-2">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    @User.Identity.Name
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="Account" asp-action="Logout">Logout</a>
+                                    </li>
+                                </ul>
+                            </div>
                         }
                         else
                         {
-                            <a class="nav-link d-inline" asp-controller="Account" asp-action="Login">Login</a>
+                            <a class="nav-link ms-2" asp-controller="Account" asp-action="Login">Login</a>
                         }
                     </div>
                 </div>
