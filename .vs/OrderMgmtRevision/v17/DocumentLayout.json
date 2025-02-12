@@ -3,6 +3,17 @@
   "WorkspaceRootPath": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\l\\desktop\\ordermgmtrevision\\order-mgmt\\ordermgmtrevision\\views\\usermanagement\\_edituser.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|solutionrelative:ordermgmtrevision\\views\\usermanagement\\_edituser.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\l\\desktop\\ordermgmtrevision\\order-mgmt\\ordermgmtrevision\\views\\usermanagement\\_createuser.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|solutionrelative:ordermgmtrevision\\views\\usermanagement\\_createuser.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/OMSDB/True/SqlTable/dbo.AspNetUsers.sql||{0058A1F7-65F3-4DB9-B3D0-CA7E64DD73CD}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|c:\\users\\l\\desktop\\ordermgmtrevision\\order-mgmt\\ordermgmtrevision\\views\\shared\\_layout.cshtml.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
       "RelativeMoniker": "D:0:0:{171629C7-DAB0-4B26-8C19-53A58DF9C289}|OrderMgmtRevision\\OrderMgmtRevision.csproj|solutionrelative:ordermgmtrevision\\views\\shared\\_layout.cshtml.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
     },
@@ -27,19 +38,55 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "_EditUser.cshtml",
+              "DocumentMoniker": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Views\\UserManagement\\_EditUser.cshtml",
+              "RelativeDocumentMoniker": "OrderMgmtRevision\\Views\\UserManagement\\_EditUser.cshtml",
+              "ToolTip": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Views\\UserManagement\\_EditUser.cshtml",
+              "RelativeToolTip": "OrderMgmtRevision\\Views\\UserManagement\\_EditUser.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-12T09:38:10.291Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "_CreateUser.cshtml",
+              "DocumentMoniker": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Views\\UserManagement\\_CreateUser.cshtml",
+              "RelativeDocumentMoniker": "OrderMgmtRevision\\Views\\UserManagement\\_CreateUser.cshtml",
+              "ToolTip": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Views\\UserManagement\\_CreateUser.cshtml",
+              "RelativeToolTip": "OrderMgmtRevision\\Views\\UserManagement\\_CreateUser.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-02-12T09:37:46.202Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "dbo.AspNetUsers [Data]",
+              "DocumentMoniker": "ViewDataWindow_MSSQL__/_localdb__MSSQLLocalDB/OMSDB/True/SqlTable/dbo.AspNetUsers.sql",
+              "ToolTip": "dbo.AspNetUsers [Data]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000826|",
+              "WhenOpened": "2025-02-12T09:36:05.534Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "_Layout.cshtml.css",
               "DocumentMoniker": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Views\\Shared\\_Layout.cshtml.css",
               "RelativeDocumentMoniker": "OrderMgmtRevision\\Views\\Shared\\_Layout.cshtml.css",
               "ToolTip": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Views\\Shared\\_Layout.cshtml.css",
               "RelativeToolTip": "OrderMgmtRevision\\Views\\Shared\\_Layout.cshtml.css",
-              "ViewState": "AgIAAGAAAAAAAAAAAAAAAHEAAAATAAAAAAAAAA==",
+              "ViewState": "AgIAAEIAAAAAAAAAAAAAAG4AAAADAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
               "WhenOpened": "2025-02-12T09:23:42.921Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "_Layout.cshtml",
               "DocumentMoniker": "C:\\Users\\L\\Desktop\\OrderMgmtRevision\\order-mgmt\\OrderMgmtRevision\\Views\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "OrderMgmtRevision\\Views\\Shared\\_Layout.cshtml",
@@ -47,8 +94,7 @@
               "RelativeToolTip": "OrderMgmtRevision\\Views\\Shared\\_Layout.cshtml",
               "ViewState": "AgIAAGYAAAAAAAAAAAAAAG0AAABEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-02-11T02:21:01.626Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-11T02:21:01.626Z"
             }
           ]
         }
