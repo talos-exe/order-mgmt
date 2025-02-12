@@ -27,10 +27,14 @@ namespace OrderMgmtRevision.Controllers
 
             if (user == null) { ModelState.AddModelError("", "User account not found."); return View(model); }
 
-            var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, model.RememberMe, false);
+            var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, true, false);
             if (result.Succeeded)
             {
                 return RedirectToAction("Index", "Home");
+            }
+            else if (result.IsLockedOut)
+            {
+                ModelState.AddModelError("", "Your account is locked out.");
             }
 
             ModelState.AddModelError("", "Invalid login attempt.");
@@ -43,11 +47,18 @@ namespace OrderMgmtRevision.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
+
             var user = new User { UserName = model.UserName, Email = model.Email, FullName = model.FullName };
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
             {
+                await _userManager.AddToRoleAsync(user, "User");
+                if (User.IsInRole("Admin"))
+                {
+                    // For admin-created users, do not sign in as the new user.
+                    return RedirectToAction("Index", "UserManagement");
+                }
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 return RedirectToAction("Index", "Home");
             }

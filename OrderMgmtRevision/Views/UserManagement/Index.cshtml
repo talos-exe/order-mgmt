@@ -1,0 +1,80 @@
+﻿@model List<OrderMgmtRevision.Models.UserViewModel>
+
+
+<h2>User Management</h2>
+
+<button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createUserModal">Create User</button>
+
+<!-- User List -->
+<table class="table">
+    <thead>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Full Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>@user.FullName</td>
+                <td>
+                    <!-- Edit Button -->
+                    <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editUserModal-@user.Id">Edit</button>
+
+                    <!-- Delete Button -->
+                    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal-@user.Id">Delete</button>
+                </td>
+            </tr>
+
+            <!-- Edit User Modal -->
+            <div class="modal fade" id="editUserModal-@user.Id" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editUserModalLabel-@user.Id">Edit User</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <partial name="_EditUser" model="@user" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delete User Modal -->
+            <div class="modal fade" id="deleteUserModal-@user.Id" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteUserModalLabel-@user.Id">Delete User</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete the user <strong>@user.UserName</strong>? This action cannot be undone.</p>
+                            <partial name="_DeleteUser" model="@user" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="modal fade" id="createUserModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createUserModal">Create User</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <partial name="_CreateUser" model="new UserViewModel()" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </tbody>
+</table>
