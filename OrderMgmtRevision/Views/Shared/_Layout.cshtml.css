@@ -96,22 +96,29 @@ button.accept-policy {
 }
 
 .topbar {
-  background-color: #07183D;
-  color: #ffffffcc;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-  height: 50px;
-  .tab-item {
+    background-color: #07183D;
+    color: #ffffffcc;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    font-size: 14px;
+    height: 50px;
+}
+
+.tab-item {
     border-right: 1px solid #07183D;
     padding: 4px 8px;
   }
-  .topbar-right {
-    display: flex;
-    padding-right: 8px;
-    .right-item {
-      padding: 0 8px; 
+
+.topbar-right {
+    display: flex; 
+    padding-right: 15px;
+}
+
+.right-item {
+      padding: 0 15px; 
+      display: flex;
+      align-items: center;
     }
   }
 }
