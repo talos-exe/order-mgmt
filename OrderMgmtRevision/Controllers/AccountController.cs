@@ -30,7 +30,7 @@ namespace OrderMgmtRevision.Controllers
             var result = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, true, false);
             if (result.Succeeded)
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Dashboard");
             }
             else if (result.IsLockedOut)
             {
@@ -60,7 +60,7 @@ namespace OrderMgmtRevision.Controllers
                     return RedirectToAction("Index", "UserManagement");
                 }
                 await _signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Dashboard");
             }
 
             foreach (var error in result.Errors)
@@ -72,7 +72,7 @@ namespace OrderMgmtRevision.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Dashboard");
         }
 
         public IActionResult Index()

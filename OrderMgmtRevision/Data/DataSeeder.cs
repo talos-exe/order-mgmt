@@ -20,7 +20,7 @@ namespace OrderMgmtRevision.Data
         public async Task SeedDataAsync()
         {
             // Seed roles
-            var roles = new[] { "Admin", "User", "Manager" };
+            var roles = new[] { "Admin", "User"};
             foreach (var role in roles)
             {
                 if (!await _roleManager.RoleExistsAsync(role))
@@ -37,7 +37,7 @@ namespace OrderMgmtRevision.Data
                 {
                     UserName = "admin",
                     Email = "admin@example.com",
-                    FullName = "Admin User"
+                    FullName = "Administrator Account"
                 };
 
                 var result = await _userManager.CreateAsync(adminUser, "Admin@123");
@@ -48,12 +48,12 @@ namespace OrderMgmtRevision.Data
                 }
             }
 
-            var guestAccount = await _userManager.FindByNameAsync("User1");
+            var guestAccount = await _userManager.FindByNameAsync("user");
             if (guestAccount == null)
             {
                 guestAccount = new User
                 {
-                    UserName = "User1",
+                    UserName = "user",
                     Email = "user@user.com",
                     FullName = "User Account"
                 };

@@ -9,6 +9,7 @@
         font-size: 14px;
         .timestamp-bold {
             font-weight: 600;
+            padding-right: 1rem;
         }
     }
     .help-center {

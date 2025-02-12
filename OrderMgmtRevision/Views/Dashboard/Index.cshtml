@@ -13,12 +13,12 @@
         <div class="timestamp">
             Last Updated 
             <span class="timestamp-bold">
-                Feb 11 5:14:34 PM
+                <time id="current-time"></time>
             </span>
         </div>
-        <div class="help-center">
-            <i class="bi bi-play-btn-fill"></i>
-        </div>
+        @* <div class="help-center"> *@
+        @*     <i class="bi bi-play-btn-fill"></i> *@
+        @* </div> *@
     </div>
     <div class="summary-container">
         @foreach (var item in Model)
@@ -45,3 +45,4 @@
     </div>
 </div>
 
+<script src="~/js/date-time.js"></script>
