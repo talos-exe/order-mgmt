@@ -1,0 +1,55 @@
+.dashboard-header {
+    height: 48px;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    color: #888C94;
+    .timestamp {
+        font-size: 14px;
+        .timestamp-bold {
+            font-weight: 600;
+        }
+    }
+    .help-center {
+        font-size: 20px;
+        padding: 0 32px;
+    }
+}
+
+.summary-container {
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+    flex-wrap: wrap;
+    .summary-item {
+        padding: 20px;
+        margin: 0 16px 16px 0;
+        background-color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        height: 134px;
+        border-radius: 6px;
+        .item-title {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: .5px;
+            margin-bottom: 12px;
+        }
+        .item-content {
+            display: flex;
+            flex-direction: row;
+            .label-value-block {
+                padding-right: 10px;
+                .item-label {
+                    color: #55585F;
+                    font-size: 14px;
+                    font-weight: 400;
+                }
+                .item-value {
+                    font-size: 24px;
+                }
+            }
+        }
+    }
+}
