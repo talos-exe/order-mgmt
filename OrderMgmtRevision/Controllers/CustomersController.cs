@@ -1,14 +1,15 @@
-using Microsoft.AspNetCore.Authorization;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using OrderMgmtRevision.Models;
 
 namespace OrderMgmtRevision.Controllers
 {
-    [Authorize]
-    public class InventoryController : Controller
+    public class CustomersController : Controller
     {
         public IActionResult Index()
         {
             return View();
         }
+
     }
 }

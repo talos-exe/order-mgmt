@@ -69,8 +69,7 @@ app.UseEndpoints(endpoints =>
     // MVC controller routes
     endpoints.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
-
+        pattern: "{controller=Dashboard}/{action=Index}/{id?}");
     // Razor Pages for Identity
     endpoints.MapRazorPages(); // This ensures Identity pages work
 });
