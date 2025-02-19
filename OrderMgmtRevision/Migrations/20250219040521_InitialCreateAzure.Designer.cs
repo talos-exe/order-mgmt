@@ -12,8 +12,8 @@ using OrderMgmtRevision.Data;
 namespace OrderMgmtRevision.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250211062526_DataSeederClass")]
-    partial class DataSeederClass
+    [Migration("20250219040521_InitialCreateAzure")]
+    partial class InitialCreateAzure
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
