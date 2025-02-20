@@ -15,26 +15,33 @@ namespace OrderMgmtRevision.Controllers
     public class UserManagementController : Controller
     {
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public UserManagementController(UserManager<User> userManager)
+        public UserManagementController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         // When clicked on UserManagement Page, Index loads
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var users = _userManager.Users.Select(u => new UserViewModel
+            var users = await _userManager.Users.ToListAsync();
+
+            var userViewModels = new List<UserViewModel>();
+            foreach (var user in users)
             {
-                Id = u.Id,
-                UserName = u.UserName,
-                Email = u.Email,
-                FullName = u.FullName
-            }).ToList();
-
-            return View(users);
-
-        }
+                var roles = await _userManager.GetRolesAsync(user);
+                userViewModels.Add(new UserViewModel
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    FullName = user.FullName
+                });
+            }
+            return View(userViewModels);
+         }
 
         [HttpPost]
         public async Task<IActionResult> CreateConfirm(UserViewModel model)

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Data;
 
 namespace OrderMgmtRevision.Models
 {
@@ -21,5 +22,8 @@ namespace OrderMgmtRevision.Models
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string? Password { get; set; }
+
+        //[Display(Name = "Role")]
+        //public string Roles { get; set; }
     }
 }

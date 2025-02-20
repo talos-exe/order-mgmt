@@ -52,8 +52,6 @@ using (var scope = app.Services.CreateScope())
     await dataSeeder.SeedDataAsync();
 
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-    await context.Database.MigrateAsync();
 }
 
 
