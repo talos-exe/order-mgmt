@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using OrderMgmtRevision.Data;
 using OrderMgmtRevision.Models;
 using Microsoft.AspNetCore.Identity;
-using OrderMgmtRevision.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,8 +42,6 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 builder.Services.AddTransient<DataSeeder>();
-
-builder.Services.AddHttpClient<FedExApiService>();
 
 var app = builder.Build();
 
