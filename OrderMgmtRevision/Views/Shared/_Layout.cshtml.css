@@ -39,9 +39,15 @@ button.accept-policy {
   line-height: inherit;
 } */
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
 .main-container {
   display: flex;
-  height: 100vh;
+  min-height: 100vh;
   font-family: "Roboto", sans-serif;
 }
 

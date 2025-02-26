@@ -1,15 +1,11 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OrderMgmtRevision.Models;
+using System.Text.Json;
 
-namespace OrderMgmtRevision.Controllers
+public class DashboardController : Controller
 {
-    [Authorize]
-    public class DashboardController : Controller
+
+    public IActionResult Index()
     {
-        public IActionResult Index()
-        {
         var summaryData = new List<SummaryItem>
         {
             new SummaryItem
@@ -73,7 +69,5 @@ namespace OrderMgmtRevision.Controllers
         };
 
         return View(summaryData);
-        }
-
     }
 }
