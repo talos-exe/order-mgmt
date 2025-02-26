@@ -35,6 +35,9 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddTransient<DataSeeder>();
 
+// FedEx Service
+builder.Services.AddSingleton<FedExService>();
+
 var app = builder.Build();
 
 // Run Database Migrations and Seed Data
@@ -45,7 +48,6 @@ using (var scope = app.Services.CreateScope())
 
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 }
-
 
 
 
