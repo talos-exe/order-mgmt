@@ -43,6 +43,9 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddTransient<DataSeeder>();
 
+// FedEx Service
+builder.Services.AddSingleton<FedExService>();
+
 var app = builder.Build();
 
 // Run Database Migrations and Seed Data
@@ -56,8 +59,7 @@ using (var scope = app.Services.CreateScope())
 
 
 
-
-//Configure the HTTP request pipeline.
+//Configure HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

@@ -398,3 +398,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Ignore app settings to hide api keys
+appsettings.json
+
+# Don't push labels up
+wwwroot/labels/
