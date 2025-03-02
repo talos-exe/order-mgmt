@@ -15,28 +15,14 @@
     <style>
         body {
             background-color: #07183D;
-            position: relative;
-            overflow: hidden;
-        }
-        .background-brand {
-            font-size: calc(2rem + 2vw);
-            color: white;
-            margin-bottom: 1rem;
         }
 
-        .register-card {
-            position: relative;
-            z-index: 1;
-        }
-        .vertical-shift {
-            margin-top: -50px;
-        }
     </style>
 </head>
 <body>
-    <div class="d-flex flex-column justify-content-center align-items-center min-vh-100 vertical-shift">
-        <div class="background-brand">领星 OMS</div>
-        <div class="card register-card p-4 shadow-sm" style="width: 450px;">
+    <div class="d-flex flex-column min-vh-100 justify-content-center align-items-center py-4 px-4 overflow-auto">
+        <div class="text-white mb-3 fs-1 fw-bold">领星 OMS</div>
+        <div class="card register-card p-4 shadow-sm w-100" style="max-width: 450px;">
             <h2 class="text-center text-dark">Register</h2>
             <form method="post">
                 @if (!ViewData.ModelState.IsValid)
@@ -52,32 +38,31 @@
                 }
                 <div class="mb-3">
                     <label for="UserName" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="UserName" asp-for="UserName" required />
+                    <input type="text" class="form-control" id="UserName" asp-for="UserName"/>
                     <span asp-validation-for="UserName" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
                     <label for="FullName" class="form-label">Full Name</label>
-                    <input type="text" class="form-control" id="FullName" asp-for="FullName" required />
+                    <input type="text" class="form-control" id="FullName" asp-for="FullName"/>
                     <span asp-validation-for="FullName" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
                     <label for="Email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="Email" asp-for="Email" required />
+                    <input type="email" class="form-control" id="Email" asp-for="Email"/>
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
                     <label for="Password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="Password" asp-for="Password" required />
+                    <input type="password" class="form-control" id="Password" asp-for="Password"/>
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
                     <label for="ConfirmPassword" class="form-label">Confirm Password</label>
-                    <input type="password" class="form-control" id="ConfirmPassword" asp-for="ConfirmPassword" required />
+                    <input type="password" class="form-control" id="ConfirmPassword" asp-for="ConfirmPassword"/>
                     <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Register</button>
             </form>
-
             <div class="mt-3 text-center">
                 <p>Back to <a href="@Url.Action("Login", "Account")">login page</a>.</p>
             </div>
