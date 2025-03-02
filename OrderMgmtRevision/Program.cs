@@ -2,11 +2,16 @@ using Microsoft.EntityFrameworkCore;
 using OrderMgmtRevision.Data;
 using OrderMgmtRevision.Models;
 using Microsoft.AspNetCore.Identity;
+using OrderMgmtRevision.Config;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Determine environment
 var environment = builder.Environment.EnvironmentName;
+
+//Get FedEx Credentials From Environment Variable.
+var fedexConnectionString = Environment.GetEnvironmentVariable("FEDEX_CONNECTION_STRING") ??
+    builder.Configuration["FedEx:ConnectionString"]; // fallback to appsettings.json
 
 // Get connection string from environment variable (Azure or local)
 var connectionString = Environment.GetEnvironmentVariable("OrderMgmtApp_ConnectionString") ??
@@ -15,6 +20,24 @@ var connectionString = Environment.GetEnvironmentVariable("OrderMgmtApp_Connecti
 // Register AppDbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+
+//Parse fedex connection string
+var fedexConfig = fedexConnectionString?
+    .Split(';', StringSplitOptions.RemoveEmptyEntries)
+    .Select(part => part.Split('=', 2))
+    .ToDictionary(split => split[0].Trim(), split => split.Length > 1 ? split[1].Trim() : "");
+
+//Bind to IConfiguration
+builder.Configuration["FedEx:ApiKey"] = fedexConfig?.GetValueOrDefault("ApiKey", "") ?? "";
+builder.Configuration["FedEx:ApiSecret"] = fedexConfig?.GetValueOrDefault("ApiSecret", "") ?? "";
+builder.Configuration["FedEx:AccountNumber"] = fedexConfig?.GetValueOrDefault("AccountNumber", "") ?? "";
+builder.Configuration["FedEx:LtlShipperAccountNumber"] = fedexConfig?.GetValueOrDefault("LtlShipperAccountNumber", "") ?? "";
+builder.Configuration["FedEx:BaseUrl"] = fedexConfig?.GetValueOrDefault("BaseUrl", "") ?? "";
+
+// Register FedEx settings for dependency injection
+//builder.Services.Configure<FedExSettings>(builder.Configuration.GetSection("FedEx"));
+// ENABLE THIS FOR STRONG-TYPED ACCESS.
 
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>

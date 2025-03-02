@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace OrderMgmtRevision.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreateAzure : Migration
+    public partial class AddFedExInitCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -49,6 +49,25 @@ namespace OrderMgmtRevision.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FedExShipments",
+                columns: table => new
+                {
+                    FedExShipmentId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    TrackingNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RecipientName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    State = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PostalCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CountryCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FedExShipments", x => x.FedExShipmentId);
                 });
 
             migrationBuilder.CreateTable(
@@ -340,6 +359,9 @@ namespace OrderMgmtRevision.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "FedExShipments");
 
             migrationBuilder.DropTable(
                 name: "InventoryAll");
