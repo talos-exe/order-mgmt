@@ -1,5 +1,121 @@
+@model List<OrderMgmtRevision.Models.FedExShipment>
 @{
     ViewBag.Title = "Inventory";
 }
 
-<h1>Inventory Working!</h1>
+<h2>Inventory</h2>
+
+<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createShipmentModal">
+    Create Shipping Order
+</button>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Tracking Number</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Postal Code</th>
+            <th>Country</th>
+            <th>Phone</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var shipment in Model)
+        {
+            <tr>
+                <td>@shipment.TrackingNumber</td>
+                <td>@shipment.RecipientName</td>
+                <td>@shipment.Address</td>
+                <td>@shipment.City</td>
+                <td>@shipment.State</td>
+                <td>@shipment.PostalCode</td>
+                <td>@shipment.CountryCode</td>
+                <td>@shipment.PhoneNumber</td>
+                <td>
+                    <button class="btn btn-danger btn-cancel" data-tracking-number="@shipment.TrackingNumber" data-bs-toggle="modal" data-bs-target="#cancelShipmentModal">Cancel</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal fade" id="createShipmentModal" tabindex="-1" aria-labelledby="createShipmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createShipmentModalLabel">Create Shipping Order</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="createShipmentForm">
+                    <div class="mb-3">
+                        <label for="recipientName" class="form-label">Recipient Name</label>
+                        <input type="text" class="form-control" id="recipientName" name="recipientName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="address" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="address" name="address" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="city" class="form-label">City</label>
+                        <input type="text" class="form-control" id="city" name="city" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="state" class="form-label">State</label>
+                        <input type="text" class="form-control" id="state" name="state" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="postalCode" class="form-label">Postal Code</label>
+                        <input type="text" class="form-control" id="postalCode" name="postalCode" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="countryCode" class="form-label">Country Code</label>
+                        <input type="text" class="form-control" id="countryCode" name="countryCode" value="US" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phoneNumber" class="form-label">Phone Number</label>
+                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="createShipmentSubmit">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cancelShipmentModal" tabindex="-1" aria-labelledby="cancelShipmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelShipmentModalLabel">Are you sure you want to cancel shipment <span id="cancelTrackingNumber"></span>?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                You cannot undo this action.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Go Back</button>
+                <button type="button" class="btn btn-danger" id="confirmCancel">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="resultToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <div class="toast-header-text"></div>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body"></div>
+    </div>
+</div>
+
+<script src="~/js/inventory.js"></script>
