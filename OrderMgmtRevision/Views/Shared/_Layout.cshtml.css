@@ -67,7 +67,7 @@ html, body {
   .sidebar-content {
     background-color: #060d1e;
     color: #BFCBD9;
-    height: 100%;
+    height: 100vh;
     .sidebar-list {
       padding: 0;
       margin: 0;
@@ -97,13 +97,22 @@ html, body {
 
 .main-content {
   width: 100%;
-  main {
-    height: 100%;
+  main
+    {
+    margin-left: 200px;
+    height: 1500px;
     background-color: #F5F5F5;
-  }
+    padding-top: 50px;
+    background-color: #F5F5F5;
+    overflow-y: auto;
+    }
 }
 
 .topbar {
+    position: fixed;
+    top: 0;
+    margin-left: 200px;
+    width: calc(100% - 200px);
     background-color: #07183D;
     color: #ffffffcc;
     display: flex;
@@ -111,6 +120,10 @@ html, body {
     align-items: center;
     font-size: 14px;
     height: 50px;
+    padding: 0 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .tab-item {
