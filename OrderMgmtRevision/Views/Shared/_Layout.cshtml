@@ -1,6 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
+@using Microsoft.Extensions.Localization
+@using OrderMgmtRevision.Resources
+@inject IStringLocalizer<SharedResources> Localizer
 
 @{
     var user = User.Identity.IsAuthenticated ? await UserManager.GetUserAsync(User) : null;
@@ -34,40 +37,41 @@
                     <li class="sidebar-link">
                         <a class="sidebar-anchor" asp-controller="Dashboard" asp-action="Index">
                             <i class="bi bi-house-fill"></i>
-                            Dashboard
+                            @Localizer["Dashboard"]
                         </a>
                     </li>
                     <li class="sidebar-link">
                         <a class="sidebar-anchor" asp-controller="Customers" asp-action="Index">
                             <i class="bi bi-people-fill"></i>
-                            Customers
+                            @Localizer["Customers"]
                         </a>
                     </li>
                     <li class="sidebar-link">
                         <a class="sidebar-anchor" asp-controller="Warehouse" asp-action="Index">
                             <i class="bi bi-building-fill"></i>
-                            Warehouse
+                            @Localizer["Warehouse"]
                         </a>
                     </li>
                     <li class="sidebar-link">
                         <a class="sidebar-anchor" asp-controller="Inventory" asp-action="Index">
                             <i class="bi bi-box-seam-fill"></i>
-                            Inventory
+                            @Localizer["Inventory"]
                         </a>
                     </li>
                     <li class="sidebar-link">
                         <a class="sidebar-anchor" asp-controller="Settings" asp-action="Index">
                             <i class="bi bi-gear-fill"></i>
-                            Settings
+                            @Localizer["Settings"]
                         </a>
                     </li>
 
                     <!-- Only show for Admins -->
-                    @if (isAdmin) {
+                    @if (isAdmin)
+                    {
                         <li class="sidebar-link">
                             <a class="sidebar-anchor" asp-controller="UserManagement" asp-action="Index">
                                 <i class="bi bi-person-circle"></i>
-                                User Management
+                                @Localizer["User Management"]
                             </a>
                         </li>
                     }
@@ -78,70 +82,63 @@
             <div class="topbar">
                 <div class="tab-group" id="tabsContainer" data-tabs="[]">
                     <div class="tab">
-                        Dashboard
+                        @Localizer["Dashboard"]
                         <i class="bi bi-x"></i>
                     </div>
                 </div>
                 <div class="topbar-right">
                     <div class="right-item">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            🌐 <span id="language-display">English</span>
+                            🌐 <span id="language-display">@Localizer["English"]</span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="?lang=en" onclick="updateLanguage('English')">English</a></li>
-                            <li><a class="dropdown-item" href="?lang=zh" onclick="updateLanguage('中文')">中文 (Chinese)</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="updateLanguage('English')">@Localizer["English"]</a></li>
+                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="updateLanguage('中文')">@Localizer["中文 (Chinese)"]</a></li>
                         </ul>
                     </div>
                     <script>
-                        // Function to update the displayed language
                         function updateLanguage(language) {
-                            document.getElementById('language-display').textContent = language;
+                            const langCode = language === 'English' ? 'en' : 'zh';
+                            window.location.href = `/Localization/SetLanguage?lang=${langCode}`;
                         }
-                        // Set default language on page load
                         window.onload = function() {
                             const urlParams = new URLSearchParams(window.location.search);
                             const lang = urlParams.get('lang');
-                            if (lang === 'zh') {
-                                updateLanguage('中文');
-                            } else {
-                                updateLanguage('English');
-                            }
+                            document.getElementById('language-display').textContent = lang === 'zh' ? '中文' : 'English';
                         };
                     </script>
-                    </div>
-                    <div class="right-item">
-                        <i class="bi bi-person-circle d-inline"></i>
-                        @if (User.Identity != null && User.Identity.IsAuthenticated)
-                        {
-                            <div class="dropdown ms-2">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                    @User.Identity.Name
-                                </a>
-                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="Account" asp-action="Logout">Logout</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        }
-                        else
-                        {
-                            <a class="nav-link ms-2" asp-controller="Account" asp-action="Login">Login</a>
-                        }
-                    </div>
-                    <div class="right-item">
-                        Arctic Warehouse
-                        <i class="bi bi-caret-down-fill"></i>
-                    </div>
+
                 </div>
+                <div class="right-item">
+                    <i class="bi bi-person-circle d-inline"></i>
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        <div class="dropdown ms-2">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                @User.Identity.Name
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="Logout">@Localizer["Logout"]</a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <a class="nav-link ms-2" asp-controller="Account" asp-action="Login">@Localizer["Login"]</a>
+                    }
+                </div>
+                <div class="right-item">
+                    Arctic Warehouse
+                    <i class="bi bi-caret-down-fill"></i>
+                </div>
+            </div>
             <main role="main">
                 @RenderBody()
             </main>
-            </div>
         </div>
     </div>
-
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

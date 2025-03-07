@@ -1,10 +1,12 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using OrderMgmtRevision.Models;
+
 
 namespace OrderMgmtRevision.Controllers
 {
@@ -13,11 +15,14 @@ namespace OrderMgmtRevision.Controllers
         private readonly FedExService _fedExService;
         private readonly IWebHostEnvironment _env;
         private static List<FedExShipment> _shipments = new List<FedExShipment>();
+        private readonly IStringLocalizer<InventoryController> _localizer;
 
-        public InventoryController(FedExService fedExService, IWebHostEnvironment env)
+        // Inject IStringLocalizer for localization
+        public InventoryController(FedExService fedExService, IWebHostEnvironment env, IStringLocalizer<InventoryController> localizer)
         {
             _fedExService = fedExService;
             _env = env;
+            _localizer = localizer; // Store the localizer
         }
 
         public IActionResult Index()
@@ -34,7 +39,9 @@ namespace OrderMgmtRevision.Controllers
                 {
                     var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
                     Console.WriteLine($"Validation errors: {string.Join(", ", errors)}");
-                    return Json(new { success = false, message = "Invalid shipment data." });
+
+                    // Use localized string for error message
+                    return Json(new { success = false, message = _localizer["Invalid shipment data."] });
                 }
 
                 var token = await _fedExService.GetAccessTokenAsync();
@@ -62,7 +69,8 @@ namespace OrderMgmtRevision.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = ex.Message });
+                // Use localized string for error message
+                return Json(new { success = false, message = _localizer["Error while creating shipment."] + " " + ex.Message });
             }
         }
 
@@ -74,11 +82,14 @@ namespace OrderMgmtRevision.Controllers
                 var token = await _fedExService.GetAccessTokenAsync();
                 var response = await _fedExService.CancelShipmentAsync(token, trackingNumber);
                 _shipments.RemoveAll(s => s.TrackingNumber == trackingNumber);
-                return Json(new { success = true, message = $"Shipment {trackingNumber} canceled successfully." });
+
+                // Use localized string for success message
+                return Json(new { success = true, message = _localizer["Shipment {0} canceled successfully.", trackingNumber] });
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = ex.Message });
+                // Use localized string for error message
+                return Json(new { success = false, message = _localizer["Error while canceling shipment."] + " " + ex.Message });
             }
         }
     }
