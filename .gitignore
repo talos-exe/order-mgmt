@@ -400,4 +400,5 @@ FodyWeavers.xsd
 *.sln.iml
 
 # Don't push labels up
-wwwroot/labels/
+OrderMgmtRevision/wwwroot/labels/
+OrderMgmtRevision/wwwroot/labels/*
