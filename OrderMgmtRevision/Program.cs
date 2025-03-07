@@ -1,15 +1,19 @@
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
+using Microsoft.AspNetCore.Identity;
 using OrderMgmtRevision.Data;
 using OrderMgmtRevision.Models;
-using Microsoft.AspNetCore.Identity;
 using OrderMgmtRevision.Config;
+using System.Globalization;
+using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Determine environment
 var environment = builder.Environment.EnvironmentName;
 
-//Get FedEx Credentials From Environment Variable.
+// Get FedEx Credentials From Environment Variable
 var fedexConnectionString = Environment.GetEnvironmentVariable("FEDEX_CONNECTION_STRING") ??
     builder.Configuration["FedEx:ConnectionString"]; // fallback to appsettings.json
 
@@ -21,25 +25,20 @@ var connectionString = Environment.GetEnvironmentVariable("OrderMgmtApp_Connecti
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
-
-//Parse fedex connection string
+// Parse FedEx connection string
 var fedexConfig = fedexConnectionString?
     .Split(';', StringSplitOptions.RemoveEmptyEntries)
     .Select(part => part.Split('=', 2))
     .ToDictionary(split => split[0].Trim(), split => split.Length > 1 ? split[1].Trim() : "");
 
-//Bind to IConfiguration
+// Bind to IConfiguration
 builder.Configuration["FedEx:ApiKey"] = fedexConfig?.GetValueOrDefault("ApiKey", "") ?? "";
 builder.Configuration["FedEx:ApiSecret"] = fedexConfig?.GetValueOrDefault("ApiSecret", "") ?? "";
 builder.Configuration["FedEx:AccountNumber"] = fedexConfig?.GetValueOrDefault("AccountNumber", "") ?? "";
 builder.Configuration["FedEx:LtlShipperAccountNumber"] = fedexConfig?.GetValueOrDefault("LtlShipperAccountNumber", "") ?? "";
 builder.Configuration["FedEx:BaseUrl"] = fedexConfig?.GetValueOrDefault("BaseUrl", "") ?? "";
 
-// Register FedEx settings for dependency injection
-//builder.Services.Configure<FedExSettings>(builder.Configuration.GetSection("FedEx"));
-// ENABLE THIS FOR STRONG-TYPED ACCESS.
-
-
+// Register Identity services
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
@@ -53,20 +52,39 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
 
+// Configure cookies
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
     options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-
 });
 
-// Add services to the container.
+// Register localization services
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+// Supported cultures
+var supportedCultures = new[] { "en", "zh" };
+
+// Custom Request Culture Provider (Query String Based)
+var localizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture("en")
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures)
+    .AddInitialRequestCultureProvider(new CustomRequestCultureProvider(context =>
+    {
+        var queryLang = context.Request.Query["lang"].ToString();
+
+        // Ensure queryLang is a valid culture from supportedCultures
+        var culture = supportedCultures.Contains(queryLang) ? queryLang : "en";
+
+        return Task.FromResult(new ProviderCultureResult(culture, culture));
+    }));
+
+
+// Add other services
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
-
 builder.Services.AddTransient<DataSeeder>();
-
-// FedEx Service
 builder.Services.AddSingleton<FedExService>();
 
 var app = builder.Build();
@@ -80,9 +98,10 @@ using (var scope = app.Services.CreateScope())
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 }
 
+// Use Request Localization Middleware
+app.UseRequestLocalization(localizationOptions);
 
-
-//Configure HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -99,13 +118,10 @@ app.MapStaticAssets();
 
 app.UseEndpoints(endpoints =>
 {
-    // MVC controller routes
     endpoints.MapControllerRoute(
         name: "default",
         pattern: "{controller=Dashboard}/{action=Index}/{id?}");
-    // Razor Pages for Identity
-    endpoints.MapRazorPages(); // This ensures Identity pages work
+    endpoints.MapRazorPages(); // Ensure Identity pages work
 });
 
-app.MapRazorPages();
 app.Run();
