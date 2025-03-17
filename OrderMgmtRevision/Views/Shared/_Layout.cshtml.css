@@ -51,9 +51,12 @@ html, body {
   font-family: "Roboto", sans-serif;
 }
 
+
+
 .sidebar-container {
   width: 200px !important;
-  .sidebar-header {
+  .sidebar-header
+{
     background-color: #07183D;
     color: #ffffff;
     font-family: sans-serif;
@@ -63,11 +66,12 @@ html, body {
     justify-content: center;
     align-items: center;
     font-weight: 600;
-  }
-  .sidebar-content {
+}
+.sidebar-content {
     background-color: #060d1e;
-    color: #BFCBD9;
+    color: #07183D;
     height: 100vh;
+    box-shadow: 4px 0 6px rgba(0, 0, 0, 0.5);
     .sidebar-list {
       padding: 0;
       margin: 0;

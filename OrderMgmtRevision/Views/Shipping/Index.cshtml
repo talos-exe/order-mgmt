@@ -1,14 +1,14 @@
 @model List<OrderMgmtRevision.Models.FedExShipment>
 @{
-    ViewBag.Title = "Inventory";
+    ViewBag.Title = "Shipping";
 }
 
 @using Microsoft.Extensions.Localization
 @using OrderMgmtRevision.Controllers
-@inject IStringLocalizer<InventoryController> Localizer
+@inject IStringLocalizer<ShippingController> Localizer
 
 
-<h2>@Localizer["Inventory"]</h2>
+<h2>@Localizer["Shipping"]</h2>
 
 <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createShipmentModal">
     @Localizer["Create Shipping Order"]

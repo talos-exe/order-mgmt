@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         console.log('Sending shipment data:', shipmentData);
 
-        fetch('/Inventory/CreateShipment', {
+        fetch('/Shipping/CreateShipment', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     confirmCancelButton.addEventListener('click', () => {
         const trackingNumber = confirmCancelButton.dataset.trackingNumber;
 
-        fetch('/Inventory/CancelShipment', {
+        fetch('/Shipping/CancelShipment', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'

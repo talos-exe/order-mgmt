@@ -6,7 +6,7 @@ using OrderMgmtRevision.Models;
 namespace OrderMgmtRevision.Controllers
 {
     [Authorize]
-    public class CustomersController : Controller
+    public class ProductsController : Controller
     {
         public IActionResult Index()
         {
