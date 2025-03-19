@@ -1,6 +1,45 @@
+@model List<OrderMgmtRevision.Models.Warehouse>
 
 @{
     ViewBag.Title = "Warehouse";
 }
 
-<h1>Warehouse Working!</h1>
+<div class="warehouse-container ms-5 me-5">
+  <h2 class="text-center mb-4 pt-4">Warehouses</h2>
+  <div class="d-flex justify-content-start mb-2">
+    <button class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#createUserModal">Create</button>
+    <button id="btnEdit" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>Edit</button>
+    <button id="btnDelete" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>Delete</button>
+    <input type="text" id="searchBar" class="form-control-sm me-2" placeholder="Search by Name" onkeyup="filterTable()" />
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+              <input type="checkbox" id="selectAll" onclick="toggleAll(this);">
+            </th>
+            <th>Warehouse Code</th>
+            <th>Name</th>
+            <th>Address</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var warehouse in Model)
+        {
+            <tr>
+                <td>
+                  <input type="checkbox" class="warehouse-checkbox" value="@warehouse.WarehouseID" onclick="toggleButtons();">
+                </td>
+                <td>@warehouse.WarehouseID</td>
+                <td>@warehouse.WarehouseName</td>
+                <td>@warehouse.Address</td>
+               
+            </tr>
+        }
+    </tbody>
+  </table>
+
+</div>
+
+<script src="~/js/warehouses.js"></script>
