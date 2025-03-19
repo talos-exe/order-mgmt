@@ -3,4 +3,43 @@
     ViewBag.Title = "Products";
 }
 
-<h1>Products Working!</h1>
+<div class="products-container ms-5 me-5">
+  <h2 class="text-center mb-4 pt-4">Products</h2>
+  <div class="d-flex justify-content-start mb-2">
+    <button class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#createUserModal">Create</button>
+    <button id="btnEdit" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>Edit</button>
+    <button id="btnDelete" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>Delete</button>
+    <input type="text" id="searchBar" class="form-control-sm me-2" placeholder="Search by SKU" onkeyup="filterTable()" />
+  </div>
+
+  <table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+              <input type="checkbox" id="selectAll" onclick="toggleAll(this);">
+            </th>
+            <th>SKU</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Cost</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr onclick="toggleButtons(this)">
+                <td>
+                  <input type="checkbox" class="shipment-checkbox" value="@product.ProductID" onclick="toggleButtons();">
+                </td>
+                <td>@product.SKU</td>
+                <td>@product.ProductName</td>
+                <td>@product.Price</td>
+                <td>@product.Cost</td>
+            </tr>
+        }
+    </tbody>
+  </table>
+
+</div>
+
+<script src="~/js/products.js"></script>
