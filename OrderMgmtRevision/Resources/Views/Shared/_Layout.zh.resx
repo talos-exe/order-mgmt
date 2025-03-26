@@ -139,6 +139,12 @@
     <value>仓库</value>
   </data>
   <data name="TestKey" xml:space="preserve">
-  <value>✅ 中文加载成功</value>
-</data>
+    <value>✅ 中文加载成功</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>产品</value>
+  </data>
+  <data name="Shipping" xml:space="preserve">
+    <value>运输</value>
+  </data>
 </root>

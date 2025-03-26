@@ -141,4 +141,10 @@
   <data name="TestKey" xml:space="preserve">
     <value>TestKey</value>
   </data>
+  <data name="Products" xml:space="preserve">
+    <value>Products</value>
+  </data>
+  <data name="Shipping" xml:space="preserve">
+    <value>Shipping</value>
+  </data>
 </root>
