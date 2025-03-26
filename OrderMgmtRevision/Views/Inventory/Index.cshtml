@@ -3,9 +3,8 @@
     ViewBag.Title = "Inventory";
 }
 
-@using Microsoft.Extensions.Localization
-@using OrderMgmtRevision.Controllers
-@inject IStringLocalizer<InventoryController> Localizer
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 
 <h2>@Localizer["Inventory"]</h2>
