@@ -63,21 +63,28 @@ builder.Services.ConfigureApplicationCookie(options =>
 // Register localization services
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
+// Add MVC with view & data annotations localization
+builder.Services.AddControllersWithViews()
+    .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+    .AddDataAnnotationsLocalization();
+
+builder.Services.AddRazorPages();
+builder.Services.AddTransient<DataSeeder>();
+builder.Services.AddSingleton<FedExService>();
+
 // Supported cultures
 var supportedCultures = new[] { "en", "zh" };
+var defaultCulture = "en";
 
 // Custom Request Culture Provider (Query String Based)
 var localizationOptions = new RequestLocalizationOptions()
-    .SetDefaultCulture("en")
+    .SetDefaultCulture(defaultCulture)
     .AddSupportedCultures(supportedCultures)
     .AddSupportedUICultures(supportedCultures)
     .AddInitialRequestCultureProvider(new CustomRequestCultureProvider(context =>
     {
         var queryLang = context.Request.Query["lang"].ToString();
-
-        // Ensure queryLang is a valid culture from supportedCultures
-        var culture = supportedCultures.Contains(queryLang) ? queryLang : "en";
-
+        var culture = supportedCultures.Contains(queryLang) ? queryLang : defaultCulture;
         return Task.FromResult(new ProviderCultureResult(culture, culture));
     }));
 

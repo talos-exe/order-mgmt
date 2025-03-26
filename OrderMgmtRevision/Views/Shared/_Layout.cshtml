@@ -1,9 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
-@using Microsoft.Extensions.Localization
-@using OrderMgmtRevision.Resources
-@inject IStringLocalizer<SharedResources> Localizer
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 @{
     var user = User.Identity.IsAuthenticated ? await UserManager.GetUserAsync(User) : null;
