@@ -6,19 +6,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using OrderMgmtRevision.Models;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace OrderMgmtRevision.Controllers
 {
-    public class InventoryController : Controller
+    [Authorize]
+   
+    public class ShippingController : Controller
     {
         private readonly FedExService _fedExService;
         private readonly IWebHostEnvironment _env;
         private static List<FedExShipment> _shipments = new List<FedExShipment>();
-        private readonly IStringLocalizer<InventoryController> _localizer;
+        private readonly IStringLocalizer<ShippingController> _localizer;
 
         // Inject IStringLocalizer for localization
-        public InventoryController(FedExService fedExService, IWebHostEnvironment env, IStringLocalizer<InventoryController> localizer)
+        public ShippingController(FedExService fedExService, IWebHostEnvironment env, IStringLocalizer<ShippingController> localizer)
         {
             _fedExService = fedExService;
             _env = env;

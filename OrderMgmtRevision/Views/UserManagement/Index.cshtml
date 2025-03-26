@@ -1,85 +1,204 @@
 ﻿@model List<OrderMgmtRevision.Models.UserViewModel>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
 <!-- Title Centering-->
 <h2 class="text-center mb-4 pt-4">User Management</h2>
 
-<!-- Create User Button-->
-<div class="text-center mb-3">
-    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createUserModal">Create User</button>
-</div>
+<ul class="nav nav-tabs ms-5 me-5" id="adminTabs">
+    <li class="nav-item">
+        <a class="nav-link active" id="userListTab" data-bs-toggle="tab" href="#userList">User List</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="userLogsTab" data-bs-toggle="tab" href="#userLogs">User Logs</a>
+    </li>
+</ul>
 
-<!-- User List -->
-<div class="d-flex justify-content-center">
-    <table class="table table-bordered" style="width: 80%;">
-        <thead>
-            <tr>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Full Name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in Model)
-            {
-                <tr>
-                    <td>@user.UserName</td>
-                    <td>@user.Email</td>
-                    <td>@user.FullName</td>
-                    <td>
-                        <!-- Edit Button -->
-                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editUserModal-@user.Id">Edit</button>
+<div class="tab-content mt-3">
 
-                        <!-- Delete Button -->
-                        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserModal-@user.Id">Delete</button>
-                    </td>
-                </tr>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show ms-5 me-5" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
 
-                <!-- Edit User Modal -->
-                <div class="modal fade" id="editUserModal-@user.Id" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="editUserModalLabel-@user.Id">Edit User</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+    <!-- User List Tab -->
+    <div class="tab-pane fade show active" id="userList">
+        <div class="ms-5 me-5">
+            <div class="d-flex justify-content-start mb-2">
+                <button class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#createUserModal">Create</button>
+                <button id="btnEdit" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>Edit</button>
+                <button id="btnDelete" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>Delete</button>
+                <input type="text" id="searchBar" class="form-control-sm me-2" placeholder="Search by Username" onkeyup="filterTable()" />
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped table-sm table-hover align-middle" id="userTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th>
+                                <input type="checkbox" id="selectAll" onclick="toggleAll(this);">
+                            </th>
+                            <th id="usernameHeader" onclick="sortTable(1)" style="cursor: pointer;">
+                                Username <i id="userCaret" class="fa fa-caret-down"></i>
+                            </th>
+                            <th>Email</th>
+                            <th>Full Name</th>
+                            <th>ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr onclick="toggleButtons(this)">
+                                <td>
+                                    <input type="checkbox" class="user-checkbox" value="@user.Id" onclick="toggleButtons();">
+                                </td>
+                                <td>@user.UserName</td>
+                                <td>@user.Email</td>
+                                <td>@user.FullName</td>
+                                <td>@user.Id</td>
+                            </tr>
+
+
+                            <!-- Edit User Modal -->
+                            <div class="modal fade" id="editUserModal-@user.Id" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="editUserModalLabel-@user.Id">Edit User</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <partial name="_EditUser" model="@user" />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="modal-body">
-                                <partial name="_EditUser" model="@user" />
+
+                            <!-- Delete User Modal -->
+                            <div class="modal fade" id="deleteUserModal-@user.Id" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteUserModalLabel-@user.Id">Delete User</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p id="deleteWarning">Are you sure you want to delete the user <strong>@user.UserName</strong>? This action cannot be undone.</p>
+                                            <partial name="_DeleteUser" model="@user" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        }
+
+                        <div class="modal fade" id="createUserModal" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="createUserModal">Create User</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <partial name="_CreateUser" model="new UserViewModel()" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex justify-content-center mt-3">
+                <div>
+                    <button class="btn btn-secondary btn-sm">Previous</button>
+                    <button class="btn btn-secondary btn-sm">Next</button>
                 </div>
-
-                <!-- Delete User Modal -->
-                <div class="modal fade" id="deleteUserModal-@user.Id" tabindex="-1">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="deleteUserModalLabel-@user.Id">Delete User</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p>Are you sure you want to delete the user <strong>@user.UserName</strong>? This action cannot be undone.</p>
-                                <partial name="_DeleteUser" model="@user" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            }
-
-            <div class="modal fade" id="createUserModal" tabindex="-1">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="createUserModal">Create User</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <partial name="_CreateUser" model="new UserViewModel()" />
-                        </div>
-                    </div>
+                <div class="ms-3">
+                    Page 1 of 1
                 </div>
             </div>
-        </tbody>
-    </table>
+
+        </div>
+    </div>
+
+    <!-- User Logs Tab -->
+    <div class="tab-pane fade" id="userLogs">
+        <div class="ms-5 me-5">
+            <h4>User Logs</h4>
+            <div class="d-flex justify-content-start mb-2">
+                <input type="text" id="logSearchBar" class="form-control-sm" style="width: 20%; height: 10%" placeholder="Search by Log Id or Username" onkeyup="filterLogs()" />
+                <button class="btn btn-danger btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#clearLogsModal">
+                    Clear All Logs
+                </button>
+            </div>
+
+
+            <div class="table-responsive">
+                <table class="table table-striped table-sm table-hover align-middle" id="logTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Log Id</th>
+                            <th>Username</th>
+                            <th>Action</th>
+                            <th>Timestamp</th>
+                            <th>IP Address</th>
+                            <th>User Id</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       @foreach(var log in Model.SelectMany(user => user.Logs).OrderBy(log=>log.Id)) {
+                                <tr>
+                                    <td>@log.Id</td>
+                                    <td>@log.UserName</td>
+                                    <td>@log.Action</td>
+                                    <td>@log.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                    <td>@log.IpAddress</td>
+                                    <td>@log.UserId</td>
+                                </tr>
+                           }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex justify-content-center mt-3">
+                <div>
+                    <button class="btn btn-secondary btn-sm">Previous</button>
+                    <button class="btn btn-secondary btn-sm">Next</button>
+                </div>
+                <div class="ms-3">
+                    Page 1 of 1
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Clear Logs Modal -->
+    <div class="modal fade" id="clearLogsModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Log Clearance</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete all logs? This action <strong>cannot be undone</strong>.</p>
+                </div>
+                <div class="modal-footer">
+                    <form asp-action="ClearLogs" asp-controller="UserManagement" method="post">
+                        <button type="submit" class="btn btn-danger">Yes, Clear Logs</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
+
+
+<script src="~/js/users.js"></script>

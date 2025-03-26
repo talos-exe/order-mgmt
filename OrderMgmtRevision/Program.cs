@@ -7,7 +7,7 @@ using OrderMgmtRevision.Models;
 using OrderMgmtRevision.Config;
 using System.Globalization;
 using System.Linq;
-using Microsoft.AspNetCore.Mvc.Razor;
+using OrderMgmtRevision.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -87,6 +87,14 @@ var localizationOptions = new RequestLocalizationOptions()
         var culture = supportedCultures.Contains(queryLang) ? queryLang : defaultCulture;
         return Task.FromResult(new ProviderCultureResult(culture, culture));
     }));
+
+
+// Add other services
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+builder.Services.AddTransient<DataSeeder>();
+builder.Services.AddSingleton<FedExService>();
+builder.Services.AddScoped<ILogService, LogService>();
 
 var app = builder.Build();
 

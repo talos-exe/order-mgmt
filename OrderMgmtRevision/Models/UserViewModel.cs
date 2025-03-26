@@ -23,7 +23,11 @@ namespace OrderMgmtRevision.Models
         [Display(Name = "Password")]
         public string? Password { get; set; }
 
+        public DateTime? LastLoginDate { get; set; }
+        public string? LastLoginIP { get; set; }
         //[Display(Name = "Role")]
         //public string Roles { get; set; }
+
+        public List<UserLog>? Logs {  get; set; } = new List<UserLog>();
     }
 }
