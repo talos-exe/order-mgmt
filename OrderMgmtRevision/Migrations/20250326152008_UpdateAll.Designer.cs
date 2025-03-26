@@ -12,8 +12,8 @@ using OrderMgmtRevision.Data;
 namespace OrderMgmtRevision.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250326095429_UpdateCreation")]
-    partial class UpdateCreation
+    [Migration("20250326152008_UpdateAll")]
+    partial class UpdateAll
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -280,6 +280,40 @@ namespace OrderMgmtRevision.Migrations
                     b.ToTable("Shipments");
                 });
 
+            modelBuilder.Entity("OrderMgmtRevision.Models.UserLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("IpAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserLogs");
+                });
+
             modelBuilder.Entity("OrderMgmtRevision.Models.Warehouse", b =>
                 {
                     b.Property<int>("WarehouseID")
@@ -342,6 +376,9 @@ namespace OrderMgmtRevision.Migrations
 
                     b.Property<DateTime?>("LastLogin")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("LastLoginIP")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastPasswordChange")
                         .HasColumnType("datetime2");
@@ -487,6 +524,22 @@ namespace OrderMgmtRevision.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("SourceWarehouse");
+                });
+
+            modelBuilder.Entity("OrderMgmtRevision.Models.UserLog", b =>
+                {
+                    b.HasOne("User", "User")
+                        .WithMany("Logs")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("User", b =>
+                {
+                    b.Navigation("Logs");
                 });
 #pragma warning restore 612, 618
         }

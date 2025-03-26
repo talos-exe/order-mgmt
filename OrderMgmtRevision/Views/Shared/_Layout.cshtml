@@ -27,6 +27,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 <body>
+
     <div class="main-container">
         <div class="sidebar-container position-fixed vh-100">
             <div class="sidebar-header">
@@ -135,6 +136,10 @@
                 </div>
             </div>
             <main role="main">
+                <!-- Loading screen -->
+                <div id="loadingScreen">
+                    <div class="spinner"></div>
+                </div>
                 @RenderBody()
             </main>
         </div>
