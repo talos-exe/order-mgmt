@@ -37,7 +37,10 @@ namespace OrderMgmtRevision.Data
                 {
                     UserName = "admin",
                     Email = "admin@example.com",
-                    FullName = "Administrator Account"
+                    FullName = "Administrator Account",
+                    DateCreated = DateTime.UtcNow,
+                    LastLogin = DateTime.UtcNow,
+                    LastLoginIP = "127.0.0.1"
                 };
 
                 var result = await _userManager.CreateAsync(adminUser, "Admin@123");
@@ -55,7 +58,10 @@ namespace OrderMgmtRevision.Data
                 {
                     UserName = "user",
                     Email = "user@user.com",
-                    FullName = "User Account"
+                    FullName = "User Account",
+                    DateCreated = DateTime.UtcNow,
+                    LastLogin = DateTime.UtcNow,
+                    LastLoginIP = "127.0.0.1"
                 };
 
                 var result = await _userManager.CreateAsync(guestAccount, "User@123");

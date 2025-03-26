@@ -75,3 +75,21 @@ function filterTable() {
         }
     }
 }
+
+function filterLogs() {
+    var input = document.getElementById("logSearchBar");
+    var filter = input.value.toLowerCase();
+    var table = document.getElementById("logTable");
+    var rows = table.getElementsByTagName("tr");
+
+    for (var i = 1; i < rows.length; i++) {
+        var logId = rows[i].getElementsByTagName("td")[0].textContent.toLowerCase();
+        var username = rows[i].getElementsByTagName("td")[1].textContent.toLowerCase();
+
+        if (logId.includes(filter) || username.includes(filter)) {
+            rows[i].style.display = "";
+        } else {
+            rows[i].style.display = "none";
+        }
+    }
+}

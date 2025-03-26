@@ -14,6 +14,7 @@ namespace OrderMgmtRevision.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Inventory> InventoryAll { get; set; }
         public DbSet<Shipment> Shipments { get; set; }
+        public DbSet<UserLog> UserLogs { get; set; }
 
         // Configure model
         protected override void OnModelCreating(ModelBuilder modelBuilder)
