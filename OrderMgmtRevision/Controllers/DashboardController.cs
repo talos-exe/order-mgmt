@@ -77,7 +77,17 @@ public class DashboardController : Controller
             }
         };
 
-        return View(summaryData);
+        var pieChartData = new
+        {
+            Labels = new string[] { "Red, Blue, Yellow" },
+            Data = new int[] { 30, 14, 6 },
+            BackgroundColor = new string[] { "#FF0000", "#0000FF", "#FFFF00" }
+        };
+
+        ViewData["SummaryData"] = summaryData;
+        ViewData["PieChartData"] = pieChartData;
+
+        return View();
     }
 }
 
