@@ -25,12 +25,14 @@ namespace OrderMgmtRevision.Services
         public async Task LogUserActivityAsync(string userId, string action, string ipAddress)
         {
             var user = await _userManager.FindByIdAsync(userId);
-            if (user == null) { throw new Exception("User not found."); }
-            var userName = user?.UserName ?? "Anonymous";
+            if (user == null)
+            {
+                return;
+            }
             var log = new UserLog()
             {
                 UserId = userId,
-                UserName = userName,
+                UserName = user.UserName,
                 Action = action,
                 IpAddress = ipAddress,
                 Timestamp = DateTime.UtcNow
