@@ -126,6 +126,7 @@ html, body {
     height: 50px;
     padding: 0 15px;
     white-space: nowrap;
+    z-index: 10000;
     text-overflow: ellipsis;
 }
 
