@@ -93,3 +93,53 @@ function filterLogs() {
         }
     }
 }
+
+function openUserDetailsTab(userId, userName) {
+    // Remove existing user details tab if it exists
+    closeUserDetailsTab();
+
+    // Create new tab
+    var tabId = 'userDetails-' + userId;
+    var newTab = $('<li class="nav-item">' +
+        '<a class="nav-link" id="' + tabId + 'Tab" data-bs-toggle="tab" href="#' + tabId + '">' +
+        'Details: ' + userName +
+        '</a>' +
+        '</li>');
+
+    // Add the new tab to the tab list
+    $('#adminTabs').append(newTab);
+
+    // Create new tab pane
+    var newPane = $('<div class="tab-pane fade" id="' + tabId + '"><div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div></div>');
+    $('.tab-content').append(newPane);
+
+    // Activate the new tab
+    $('#' + tabId + 'Tab').tab('show');
+
+    // Load the user details via AJAX
+    $.ajax({
+        url: '/UserManagement/GetUserDetails',
+        type: 'GET',
+        data: { userId: userId },
+        success: function (data) {
+            $('#' + tabId).html(data);
+        },
+        error: function () {
+            console.log("User ID: " + userId);
+            $('#' + tabId).html('<div class="ms-5 me-5 text-danger">Error loading user details</div>');
+        }
+    });
+}
+
+function closeUserDetailsTab() {
+    // Find any user details tab
+    $('a[id^="userDetails-"][id$="Tab"]').each(function () {
+        var tabId = $(this).attr('href');
+        // Remove the tab and its content
+        $(this).parent().remove();
+        $(tabId).remove();
+    });
+
+    // Activate the user list tab
+    $('#userListTab').tab('show');
+}

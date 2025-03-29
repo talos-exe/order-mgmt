@@ -1,0 +1,59 @@
+﻿@model OrderMgmtRevision.Models.UserViewModel
+
+<div class="ms-5 me-5">
+    <div class="d-flex justify-content-between mb-3">
+        <h4>User Details for @Model.UserName</h4>
+        <button type="button" class="btn-close" onclick="closeUserDetailsTab()"></button>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>User ID: </strong>@Model.Id</p>
+            <p><strong>Username: </strong>@Model.UserName</p>
+            <p><strong>Email: </strong>@Model.Email</p>
+            <p><strong>Full Name: </strong>@Model.FullName</p>
+            @* <p><strong>Account Created: </strong>@(Model.DateCreated.HasValue ? Model.DateCreated.Value.ToString("yyyy-MM-dd HH:mm:ss") : "N/A")</p> *@
+            <p><strong>Last Login: </strong>@(Model.LastLoginDate.HasValue ? Model.LastLoginDate.Value.ToString("yyyy-MM-dd HH:mm:ss") : "N/A")</p>
+            <p><strong>Last Login IP: </strong>@(Model.LastLoginIP ?? "N/A")</p>
+        </div>
+    </div>
+
+    <!-- Logs Table -->
+    <h5>User Logs:</h5>
+    <div class="table-responsive">
+        <table class="table table-striped table-sm">
+            <thead class="table-light">
+                <tr>
+                    <th>Log Id</th>
+                    <th>Username</th>
+                    <th>Action</th>
+                    <th>Timestamp</th>
+                    <th>IP Address</th>
+                    <th>User Id</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Logs != null && Model.Logs.Any())
+                {
+                    @foreach (var log in Model.Logs)
+                    {
+                        <tr>
+                            <td>@log.Id</td>
+                            <td>@log.UserName</td>
+                            <td>@log.Action</td>
+                            <td>@log.Timestamp.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                            <td>@log.IpAddress</td>
+                            <td>@log.UserId</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">No logs available for this user</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

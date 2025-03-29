@@ -29,5 +29,6 @@ namespace OrderMgmtRevision.Models
         //public string Roles { get; set; }
 
         public List<UserLog>? Logs {  get; set; } = new List<UserLog>();
+        public User? User { get; set; }
     }
 }
