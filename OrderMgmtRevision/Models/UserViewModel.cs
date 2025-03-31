@@ -21,7 +21,9 @@ namespace OrderMgmtRevision.Models
 
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
+        [Required(ErrorMessage = "Password is required.")]
         public string? Password { get; set; }
+
 
         public DateTime? LastLoginDate { get; set; }
         public string? LastLoginIP { get; set; }

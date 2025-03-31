@@ -62,9 +62,7 @@ namespace OrderMgmtRevision.Controllers
 
         public IActionResult _CreateUser()
         {
-            // Create a new UserViewModel instance
-            var model = new UserViewModel();
-            return PartialView("_CreateUser", model);
+            return PartialView("_CreateUser", new UserViewModel());
         }
 
         [HttpPost]
@@ -72,8 +70,9 @@ namespace OrderMgmtRevision.Controllers
         {
             if (!ModelState.IsValid)
             {
-                await _logService.LogUserActivityAdmin("Failed user creation due to invalid modelstate", GetClientIp());
-                return PartialView("_CreateUser", model);
+                await _logService.LogUserActivityAdmin("[Administrator] Failed user creation due to invalid model state", GetClientIp());
+
+                return View(model);
             }
 
             var user = new User
@@ -87,24 +86,24 @@ namespace OrderMgmtRevision.Controllers
                 LastPasswordChange = DateTime.UtcNow
             };
 
-            var existingUser = await _userManager.FindByNameAsync(model.UserName);
-            if (existingUser != null)
-            {
-                ModelState.AddModelError("Username", "Username is already taken.");
-                await _logService.LogUserActivityAdmin("[Administrator] Username conflict: " + model.UserName + " already taken.", GetClientIp());
-            }
+            //var existingUser = await _userManager.FindByNameAsync(model.UserName);
+            //if (existingUser != null)
+            //{
+            //    ModelState.AddModelError("UserName", "Username is already taken.");
+            //    await _logService.LogUserActivityAdmin("[Administrator] Username conflict: " + model.UserName + " already taken.", GetClientIp());
+            //}
 
-            var existingUserEmail = await _userManager.FindByEmailAsync(model.Email);
-            if (existingUserEmail != null)
-            {
-                ModelState.AddModelError("Email", "Email is already taken.");
-                await _logService.LogUserActivityAdmin("[Administrator] Email conflict: " + model.Email + " already taken.", GetClientIp());
-            }
+            //var existingUserEmail = await _userManager.FindByEmailAsync(model.Email);
+            //if (existingUserEmail != null)
+            //{
+            //    ModelState.AddModelError("Email", "Email is already taken.");
+            //    await _logService.LogUserActivityAdmin("[Administrator] Email conflict: " + model.Email + " already taken.", GetClientIp());
+            //}
 
-            if (!ModelState.IsValid)
-            {
-                return PartialView("_CreateUser", model);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return View(model);
+            //}
 
             var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -114,19 +113,19 @@ namespace OrderMgmtRevision.Controllers
                 await _logService.LogUserActivityAdmin("[Administrator] Created User " + user.UserName, GetClientIp());
                 TempData["SuccessMessage"] = "Successfully created user.";
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "UserManagement");
             }
 
-            foreach (var error in result.Errors)
+            if (!result.Succeeded)
             {
-                ModelState.AddModelError(string.Empty, error.Description);
-                await _logService.LogUserActivityAdmin("Error creating user " + model.UserName + ": " + error.Description, GetClientIp());
+                TempData["Errors"] = result.Errors.Select(e => e.Description).ToList();
+                await _logService.LogUserActivityAdmin("[Administrator] Error creating user " + model.UserName, GetClientIp());
+
+                return RedirectToAction("Index", "UserManagement");
             }
 
-            return PartialView("_CreateUser", model);
-
+            return RedirectToAction("Index", "UserManagement");
         }
-
         [HttpPost]
         public async Task<IActionResult> EditConfirm(string id, UserViewModel model)
         {

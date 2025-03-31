@@ -1,5 +1,11 @@
 ﻿@model OrderMgmtRevision.Models.UserViewModel
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@3.2.11/dist/jquery.validate.unobtrusive.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
 @if (!ViewData.ModelState.IsValid)
 {
     <div class="alert alert-danger">
@@ -16,7 +22,7 @@
         <button type="button" class="btn-close" onclick="closeCreateUser()"></button>
     </div>
     <div class="d-flex mt-3">
-        <form id="createUserForm" asp-action="CreateConfirm" asp-controller="UserManagement" method="post">
+        <form id="createUserForm" asp-action="CreateConfirm" asp-controller="UserManagement" method="post" novalidate="novalidate">
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="UserName">Username</label>
@@ -44,3 +50,6 @@
         </form>
         </div>
 </div>
+
+
+
