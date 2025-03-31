@@ -60,6 +60,13 @@ namespace OrderMgmtRevision.Controllers
             return View(userViewModels);
         }
 
+        public IActionResult _CreateUser()
+        {
+            // Create a new UserViewModel instance
+            var model = new UserViewModel();
+            return PartialView("_CreateUser", model);
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateConfirm(UserViewModel model)
         {

@@ -143,3 +143,57 @@ function closeUserDetailsTab() {
     // Activate the user list tab
     $('#userListTab').tab('show');
 }
+
+
+function openCreateUserPane() {
+    // If the "Create User" tab already exists, activate it and return
+    closeCreateUser();
+
+    // Create new tab for Create User
+    var tabId = 'createUser';
+    var newTab = $('<li class="nav-item">' +
+        '<a class="nav-link" id="' + tabId + 'Tab" data-bs-toggle="tab" href="#' + tabId + '">' +
+        'Create User' +
+        '</a>' +
+        '</li>');
+
+    // Add the new tab to the tab list
+    $('#adminTabs').append(newTab);
+
+    // Create the new tab pane
+    var newPane = $('<div class="tab-pane fade" id="' + tabId + '">' +
+        '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>' +
+        '</div>');
+    $('.tab-content').append(newPane);
+
+    // Activate the new tab
+    $('#' + tabId + 'Tab').tab('show');
+
+    // Load the Create User form (partial) via AJAX into the new tab
+    $.ajax({
+        url: '/UserManagement/_CreateUser',  // The URL of the partial
+        type: 'GET',
+        success: function (data) {
+            $('#' + tabId).html(data);  // Insert the partial into the tab pane
+        },
+        error: function () {
+            $('#' + tabId).html('<div class="ms-5 me-5 text-danger">Error loading Create User form</div>');
+        }
+    });
+}
+
+
+
+function closeCreateUser() {
+    // Find the create user tab
+    var tab = $('#createUserTab');
+    if (tab.length) {
+        var tabId = tab.attr('href');
+        // Remove the tab and its content
+        tab.parent().remove();
+        $(tabId).remove();
+    }
+
+    // Activate the user list tab
+    $('#userListTab').tab('show');
+}

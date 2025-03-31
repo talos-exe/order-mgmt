@@ -31,7 +31,7 @@
     <div class="tab-pane fade show active" id="userList">
         <div class="ms-5 me-5">
             <div class="d-flex justify-content-start mb-2">
-                <button class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#createUserModal">Create</button>
+                <button id="btnCreate" class="btn btn-primary btn-sm me-2" onclick="openCreateUserPane()">Create</button>
                 <button id="btnEdit" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>Edit</button>
                 <button id="btnDelete" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>Delete</button>
 
@@ -104,19 +104,20 @@
 
                         }
 
-                        <div class="modal fade" id="createUserModal" tabindex="-1">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="createUserModal">Create User</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <partial name="_CreateUser" model="new UserViewModel()" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        @* <div class="modal fade" id="createUserModal" tabindex="-1"> *@
+                        @*     <div class="modal-dialog"> *@
+                        @*         <div class="modal-content"> *@
+                        @*             <div class="modal-header"> *@
+                        @*                 <h5 class="modal-title" id="createUserModal">Create User</h5> *@
+                        @*                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> *@
+                        @*             </div> *@
+                        @*             <div class="modal-body"> *@
+                        @*                 <partial name="_CreateUser" model="new UserViewModel()" /> *@
+                        @*             </div> *@
+                        @*         </div> *@
+                        @*     </div> *@
+                        @* </div> *@
+
                     </tbody>
                 </table>
             </div>
