@@ -4,9 +4,9 @@ function toggleButtons() {
     let btnDelete = document.getElementById("btnDelete");
 
     if (checkboxes.length === 1) {
-        let userId = checkboxes[0].value;
-        btnEdit.setAttribute("data-bs-target", `#editUserModal-${userId}`);
-        btnDelete.setAttribute("data-bs-target", `#deleteUserModal-${userId}`);
+        let productId = checkboxes[0].value;
+        btnEdit.setAttribute("data-bs-target", `#editProductModal-${productId}`);
+        btnDelete.setAttribute("data-bs-target", `#deleteProductModal-${productId}`);
         btnEdit.disabled = false;
         btnDelete.disabled = false;
     } else if (checkboxes.length > 1) {
@@ -63,6 +63,55 @@ function openProductDetailsTab(productId, productName) {
     });
 }
 
+function openCreateProductPane() {
+    closeCreateProduct();
+
+    var tabId = 'createProduct';
+    var newTab = $('<li class="nav-item">' +
+        '<a class="nav-link" id="' + tabId + 'Tab" data-bs-toggle="tab" href="#' + tabId + '">' +
+        'Create Product' +
+        '</a>' +
+        '</li>');
+
+    $('#productTabs').append(newTab);
+
+    var newPane = $('<div class="tab-pane fade" id="' + tabId + '">' +
+        '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>' +
+        '</div>');
+    $('.tab-content').append(newPane);
+
+    $('#' + tabId + 'Tab').tab('show');
+
+    $.ajax({
+        url: '/Products/_CreateProduct',
+        type: 'GET',
+        success: function (data) {
+            $('#' + tabId).html(data);
+        },
+        error: function () {
+            $('#' + tabId).html('<div class="ms-5 me-5 text-danger">Error loading Create Product form</div>');
+        }
+    });
+}
+
+
+
+
+function closeCreateProduct() {
+    // Find the create user tab
+    var tab = $('#createProductTab');
+    if (tab.length) {
+        var tabId = tab.attr('href');
+        // Remove the tab and its content
+        tab.parent().remove();
+        $(tabId).remove();
+    }
+
+    // Activate the user list tab
+    $('#productListTab').tab('show');
+}
+
+
 function closeProductDetailsTab() {
     // Find any product details tab
     $('a[id^="productDetails-"][id$="Tab"]').each(function () {
@@ -74,4 +123,23 @@ function closeProductDetailsTab() {
 
     // Activate the product list tab
     $('#productListTab').tab('show');
+}
+
+function filterTable() {
+    var input = document.getElementById("searchBar");
+    var filter = input.value.toLowerCase();
+    var table = document.getElementById("productTable");
+    var rows = table.getElementsByTagName("tr");
+
+    for (var i = 1; i < rows.length; i++) {
+        var productCell = rows[i].getElementsByTagName("td")[1]; // Get the product cell
+        if (productCell) {
+            var product = productCell.textContent || productCell.innerText;
+            if (product.toLowerCase().includes(filter)) {
+                rows[i].style.display = "";
+            } else {
+                rows[i].style.display = "none";
+            }
+        }
+    }
 }

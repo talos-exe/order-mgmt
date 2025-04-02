@@ -26,6 +26,13 @@
         </div>
     }
 
+    @if(TempData["Error"] != null) {
+        <div class="alert alert-danger alert-dismissible fade show ms-5 me-5" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
     @if (TempData["Errors"] != null)
     {
         <div class="alert alert-danger alert-dismissible fade show ms-5 me-5" role="alert">

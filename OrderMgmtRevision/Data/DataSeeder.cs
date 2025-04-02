@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using OrderMgmtRevision.Controllers;
 using OrderMgmtRevision.Models;
 
 namespace OrderMgmtRevision.Data
@@ -19,6 +20,7 @@ namespace OrderMgmtRevision.Data
 
         public async Task SeedDataAsync()
         {
+
             // Seed roles
             var roles = new[] { "Admin", "User"};
             foreach (var role in roles)
@@ -76,7 +78,7 @@ namespace OrderMgmtRevision.Data
             if (!_context.Warehouses.Any())
             {
                 _context.Warehouses.AddRange(
-                    new Warehouse { WarehouseName = "Main Warehouse", Address = "111 New York" },
+                    new Warehouse { WarehouseName = "Arctic Warehouse", Address = "111 New York" },
                     new Warehouse { WarehouseName = "Backup Warehouse", Address = "444 Los Angeles" }
                 );
                 await _context.SaveChangesAsync();
@@ -85,30 +87,32 @@ namespace OrderMgmtRevision.Data
             if (!_context.Products.Any())
             {
                 _context.Products.AddRange(
-                    new Product { ProductName = "Laptop", Description = "ASUS Laptop", SKU = "LAP-123", Price = 999.99m, Cost = 700.00m },
-                    new Product { ProductName = "Mouse", Description = "HP Mouse", SKU = "HPMOUSE-001", Price = 49.99m, Cost = 20.00m }
-                );
+                        new Product { ProductID = "PROD-20250402-001", Description = "An elite gaming laptop. Very nice and high-end.", ProductName = "ASUS Laptop", SKU = "ASUS-LAP1", Price = 999.99m, Cost = 700.00m, Stock = 20},
+                        new Product { ProductID = "PROD-20250402-002", Description = "A basic mouse that any user can use.", ProductName = "HP Mouse", SKU = "HP01-0001", Price = 49.99m, Cost = 20.00m, Stock = 40 }
+                    );
+
                 await _context.SaveChangesAsync();
             }
 
-            if (!_context.InventoryAll.Any())
-            {
-                _context.InventoryAll.AddRange(
-                    new Inventory { ProductID = 1, WarehouseID = 1, Quantity = 30 },
-                    new Inventory { ProductID = 2, WarehouseID = 1, Quantity = 10 },
-                    new Inventory { ProductID = 1, WarehouseID = 2, Quantity = 50 }
-                );
-                await _context.SaveChangesAsync();
-            }
+            // Not Fully implemented yet.
+            //if (!_context.InventoryAll.Any())
+            //{
+            //    _context.InventoryAll.AddRange(
+            //        new Inventory { ProductID = 1, WarehouseID = 1, Quantity = 30 },
+            //        new Inventory { ProductID = 2, WarehouseID = 1, Quantity = 10 },
+            //        new Inventory { ProductID = 1, WarehouseID = 2, Quantity = 50 }
+            //    );
+            //    await _context.SaveChangesAsync();
+            //}
 
-            if (!_context.Shipments.Any())
-            {
-                _context.Shipments.AddRange(
-                    new Shipment { ProductID = 1, Quantity = 5, SourceWarehouseID = 1, DestinationWarehouseID = 2, Cost = 30.00m, TrackingNumber = "111" },
-                    new Shipment { ProductID = 2, Quantity = 2, SourceWarehouseID = 2, DestinationWarehouseID = 1, Cost = 30.00m, TrackingNumber = "112" }
-                );
-                await _context.SaveChangesAsync();
-            }
+            //if (!_context.Shipments.Any())
+            //{
+            //    _context.Shipments.AddRange(
+            //        new Shipment { ProductID = 1, Quantity = 5, SourceWarehouseID = 1, DestinationWarehouseID = 2, Cost = 30.00m, TrackingNumber = "111" },
+            //        new Shipment { ProductID = 2, Quantity = 2, SourceWarehouseID = 2, DestinationWarehouseID = 1, Cost = 30.00m, TrackingNumber = "112" }
+            //    );
+            //    await _context.SaveChangesAsync();
+            //}
         }
     }
 }

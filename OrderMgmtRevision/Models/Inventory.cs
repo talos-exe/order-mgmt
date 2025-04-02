@@ -4,7 +4,7 @@
     {
         public int InventoryID { get; set; }
 
-        public int ProductID { get; set; }
+        public string ProductID { get; set; }
 
         public int WarehouseID { get; set; }
 

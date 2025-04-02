@@ -3,32 +3,6 @@
     var pieChartData = ViewData["PieChartData"] as dynamic;
     var summaryData = ViewData["SummaryData"] as List<SummaryItem>;
 
-    <script>
-            window.onload = function () {
-
-            var chart = new CanvasJS.Chart("chartContainer", {
-                theme: "light2", // "light2", "dark1", "dark2"
-                animationEnabled: true, // change to true
-                title:{
-                    text: "Shipper Types"
-                },
-                data: [
-                {
-                    // Change type to "bar", "area", "spline", "pie",etc.
-                    type: "pie",
-                    dataPoints: [
-                        { label: "FedEx",  y: 10  },
-                        { label: "DHL", y: 15  },
-                        { label: "UPS", y: 25  },
-                        { label: "USPS",  y: 30  }
-                    ]
-                }
-                ]
-            });
-            chart.render();
-
-            }
-      </script>
 }
 
 @section Styles {
@@ -50,7 +24,7 @@
         @* </div> *@
     </div>
 
-    
+   
 
     <div class="summary-container">
         @foreach (var item in summaryData)
@@ -74,7 +48,62 @@
                 </div>
             </div>
         }
-        <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+        <div class="row">
+            <div class="col" style="width: 40vw; height: 40vh;">
+                <h2>Products Sold Over Time</h2>
+                <canvas id="lineChart"></canvas>
+            </div>  
+            <div class="col" style="width: 40vw; height: 40vh;">
+                <h2>Top Shippers</h2>
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+        
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            // Line Chart
+            var lineCtx = document.getElementById('lineChart').getContext('2d');
+            new Chart(lineCtx, {
+                type: 'line',
+                data: {
+                    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                    datasets: [{
+                        label: 'Sales ($)',
+                        data: [1200, 1900, 3000, 5000, 2500, 4000],
+                        borderColor: 'blue',
+                        backgroundColor: 'rgba(0, 0, 255, 0.2)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Pie Chart
+            var pieCtx = document.getElementById('pieChart').getContext('2d');
+            new Chart(pieCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['FedEx', 'USPS', 'UPS', 'DHL'],
+                    datasets: [{
+                        data: [40, 30, 20, 10],
+                        backgroundColor: ['red', 'blue', 'green', 'orange']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        </script>
     </div>
 
 
@@ -82,5 +111,3 @@
 </div>
 
 <script src="~/js/date-time.js"></script>
-<script src="https://cdn.canvasjs.com/canvasjs.min.js">
-

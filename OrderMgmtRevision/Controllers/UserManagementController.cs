@@ -14,6 +14,7 @@ using X.PagedList;
 using X.PagedList.Mvc.Core;
 using X.PagedList.Extensions;
 using NuGet.Protocol.Plugins;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 
@@ -60,19 +61,23 @@ namespace OrderMgmtRevision.Controllers
             return View(userViewModels);
         }
 
+        [HttpGet]
         public IActionResult _CreateUser()
         {
             return PartialView("_CreateUser", new UserViewModel());
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateConfirm(UserViewModel model)
         {
             if (!ModelState.IsValid)
             {
+                TempData["Error"] = "Invalid model state.";
+
                 await _logService.LogUserActivityAdmin("[Administrator] Failed user creation due to invalid model state", GetClientIp());
 
-                return View(model);
+                return RedirectToAction("Index");
             }
 
             var user = new User
@@ -126,89 +131,93 @@ namespace OrderMgmtRevision.Controllers
 
             return RedirectToAction("Index", "UserManagement");
         }
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditConfirm(string id, UserViewModel model)
         {
             if (!ModelState.IsValid)
             {
+                TempData["Error"] = "Invalid model state.";
                 await _logService.LogUserActivityAdmin("[Administrator] User edit failed due to invalid model state. UserId: " + id, GetClientIp());
-                return PartialView("_EditUser", model);
+                return RedirectToAction("Index");
             }
 
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
-                ModelState.AddModelError(string.Empty, "User not found");
+                TempData["Error"] = "User not found.";
                 await _logService.LogUserActivityAdmin("[Administrator] User not found during edit attempt. Attempted UserId: " + id, GetClientIp());
-                return PartialView("_EditUser", model);
+                return RedirectToAction("Index");
             }
 
             var existingUser = await _userManager.FindByNameAsync(model.UserName);
             if (existingUser != null && existingUser.Id != id)
             {
-                ModelState.AddModelError("Username", "Username is already taken.");
-                await _logService.LogUserActivityAdmin("[Administrator] Username conflict while updating. Username " + existingUser.UserName + " is already taken. Attempted User: " + user.UserName, GetClientIp());
+                TempData["Error"] = "Username is already taken.";
+                await _logService.LogUserActivityAdmin("[Administrator] Username conflict while updating. Username " + existingUser.UserName + " is already taken.", GetClientIp());
+                return RedirectToAction("Index");
             }
 
             var existingUserEmail = await _userManager.FindByEmailAsync(model.Email);
             if (existingUserEmail != null && existingUserEmail.Id != id)
             {
-                ModelState.AddModelError("Email", "Email is already taken.");
-                await _logService.LogUserActivityAdmin("[Administrator] Email conflict while updating. Email " + existingUser.Email + " is already taken. by user " + existingUser.UserName + " Attempted User: " + user.UserName, GetClientIp());
+                TempData["Error"] = "Email is already taken.";
+                await _logService.LogUserActivityAdmin("[Administrator] Email conflict while updating. Email " + existingUserEmail.Email + " is already taken by user " + model.UserName, GetClientIp());
+                return RedirectToAction("Index");
             }
+            
+                                        // Enable for specific logging. 
+                                        //
+                                        //// Check if username is different and log it
+                                        //if (user.UserName != model.UserName)
+                                        //{
+                                        //    await _logService.LogUserActivityAdmin("[Administrator] Changed Username from " + user.UserName + " to " + model.UserName, GetClientIp());
+                                        //    user.UserName = model.UserName;
+                                        //}
 
-            if (!ModelState.IsValid)
-            {
-                return PartialView("_EditUser", model);
-            }
+                                        //// Check if email is different and log it
+                                        //if (user.Email != model.Email)
+                                        //{
+                                        //    await _logService.LogUserActivityAdmin($"[Administrator] Changed User {model.Email} Email Address from " + user.Email + " to " + model.Email, GetClientIp());
+                                        //    user.Email = model.Email;
+                                        //}
 
-            // Check if username is different and log it
-            if (user.UserName != model.UserName)
-            {
-                await _logService.LogUserActivityAdmin("[Administrator] Changed Username from " + user.UserName + " to " + model.UserName, GetClientIp());
-                user.UserName = model.UserName;
-            }
-
-            // Check if email is different and log it
-            if (user.Email != model.Email)
-            {
-                await _logService.LogUserActivityAdmin("[Administrator] Changed Email from " + user.Email + " to " + model.Email, GetClientIp());
-                user.Email = model.Email;
-            }
-
-            // Check if full name is different and log it
-            if (user.FullName != model.FullName)
-            {
-                await _logService.LogUserActivityAdmin("[Administrator] Changed Full Name from "+ user.FullName + " to " + model.FullName, GetClientIp());
-                user.FullName = model.FullName;
-            }
+                                        //// Check if full name is different and log it
+                                        //if (user.FullName != model.FullName)
+                                        //{
+                                        //    await _logService.LogUserActivityAdmin("[Administrator] Changed Full Name from "+ user.FullName + " to " + model.FullName, GetClientIp());
+                                        //    user.FullName = model.FullName;
+                                        //}
 
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
             {
                 await _logService.LogUserActivityAdmin("[Administrator] User " + user.UserName + " successfully updated.", GetClientIp());
                 TempData["SuccessMessage"] = "Successfully edited user.";
-                return RedirectToAction("Index");
+                return RedirectToAction("Index", "UserManagement");
             }
 
-            // If the update failed, add the errors to the ModelState and log the error
-            foreach (var error in result.Errors)
+            //If Editing user failed, log errors.
+            if (!result.Succeeded)
             {
-                ModelState.AddModelError(string.Empty, error.Description);
-                await _logService.LogUserActivityAdmin("Error occurred while updating user. UserId: " + user.Id + " Error: " + error.Description, GetClientIp());
+                TempData["Errors"] = result.Errors.Select(e => e.Description).ToList(); 
+                await _logService.LogUserActivityAdmin("[Administrator] Error occurred while updating user. UserId: " + user.Id, GetClientIp());
+                return RedirectToAction("Index", "UserManagement");
             }
 
             TempData["SuccessMessage"] = "Successfully edited user.";
 
-            return PartialView("_EditUser", model);
+            return RedirectToAction("Index", "UserManagement");
         }
 
         //Delete User (POST)
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            if (user == null) return NotFound();
+            if (user == null) { TempData["Errors"] = "User not found.".ToList(); return RedirectToAction("Index"); }
             await _logService.LogUserActivityAdmin("[Administrator] Deleted User " + user.UserName, GetClientIp());
             await _userManager.DeleteAsync(user);
             TempData["SuccessMessage"] = "Successfully deleted user.";

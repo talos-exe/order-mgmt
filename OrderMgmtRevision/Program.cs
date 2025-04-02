@@ -25,7 +25,9 @@ var connectionString = Environment.GetEnvironmentVariable("OrderMgmtApp_Connecti
 
 // Register AppDbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString));
+{
+    options.UseSqlServer(connectionString);
+});
 
 // Parse FedEx connection string
 var fedexConfig = fedexConnectionString?
