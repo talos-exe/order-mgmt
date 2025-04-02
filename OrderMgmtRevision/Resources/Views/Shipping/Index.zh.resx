@@ -118,75 +118,78 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Create Shipping Order" xml:space="preserve">
-    <value>Create Shipping Order</value>
+    <value>创建发货订单</value>
   </data>
   <data name="Tracking Number" xml:space="preserve">
-    <value>Tracking Number</value>
+    <value>追踪号码</value>
   </data>
   <data name="Inventory" xml:space="preserve">
-    <value>Inventory</value>
+    <value>库存</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>姓名</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Address</value>
+    <value>地址</value>
   </data>
   <data name="City" xml:space="preserve">
-    <value>City</value>
+    <value>城市</value>
   </data>
   <data name="State" xml:space="preserve">
-    <value>State</value>
+    <value>州/省</value>
   </data>
   <data name="Postal Code" xml:space="preserve">
-    <value>Postal Code</value>
+    <value>邮政编码</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Country</value>
+    <value>国家</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
+    <value>电话</value>
   </data>
   <data name="Cancel " xml:space="preserve">
     <value>Cancel</value>
   </data>
   <data name="Are you sure you want to cancel shipment" xml:space="preserve">
-    <value>Are you sure you want to cancel shipment</value>
+    <value>您确定要取消货运吗？</value>
   </data>
   <data name="You cannot undo this action" xml:space="preserve">
-    <value>You cannot undo this action</value>
+    <value>您无法撤销此操作</value>
   </data>
   <data name="Go Back" xml:space="preserve">
-    <value>Go Back</value>
+    <value>返回</value>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>Confirm</value>
+    <value>确认</value>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Create</value>
+    <value>创建</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Close</value>
+    <value>关闭</value>
   </data>
   <data name="Invalid shipment data." xml:space="preserve">
-    <value>Invalid shipment data.</value>
+    <value>无效的货运数据。</value>
   </data>
   <data name="String1" xml:space="preserve">
-    <value>Error while creating shipment.</value>
+    <value>创建货运时出错。</value>
   </data>
   <data name="Shipment {0} canceled successfully." xml:space="preserve">
-    <value>Shipment {0} canceled successfully.</value>
+    <value>货运 {0} 已成功取消。</value>
   </data>
   <data name="Error while canceling shipment." xml:space="preserve">
-    <value>Error while canceling shipment.</value>
+    <value>取消货运时出错。</value>
   </data>
   <data name="Country Code" xml:space="preserve">
-    <value>Country Code</value>
+    <value>国家代码</value>
   </data>
   <data name="Phone Number" xml:space="preserve">
-    <value>Phone Number</value>
+    <value>电话号码</value>
   </data>
   <data name="Recipient Name" xml:space="preserve">
-    <value>Recipient Name</value>
+    <value>收件人姓名</value>
+  </data>
+  <data name="Shipping" xml:space="preserve">
+    <value>运输</value>
   </data>
 </root>
