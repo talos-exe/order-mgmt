@@ -3,9 +3,9 @@
     ViewBag.Title = "Shipping";
 }
 
-@using Microsoft.Extensions.Localization
-@using OrderMgmtRevision.Controllers
-@inject IStringLocalizer<ShippingController> Localizer
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 
 <divi class="shipping-container ms-5 me-5">
   <h2 class="text-center mb-4 pt-4">@Localizer["Shipping"]</h2>
