@@ -185,7 +185,7 @@ namespace OrderMgmtRevision.Migrations
 
                     b.HasIndex("WarehouseID");
 
-                    b.ToTable("InventoryAll");
+                    b.ToTable("InventoryAll", (string)null);
                 });
 
             modelBuilder.Entity("OrderMgmtRevision.Models.Product", b =>
@@ -236,7 +236,7 @@ namespace OrderMgmtRevision.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("OrderMgmtRevision.Models.Shipment", b =>
@@ -288,7 +288,7 @@ namespace OrderMgmtRevision.Migrations
 
                     b.HasIndex("SourceWarehouseID");
 
-                    b.ToTable("Shipments");
+                    b.ToTable("Shipments", (string)null);
                 });
 
             modelBuilder.Entity("OrderMgmtRevision.Models.UserLog", b =>
@@ -322,7 +322,7 @@ namespace OrderMgmtRevision.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserLogs");
+                    b.ToTable("UserLogs", (string)null);
                 });
 
             modelBuilder.Entity("OrderMgmtRevision.Models.Warehouse", b =>
@@ -350,7 +350,7 @@ namespace OrderMgmtRevision.Migrations
 
                     b.HasKey("WarehouseID");
 
-                    b.ToTable("Warehouses");
+                    b.ToTable("Warehouses", (string)null);
                 });
 
             modelBuilder.Entity("User", b =>

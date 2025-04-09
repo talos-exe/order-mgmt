@@ -25,7 +25,7 @@ namespace OrderMgmtRevision.Models
 
         public decimal Cost { get; set; } = 0; // Shipping cost, 0 if null
 
-        public string TrackingNumber { get; set; }  // FedEx Tracking Number
+        public string TrackingNumber { get; set; }  // Shipping Tracking Number
 
         public DateTime GeneratedAt { get; set; } = DateTime.Now;
 

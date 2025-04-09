@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using OrderMgmtRevision.Models;
 using Microsoft.AspNetCore.Authorization;
+using OrderMgmtRevision.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Azure.Core;
 
 
 namespace OrderMgmtRevision.Controllers
@@ -16,21 +20,42 @@ namespace OrderMgmtRevision.Controllers
     public class ShippingController : Controller
     {
         private readonly FedExService _fedExService;
+        private readonly ShippoService _shippoService;
         private readonly IWebHostEnvironment _env;
         private static List<FedExShipment> _shipments = new List<FedExShipment>();
         private readonly IStringLocalizer<ShippingController> _localizer;
+        private readonly UserManager<User> _userManager;
 
         // Inject IStringLocalizer for localization
-        public ShippingController(FedExService fedExService, IWebHostEnvironment env, IStringLocalizer<ShippingController> localizer)
+        public ShippingController(FedExService fedExService, IWebHostEnvironment env, IStringLocalizer<ShippingController> localizer, ShippoService shippoService, UserManager<User> userManager)
         {
             _fedExService = fedExService;
             _env = env;
             _localizer = localizer; // Store the localizer
-        }
+            _shippoService = shippoService;
+            _userManager = userManager;
+         }
 
         public IActionResult Index()
         {
             return View(_shipments);
+        }
+
+        private async Task<bool> IsUserAdmin()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return false;
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+            return roles.Contains("Admin");
+        }
+
+        private string GetClientIp()
+        {
+            return HttpContext.Connection.RemoteIpAddress?.ToString();
         }
 
         [HttpPost]
@@ -94,6 +119,42 @@ namespace OrderMgmtRevision.Controllers
                 // Use localized string for error message
                 return Json(new { success = false, message = _localizer["Error while canceling shipment."] + " " + ex.Message });
             }
+        }
+
+        [HttpGet]
+        public IActionResult _CreateShipmentRequest()
+        {
+            return PartialView("_CreateShipmentRequest", new ShippingRequest());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateShippingRequest(ShippingRequest model)
+        {
+            //bool isAdmin = await IsUserAdmin();
+            //var user = await _userManager.GetUserAsync(User);
+            //string userId = user?.Id ?? "Unknown";
+            //string userName = user?.UserName ?? "Unknown";
+            //string ipAddress = GetClientIp();
+            //string logMessage = "";
+
+
+            if (!ModelState.IsValid)
+            {
+                return View("Index",  model);
+            }
+
+            try
+            {
+                var rates = await _shippoService.GetShippingRatesAsync(model);
+                return View("Rates", rates);
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Error getting rates: {ex.Message}");
+                return View("Index", model);
+            }
+
         }
     }
 }

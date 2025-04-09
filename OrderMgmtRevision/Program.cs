@@ -23,6 +23,9 @@ var fedexConnectionString = Environment.GetEnvironmentVariable("FEDEX_CONNECTION
 var connectionString = Environment.GetEnvironmentVariable("OrderMgmtApp_ConnectionString") ??
                         builder.Configuration.GetConnectionString("DefaultConnection");
 
+var shippoApiKey = Environment.GetEnvironmentVariable("SHIPPO_API_KEY") ??
+    builder.Configuration["Shippo:ApiKey"];
+
 // Register AppDbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
@@ -41,6 +44,9 @@ builder.Configuration["FedEx:ApiSecret"] = fedexConfig?.GetValueOrDefault("ApiSe
 builder.Configuration["FedEx:AccountNumber"] = fedexConfig?.GetValueOrDefault("AccountNumber", "") ?? "";
 builder.Configuration["FedEx:LtlShipperAccountNumber"] = fedexConfig?.GetValueOrDefault("LtlShipperAccountNumber", "") ?? "";
 builder.Configuration["FedEx:BaseUrl"] = fedexConfig?.GetValueOrDefault("BaseUrl", "") ?? "";
+
+// Bind Shippo to IConfiguration
+builder.Configuration["Shippo:ApiKey"] = shippoApiKey ?? "";
 
 // Register Identity services
 builder.Services.AddIdentity<User, IdentityRole>(options =>
@@ -74,6 +80,7 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddRazorPages();
 builder.Services.AddTransient<DataSeeder>();
 builder.Services.AddSingleton<FedExService>();
+builder.Services.AddHttpClient<ShippoService>();
 
 // Supported cultures
 var supportedCultures = new[] { "en", "zh" };

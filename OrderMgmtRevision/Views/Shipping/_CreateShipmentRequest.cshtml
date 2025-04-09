@@ -1,0 +1,118 @@
+﻿@model OrderMgmtRevision.Models.ShippingRequest
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@3.2.11/dist/jquery.validate.unobtrusive.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
+
+<div class="ms-5 me-5">
+    <div class="d-flex justify-content-between mb-3">
+        <h4>Create Shipping Request</h4>
+        <button type="button" class="btn-close" onclick="closeCreateShipment()"></button>
+    </div>
+
+    <div class="d-flex mt-3">
+        <form id="createShippingRequestForm" asp-action="CreateShippingRequest" asp-controller="Shipping" method="post" novalidate="novalidate" class="w-100">
+            <div class="row">
+                <!-- From Address -->
+                <div class="col-md-4">
+                    <h5>From Address</h5>
+                    <div class="form-group">
+                        <label asp-for="FromName"></label>
+                        <input asp-for="FromName" class="form-control" required />
+                        <span asp-validation-for="FromName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="FromStreet"></label>
+                        <input asp-for="FromStreet" class="form-control" required />
+                        <span asp-validation-for="FromStreet" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="FromCity"></label>
+                        <input asp-for="FromCity" class="form-control" required />
+                        <span asp-validation-for="FromCity" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="FromState"></label>
+                        <input asp-for="FromState" class="form-control" required />
+                        <span asp-validation-for="FromState" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="FromZip"></label>
+                        <input asp-for="FromZip" class="form-control" required />
+                        <span asp-validation-for="FromZip" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- To Address -->
+                <div class="col-md-4">
+                    <h5>To Address</h5>
+                    <div class="form-group">
+                        <label asp-for="ToName"></label>
+                        <input asp-for="ToName" class="form-control" required />
+                        <span asp-validation-for="ToName" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ToStreet"></label>
+                        <input asp-for="ToStreet" class="form-control" required />
+                        <span asp-validation-for="ToStreet" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ToCity"></label>
+                        <input asp-for="ToCity" class="form-control" required />
+                        <span asp-validation-for="ToCity" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ToState"></label>
+                        <input asp-for="ToState" class="form-control" required />
+                        <span asp-validation-for="ToState" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ToZip"></label>
+                        <input asp-for="ToZip" class="form-control" required />
+                        <span asp-validation-for="ToZip" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!-- Package Dimensions -->
+                <div class="col-md-4">
+                    <h5>Package Dimensions</h5>
+                    <div class="form-group">
+                        <label asp-for="Weight"></label>
+                        <input asp-for="Weight" class="form-control" required />
+                        <span asp-validation-for="Weight" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Length"></label>
+                        <input asp-for="Length" class="form-control" required />
+                        <span asp-validation-for="Length" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Width"></label>
+                        <input asp-for="Width" class="form-control" required />
+                        <span asp-validation-for="Width" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Height"></label>
+                        <input asp-for="Height" class="form-control" required />
+                        <span asp-validation-for="Height" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-success px-5">Submit Request</button>
+            </div>
+        </form>
+    </div>
+</div>

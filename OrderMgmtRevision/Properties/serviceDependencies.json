@@ -2,8 +2,7 @@
   "dependencies": {
     "mssql1": {
       "type": "mssql",
-      "connectionId": "OrderMgmtApp_ConnectionString",
-      "dynamicId": null
+      "connectionId": "OrderMgmtApp_ConnectionString"
     }
   }
 }
