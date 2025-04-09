@@ -7,9 +7,9 @@
 <div class="warehouse-container ms-5 me-5">
   <h2 class="text-center mb-4 pt-4">Warehouses</h2>
   <div class="d-flex justify-content-start mb-2">
-    <button class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#createUserModal">Create</button>
+    <button class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#createWarehouseModal">Create</button>
     <button id="btnEdit" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>Edit</button>
-    <button id="btnDelete" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>Delete</button>
+    <button id="btnDelete" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#deleteWarehouseModal" disabled>Delete</button>
     <input type="text" id="searchBar" class="form-control-sm me-2" placeholder="Search by Name" onkeyup="filterTable()" />
   </div>
 
@@ -39,6 +39,34 @@
         }
     </tbody>
   </table>
+
+  <div class="modal fade" id="createWarehouseModal" tabindex="-1">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="createWarehouseModal">Create Warehouse</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <partial name="CreateWarehouse" model="new Warehouse()" />
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="modal fade" id="deleteWarehouseModal" tabindex="-1">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="deleteWarehouseModal">Are you sure you want to delete this warehouse?</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <partial name="DeleteWarehouse" />
+              </div>
+          </div>
+      </div>
+  </div>
 
 </div>
 
