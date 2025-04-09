@@ -87,8 +87,8 @@ namespace OrderMgmtRevision.Data
             if (!_context.Products.Any())
             {
                 _context.Products.AddRange(
-                        new Product { ProductID = "PROD-20250402-001", Description = "An elite gaming laptop. Very nice and high-end.", ProductName = "ASUS Laptop", SKU = "ASUS-LAP1", Price = 999.99m, Cost = 700.00m, Stock = 20},
-                        new Product { ProductID = "PROD-20250402-002", Description = "A basic mouse that any user can use.", ProductName = "HP Mouse", SKU = "HP01-0001", Price = 49.99m, Cost = 20.00m, Stock = 40 }
+                        new Product { ProductID = "PROD-20250402-001", Description = "An elite gaming laptop. Very nice and high-end.", ProductName = "ASUS Laptop", SKU = "ASUS-LAP1", Price = 999.99m, Cost = 700.00m, Stock = 20, ShipAmount = 3},
+                        new Product { ProductID = "PROD-20250402-002", Description = "A basic mouse that any user can use.", ProductName = "HP Mouse", SKU = "HP01-0001", Price = 49.99m, Cost = 20.00m, Stock = 40, ShipAmount = 5 }
                     );
 
                 await _context.SaveChangesAsync();

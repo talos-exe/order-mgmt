@@ -57,7 +57,7 @@
                     @Localizer["Ready To Be Shipped"]
                 </div>
                 <div class="item-value">
-                    2
+                    @Model.Count
                 </div>
             </div>
         </div>
@@ -72,7 +72,10 @@
                     @Localizer["Shipped to Customers"]
                 </div>
                 <div class="item-value">
-                    23
+                    @{
+                        int totalShipped = Model.Sum(p => p.ShipAmount ?? 0);
+                    }
+                    @totalShipped
                 </div>
             </div>
         </div>

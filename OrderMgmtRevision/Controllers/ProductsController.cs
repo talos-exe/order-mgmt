@@ -107,7 +107,8 @@ namespace OrderMgmtRevision.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateProductAsync(Product model)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateProduct(Product model)
         {
             bool isAdmin = await IsUserAdmin();
             var user = await _userManager.GetUserAsync(User);
@@ -115,14 +116,6 @@ namespace OrderMgmtRevision.Controllers
             string userName = user?.UserName ?? "Unknown";
             string ipAddress = GetClientIp();
             string logMessage = "";
-
-            if (!ModelState.IsValid)
-            {
-                TempData["Error"] = "Invalid model state.";
-                logMessage = isAdmin ? $"[Administrator] Failed product creation; invalid model state." : $"Failed product creation; invalid model state.";
-                await _logService.LogUserActivityAsync(userId, logMessage, ipAddress);
-                return RedirectToAction("Index", "Products");
-            }
 
             var product = new Product
             {
@@ -135,18 +128,45 @@ namespace OrderMgmtRevision.Controllers
                 Stock = model.Stock,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
-                CreatedBy = userName
+                CreatedBy = userName,
+                ShipAmount = 0
             };
 
-            logMessage = isAdmin
-                ? $"[Admin] {userName} created product {model.ProductName} | SKU: {model.SKU}"
-                : $"User {userName} created product {model.ProductName} | SKU: {model.SKU}";
+            // Create errors and post
 
-            await _logService.LogUserActivityAsync(userId, logMessage, ipAddress);
-            var result = await _dbContext.Products.AddAsync(product);
-            await _dbContext.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Product created successfully.";
-            return RedirectToAction("Index", "Products");
+            try
+            {
+                await _dbContext.Products.AddAsync(product);
+                await _dbContext.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Product created successfully.";
+                logMessage = isAdmin
+                    ? $"[Administrator] {userName} created product {model.ProductName} | SKU: {model.SKU}"
+                    : $"User {userName} created product {model.ProductName} | SKU: {model.SKU}";
+
+                await _logService.LogUserActivityAsync(userId, logMessage, ipAddress);
+                return RedirectToAction("Index", "Products");
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "An error occured while creating the product.";
+                await _logService.LogUserActivityAsync(userId, $"Failed to create product. Error: {ex.Message}", ipAddress);
+                return RedirectToAction("Index", "Products");
+            }
+
+
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage);
+
+                TempData["Error"] = "Invalid model state. Errors: " + string.Join(" | ", errors);
+                logMessage = isAdmin ? $"[Administrator] Failed product creation; invalid model state." : $"Failed product creation; invalid model state.";
+                await _logService.LogUserActivityAsync(userId, logMessage, ipAddress);
+                return RedirectToAction("Index", "Products");
+            }
+
+
         }
 
 
@@ -172,7 +192,8 @@ namespace OrderMgmtRevision.Controllers
                     Stock = p.Stock,
                     CreatedAt = p.CreatedAt,
                     UpdatedAt = p.UpdatedAt,
-                    CreatedBy = p.CreatedBy
+                    CreatedBy = p.CreatedBy,
+                    ShipAmount = p.ShipAmount
                 })
                 .FirstOrDefaultAsync();
 
