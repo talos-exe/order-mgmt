@@ -88,5 +88,49 @@ namespace OrderMgmtRevision.Services
             return rates;
         }
 
+        public async Task<ShippingLabel> CreateLabelAsync(string rateObjectId)
+        {
+            var transactionRequest = new
+            {
+                rate = rateObjectId,
+                async = false
+            };
+
+            var jsonContent = JsonConvert.SerializeObject(transactionRequest);
+            var content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync("transactions/", content);
+            response.EnsureSuccessStatusCode();
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            dynamic transactionResponse = JsonConvert.DeserializeObject(responseContent);
+
+            return new ShippingLabel
+            {
+                LabelUrl = transactionResponse.label_url,
+                TrackingNumber = transactionResponse.tracking_number,
+                TrackingUrl = transactionResponse.tracking_url,
+                Carrier = transactionResponse.tracking_provider,
+                Amount = decimal.Parse(transactionResponse.amount.ToString()),
+                Currency = transactionResponse.currency
+            };
+        }
+
+        public async Task<ShipmentTracking> TrackShipmentAsync(string carrier, string trackingNumber)
+        {
+            var response = await _httpClient.GetAsync($"tracks/{carrier}/{trackingNumber}");
+            response.EnsureSuccessStatusCode();
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            dynamic trackingResponse = JsonConvert.DeserializeObject(responseContent);
+
+            return new ShipmentTracking
+            {
+                Status = trackingResponse.tracking_status?.status,
+                StatusDate = trackingResponse.tracking_status?.status_date,
+                Location = $"{trackingResponse.tracking_status?.location?.city}, {trackingResponse.tracking_status?.location?.state}"
+            };
+        }
+
     }
 }

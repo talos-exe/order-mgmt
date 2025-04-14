@@ -35,5 +35,13 @@ namespace OrderMgmtRevision.Models
         public Warehouse SourceWarehouse { get; set; }
 
         public Warehouse DestinationWarehouse { get; set; }
+
+        public ShippingRate Rate { get; set; }
+        public ShippingLabel Label { get; set; }
+        public ShipmentTracking Tracking { get; set; }
+
+        public ICollection<ShipmentStatusHistory> StatusHistory {  get; set; }
+
+
     }
 }
