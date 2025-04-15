@@ -1,10 +1,6 @@
 ﻿@model OrderMgmtRevision.Models.Product
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@3.2.11/dist/jquery.validate.unobtrusive.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 @if (!ViewData.ModelState.IsValid)
 {
@@ -18,7 +14,7 @@
 
 <div class="ms-5 me-5">
     <div class="d-flex justify-content-between mb-3">
-        <h4>Create Product</h4>
+        <h4>@Localizer["Create Product"]</h4>
         <button type="button" class="btn-close" onclick="closeCreateProduct()"></button>
     </div>
 
@@ -26,40 +22,37 @@
         <form id="createProductForm" asp-action="CreateProductAsync" asp-controller="Products" method="post" novalidate="novalidate">
             <input type="hidden" asp-for="ProductID" />
             <div class="form-group">
-                <label asp-for="ProductName">Product Name</label>
+                <label asp-for="ProductName">@Localizer["Product Name"]</label>
                 <input asp-for="ProductName" class="form-control" required />
                 <span asp-validation-for="ProductName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description">Description</label>
-                <input asp-for="Description" class="form-control"/>
+                <label asp-for="Description">@Localizer["Description"]</label>
+                <input asp-for="Description" class="form-control" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SKU">SKU (Stock Keeping Unit)</label>
+                <label asp-for="SKU">@Localizer["SKU (Stock Keeping Unit)"]</label>
                 <input asp-for="SKU" class="form-control" required />
                 <span asp-validation-for="SKU" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Price">Price</label>
+                <label asp-for="Price">@Localizer["Price"]</label>
                 <input asp-for="Price" class="form-control" required />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Cost">Cost</label>
+                <label asp-for="Cost">@Localizer["Cost"]</label>
                 <input asp-for="Cost" class="form-control" required />
                 <span asp-validation-for="Cost" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Stock">Amount # in stock</label>
+                <label asp-for="Stock">@Localizer["Amount # in stock"]</label>
                 <input asp-for="Stock" class="form-control" required />
                 <span asp-validation-for="Stock" class="text-danger"></span>
             </div>
             <br />
-            <button type="submit" class="btn btn-success">Create</button>
+            <button type="submit" class="btn btn-success">@Localizer["Create"]</button>
         </form>
     </div>
 </div>
-
-
-
