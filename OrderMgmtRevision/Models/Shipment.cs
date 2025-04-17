@@ -4,20 +4,21 @@ namespace OrderMgmtRevision.Models
 {
     public class Shipment
     {
-        public int ShipmentID { get; set; }
-
+        public int? ShipmentID { get; set; }
+        
         [Required]
+        [MaxLength(36)]
+        public string? ShipmentName { get; set; } = "New Shipment";
+
         public string ProductID { get; set; }
 
-        public int Quantity { get; set; }
+        public int? Quantity { get; set; }
 
-        [Required]
         public int SourceWarehouseID { get; set; }
 
-        [Required]
-        public int DestinationWarehouseID { get; set; }
+        //public int? DestinationWarehouseID { get; set; }
 
-        public string Status { get; set; } = "In Progress";
+        public string? Status { get; set; } = "In Progress";
 
         public DateTime ShipmentDate { get; set; } = DateTime.Now;
 
@@ -25,7 +26,7 @@ namespace OrderMgmtRevision.Models
 
         public decimal Cost { get; set; } = 0; // Shipping cost, 0 if null
 
-        public string TrackingNumber { get; set; }  // Shipping Tracking Number
+        public string? TrackingNumber { get; set; }  // Shipping Tracking Number
 
         public DateTime GeneratedAt { get; set; } = DateTime.Now;
 
@@ -34,11 +35,17 @@ namespace OrderMgmtRevision.Models
 
         public Warehouse SourceWarehouse { get; set; }
 
-        public Warehouse DestinationWarehouse { get; set; }
+        //public Warehouse DestinationWarehouse { get; set; }
+
+        public string SelectedRateId { get; set; }
 
         public ShippingRate Rate { get; set; }
+
         public ShippingLabel Label { get; set; }
+
         public ShipmentTracking Tracking { get; set; }
+
+        public ShippingRequest ShippingRequest { get; set; }
 
         public ICollection<ShipmentStatusHistory> StatusHistory {  get; set; }
 

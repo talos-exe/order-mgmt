@@ -5,25 +5,18 @@
 namespace OrderMgmtRevision.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateProductModel : Migration
+    public partial class UpdateShippingRequestViewModel : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "ShipAmount",
-                table: "Products",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
+
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "ShipAmount",
-                table: "Products");
+
         }
     }
 }

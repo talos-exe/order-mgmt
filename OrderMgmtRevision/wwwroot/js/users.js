@@ -116,19 +116,16 @@ function openUserDetailsTab(userId, userName) {
     // Activate the new tab
     $('#' + tabId + 'Tab').tab('show');
 
-    // Load the user details via AJAX
-    $.ajax({
-        url: '/UserManagement/GetUserDetails',
-        type: 'GET',
-        data: { userId: userId },
-        success: function (data) {
+    // Fetch user details
+    fetch(`/UserManagement/GetUserDetails?userId=${userId}`)
+        .then(response => response.text())
+        .then(data => {
             $('#' + tabId).html(data);
-        },
-        error: function () {
+        })
+        .catch(() => {
             console.log("User ID: " + userId);
             $('#' + tabId).html('<div class="ms-5 me-5 text-danger">Error loading user details</div>');
-        }
-    });
+        });
 }
 
 function closeUserDetailsTab() {
@@ -164,20 +161,16 @@ function openCreateUserPane() {
 
     $('#' + tabId + 'Tab').tab('show');
 
-    $.ajax({
-        url: '/UserManagement/_CreateUser',
-        type: 'GET',
-        success: function (data) {
+    // Fetch the Create User form
+    fetch('/UserManagement/_CreateUser')
+        .then(response => response.text())
+        .then(data => {
             $('#' + tabId).html(data);
-        },
-        error: function () {
+        })
+        .catch(() => {
             $('#' + tabId).html('<div class="ms-5 me-5 text-danger">Error loading Create User form</div>');
-        }
-    });
+        });
 }
-
-
-
 
 function closeCreateUser() {
     // Find the create user tab

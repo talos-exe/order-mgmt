@@ -1,4 +1,4 @@
-@model List<OrderMgmtRevision.Models.FedExShipment>
+@model List<OrderMgmtRevision.Models.ShipmentViewModel>
 
 @{
     ViewBag.Title = "Shipping";
@@ -95,8 +95,7 @@
      <div class="tab-pane fade show active" id="shippingList">
         <div class="ms-5 me-5">
             <div class="d-flex justify-content-start mb-2">
-                <button id="btnCreateShipmentRequest" class="btn btn-primary btn-sm me-2" onclick="openCreateShipmentPane()">Calculate Rate</button>
-                <button id="btnCreate" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#createShipmentModal">
+                <button id="btnCreateShipmentRequest" class="btn btn-primary btn-sm me-2" onclick="openCreateShipmentPane()">
                     @Localizer["Create Shipping Order"]
                 </button>
                 <button id="btnCancel" class="btn btn-danger btn-sm me-2" data-bs-toggle="modal" disabled>
@@ -110,6 +109,8 @@
                     <thead class="table-light">
                         <tr>
                             <th><input type="checkbox" id="selectAll" onclick="toggleAll(this);"></th>
+                            <th>Shipment ID</th>
+                            <th>Status</th>
                             <th>@Localizer["Tracking Number"]</th>
                             <th>@Localizer["Name"]</th>
                             <th>@Localizer["Address"]</th>
@@ -122,21 +123,56 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var shipment in Model)
+                        @if (Model != null && Model.Any())
                         {
-                            <tr onclick="toggleButtons(this)">
-                                <td><input type="checkbox" class="shipment-checkbox" value="@shipment.TrackingNumber" onclick="toggleButtons();"></td>
-                                <td>@shipment.TrackingNumber</td>
-                                <td>@shipment.RecipientName</td>
-                                <td>@shipment.Address</td>
-                                <td>@shipment.City</td>
-                                <td>@shipment.State</td>
-                                <td>@shipment.PostalCode</td>
-                                <td>@shipment.CountryCode</td>
-                                <td>@shipment.PhoneNumber</td>
-                                <td>
-                                    <button class="btn-sm btn-danger" data-tracking-number="@shipment.TrackingNumber" data-bs-toggle="modal" data-bs-target="#cancelShipmentModal">@Localizer["Cancel"]</button>
-                                </td>
+                            @foreach (var shipment in Model)
+                            {
+                                <tr onclick="toggleButtons(this)">
+                                    <td>
+                                        <input type="checkbox" class="shipment-checkbox" value="@shipment.ShipmentID" onclick="toggleButtons();">
+                                    </td>
+                                    <td>@shipment.ShipmentID</td>
+                                    <td>
+                                        <!-- New status column with color coding -->
+                                        <span class="badge @(shipment.Status == "CANCELLED" ? "bg-danger" :
+                                       shipment.Status == "DELIVERED" ? "bg-success" :
+                                       shipment.Status == "TRANSIT" ? "bg-primary" :
+                                       shipment.Status == "UNKNOWN" ? "bg-dark" :
+                                       shipment.Status == "CREATED" ? "bg-info" : "bg-secondary")">
+                                            @shipment.Status
+                                        </span>
+                                    </td>
+                                    <td>@shipment.TrackingNumber</td>
+                                    <td>@shipment.RecipientName</td>
+                                    <td>@shipment.Address</td>
+                                    <td>@shipment.City</td>
+                                    <td>@shipment.State</td>
+                                    <td>@shipment.PostalCode</td>
+                                    <td>@shipment.CountryCode</td> 
+                                    <td>@shipment.PhoneNumber</td>
+                                </tr>
+
+                                <!-- Cancel Shipment Modal -->
+                                <div class="modal fade" id="cancelShipmentModal-@shipment.ShipmentID" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">@Localizer["Cancel Shipment"]</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                @Localizer["Are you sure you want to cancel this shipment? This action cannot be undone."]
+                                                <partial name="_CancelShipment" model="@shipment" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="10" class="text-center">No shipments found</td>
                             </tr>
                         }
                     </tbody>
@@ -191,84 +227,65 @@
 
 </div>
 
-<!-- Currently not in use as I am using panes rather than modals to add on this code. Not commented out in case we need to fall back on it. -->
+<!-- Currently not in use as I am using panes rather than modals to add on this code. Now commented out in case we need to fall back on it. -->
 <!-- Create Shipment Modal -->
-<div class="modal fade" id="createShipmentModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">@Localizer["Create Shipping Order"]</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <form id="createShipmentForm">
-                    <div class="mb-3">
-                        <label for="recipientName" class="form-label">@Localizer["Recipient Name"]</label>
-                        <input type="text" class="form-control" id="recipientName" name="recipientName" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="address" class="form-label">@Localizer["Address"]</label>
-                        <input type="text" class="form-control" id="address" name="address" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="city" class="form-label">@Localizer["City"]</label>
-                        <input type="text" class="form-control" id="city" name="city" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="state" class="form-label">@Localizer["State"]</label>
-                        <input type="text" class="form-control" id="state" name="state" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="postalCode" class="form-label">@Localizer["Postal Code"]</label>
-                        <input type="text" class="form-control" id="postalCode" name="postalCode" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="countryCode" class="form-label">@Localizer["Country Code"]</label>
-                        <input type="text" class="form-control" id="countryCode" name="countryCode" value="US" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="phoneNumber" class="form-label">@Localizer["Phone Number"]</label>
-                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["Close"]</button>
-                <button type="button" class="btn btn-primary" id="createShipmentSubmit">@Localizer["Create"]</button>
-            </div>
-        </div>
-    </div>
-</div>
+@* <div class="modal fade" id="createShipmentModal" tabindex="-1"> *@
+@*     <div class="modal-dialog"> *@
+@*         <div class="modal-content"> *@
+@*             <div class="modal-header"> *@
+@*                 <h5 class="modal-title">@Localizer["Create Shipping Order"]</h5> *@
+@*                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button> *@
+@*             </div> *@
+@*             <div class="modal-body"> *@
+@*                 <form id="createShipmentForm"> *@
+@*                     <div class="mb-3"> *@
+@*                         <label for="recipientName" class="form-label">@Localizer["Recipient Name"]</label> *@
+@*                         <input type="text" class="form-control" id="recipientName" name="recipientName" required> *@
+@*                     </div> *@
+@*                     <div class="mb-3"> *@
+@*                         <label for="address" class="form-label">@Localizer["Address"]</label> *@
+@*                         <input type="text" class="form-control" id="address" name="address" required> *@
+@*                     </div> *@
+@*                     <div class="mb-3"> *@
+@*                         <label for="city" class="form-label">@Localizer["City"]</label> *@
+@*                         <input type="text" class="form-control" id="city" name="city" required> *@
+@*                     </div> *@
+@*                     <div class="mb-3"> *@
+@*                         <label for="state" class="form-label">@Localizer["State"]</label> *@
+@*                         <input type="text" class="form-control" id="state" name="state" required> *@
+@*                     </div> *@
+@*                     <div class="mb-3"> *@
+@*                         <label for="postalCode" class="form-label">@Localizer["Postal Code"]</label> *@
+@*                         <input type="text" class="form-control" id="postalCode" name="postalCode" required> *@
+@*                     </div> *@
+@*                     <div class="mb-3"> *@
+@*                         <label for="countryCode" class="form-label">@Localizer["Country Code"]</label> *@
+@*                         <input type="text" class="form-control" id="countryCode" name="countryCode" value="US" required> *@
+@*                     </div> *@
+@*                     <div class="mb-3"> *@
+@*                         <label for="phoneNumber" class="form-label">@Localizer["Phone Number"]</label> *@
+@*                         <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required> *@
+@*                     </div> *@
+@*                 </form> *@
+@*             </div> *@
+@*             <div class="modal-footer"> *@
+@*                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["Close"]</button> *@
+@*                 <button type="button" class="btn btn-primary" id="createShipmentSubmit">@Localizer["Create"]</button> *@
+@*             </div> *@
+@*         </div> *@
+@*     </div> *@
+@* </div> *@
 
-<!-- Cancel Shipment Modal -->
-<div class="modal fade" id="cancelShipmentModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">@Localizer["Cancel Shipment"]</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                @Localizer["Are you sure you want to cancel this shipment? This action cannot be undone."]
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["Go Back"]</button>
-                <button type="button" class="btn btn-danger" id="confirmCancel">@Localizer["Confirm"]</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Toast -->
-<div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="resultToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <div class="toast-header-text"></div>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body"></div>
-    </div>
-</div>
+@* <!-- Toast --> *@
+@* <div class="toast-container position-fixed bottom-0 end-0 p-3"> *@
+@*     <div id="resultToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true"> *@
+@*         <div class="toast-header"> *@
+@*             <div class="toast-header-text"></div> *@
+@*             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button> *@
+@*         </div> *@
+@*         <div class="toast-body"></div> *@
+@*     </div> *@
+@* </div> *@
 
 <script src="~/js/shipments.js"></script>
 

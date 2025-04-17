@@ -11,34 +11,62 @@ using OrderMgmtRevision.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Azure.Core;
+using OrderMgmtRevision.Extensions;
+using OrderMgmtRevision.Data;
 
 
 namespace OrderMgmtRevision.Controllers
 {
     [Authorize]
-   
     public class ShippingController : Controller
     {
-        private readonly FedExService _fedExService;
         private readonly ShippoService _shippoService;
         private readonly IWebHostEnvironment _env;
-        private static List<FedExShipment> _shipments = new List<FedExShipment>();
         private readonly IStringLocalizer<ShippingController> _localizer;
         private readonly UserManager<User> _userManager;
+        private readonly AppDbContext _context;
+        private readonly List<ShipmentViewModel> _shipments;
 
         // Inject IStringLocalizer for localization
-        public ShippingController(FedExService fedExService, IWebHostEnvironment env, IStringLocalizer<ShippingController> localizer, ShippoService shippoService, UserManager<User> userManager)
+        public ShippingController(IWebHostEnvironment env, IStringLocalizer<ShippingController> localizer, ShippoService shippoService, UserManager<User> userManager, AppDbContext context)
         {
-            _fedExService = fedExService;
             _env = env;
             _localizer = localizer; // Store the localizer
             _shippoService = shippoService;
             _userManager = userManager;
+            _context = context;
          }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View(_shipments);
+            // Fetch the shipments, including related entities
+            var shipments = await _context.Shipments
+                .Include(s => s.Product) // Include related product information
+                .Include(s => s.SourceWarehouse) // Include source warehouse details
+                .Include(s => s.ShippingRequest) // Include the shippingrequest
+                .Include(s => s.Label) // Include shipping label details
+                .Include(s => s.Tracking) // Include tracking details
+                .ToListAsync();
+
+            // Map the shipments to the view model
+            var shipmentViewModels = new List<ShipmentViewModel>();
+            foreach (var shipment in shipments)
+            {
+                shipmentViewModels.Add(new ShipmentViewModel
+                {
+                    ShipmentID = shipment.ShipmentID.GetValueOrDefault(),
+                    TrackingNumber = shipment.TrackingNumber,
+                    RecipientName = shipment.ShipmentName,
+                    Address = shipment.ShippingRequest?.ToStreet,
+                    City = shipment.ShippingRequest?.ToCity,
+                    CountryCode = shipment.ShippingRequest?.ToCountryCode,
+                    State = shipment.ShippingRequest?.ToState,
+                    PhoneNumber = shipment.ShippingRequest?.ToPhone,
+                    PostalCode = shipment.ShippingRequest?.ToZip,
+                    Status = shipment.Status
+                });
+            }
+            return View(shipmentViewModels);
         }
 
         private async Task<bool> IsUserAdmin()
@@ -58,105 +86,221 @@ namespace OrderMgmtRevision.Controllers
             return HttpContext.Connection.RemoteIpAddress?.ToString();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateShipment([FromBody] FedExShipment shipment)
-        {
-            try
-            {
-                if (shipment == null || !ModelState.IsValid)
-                {
-                    var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
-                    Console.WriteLine($"Validation errors: {string.Join(", ", errors)}");
-
-                    // Use localized string for error message
-                    return Json(new { success = false, message = _localizer["Invalid shipment data."] });
-                }
-
-                var token = await _fedExService.GetAccessTokenAsync();
-                var response = await _fedExService.CreateShipmentAsync(token, shipment);
-                dynamic result = JsonConvert.DeserializeObject(response);
-
-                string trackingNumber = result.output.transactionShipments[0].masterTrackingNumber;
-                string encodedLabel = result.output.transactionShipments[0].pieceResponses[0].packageDocuments[0].encodedLabel;
-
-                // Decode Label
-                byte[] labelBytes = Convert.FromBase64String(encodedLabel);
-
-                // Create path for file download
-                string labelPath = Path.Combine(_env.WebRootPath, "labels", $"label_{trackingNumber}.pdf");
-                Directory.CreateDirectory(Path.GetDirectoryName(labelPath));
-                await System.IO.File.WriteAllBytesAsync(labelPath, labelBytes);
-
-                ViewBag.TrackingNumber = trackingNumber;
-                ViewBag.LabelUrl = $"/labels/label_{trackingNumber}.pdf";
-
-                shipment.TrackingNumber = trackingNumber; // Update the shipment with the tracking number
-                _shipments.Add(shipment);
-
-                return File(labelBytes, "application/pdf", $"label_{trackingNumber}.pdf");
-            }
-            catch (Exception ex)
-            {
-                // Use localized string for error message
-                return Json(new { success = false, message = _localizer["Error while creating shipment."] + " " + ex.Message });
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CancelShipment(string trackingNumber)
-        {
-            try
-            {
-                var token = await _fedExService.GetAccessTokenAsync();
-                var response = await _fedExService.CancelShipmentAsync(token, trackingNumber);
-                _shipments.RemoveAll(s => s.TrackingNumber == trackingNumber);
-
-                // Use localized string for success message
-                return Json(new { success = true, message = _localizer["Shipment {0} canceled successfully.", trackingNumber] });
-            }
-            catch (Exception ex)
-            {
-                // Use localized string for error message
-                return Json(new { success = false, message = _localizer["Error while canceling shipment."] + " " + ex.Message });
-            }
-        }
-
         [HttpGet]
-        public IActionResult _CreateShipmentRequest()
+        public async Task<IActionResult> _CreateShipmentRequest()
         {
-            return PartialView("_CreateShipmentRequest", new ShippingRequest());
+            var model = new ShippingRequestViewModel
+            {
+                ProductList = await _context.Products.ToListAsync(),
+                Warehouses = await _context.Warehouses.ToListAsync()
+            };
+
+            return PartialView("_CreateShipmentRequest", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetRates(ShippingRequestViewModel request)
+        {
+            var rates = await _shippoService.GetShippingRatesAsync(request); // however you're getting these
+
+            var result = rates.Select(r => new {
+                RateObjectId = r.RateObjectId,
+                Provider = r.Provider,
+                Service = r.Service,
+                Amount = r.Amount,
+                Currency = r.Currency,
+                EstimatedDays = r.EstimatedDays
+            }).ToList(); // <--- this is important!
+            System.Diagnostics.Debug.WriteLine("Shippo rate results when clicking shipment: " + JsonConvert.SerializeObject(result));
+
+            return Json(result);
+
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateShippingRequest(ShippingRequest model)
+        public async Task<IActionResult> CreateShippingRequest(ShippingRequestViewModel model, string selectedRateJson)
         {
-            //bool isAdmin = await IsUserAdmin();
-            //var user = await _userManager.GetUserAsync(User);
-            //string userId = user?.Id ?? "Unknown";
-            //string userName = user?.UserName ?? "Unknown";
-            //string ipAddress = GetClientIp();
-            //string logMessage = "";
+            System.Diagnostics.Debug.WriteLine("CreateShippingRequest called with Rate JSON: " + selectedRateJson);
 
+            ModelState.Remove("Warehouses");
+            ModelState.Remove("ProductList");
+
+            if (model.SourceWarehouseId > 0)
+            {
+                var warehouse = await _context.Warehouses.FindAsync(model.SourceWarehouseId);
+                if (warehouse != null)
+                {
+                    // Populate the from address fields from the warehouse
+                    model.FromName = warehouse.WarehouseName;
+                    model.FromStreet = warehouse.Address;
+                    model.FromCity = warehouse.City;
+                    model.FromState = warehouse.State;
+                    model.FromZip = warehouse.Zip;
+                    model.FromEmail = warehouse.WarehouseEmail;
+                    model.FromPhone = warehouse.PhoneNumber;
+                }
+            }
 
             if (!ModelState.IsValid)
             {
-                return View("Index",  model);
+                // Repopulate dropdown lists
+                model.ProductList = await _context.Products.ToListAsync();
+                model.Warehouses = await _context.Warehouses.ToListAsync();
+                return PartialView("_CreateShipmentRequest", model);
             }
+
+            var source = await _context.Warehouses.FindAsync(model.SourceWarehouseId);
+
+            var request = new ShippingRequest
+            {
+                FromName = source.WarehouseName,
+                FromStreet = source.Address,
+                FromCity = source.City,
+                FromState = source.State,
+                FromZip = source.Zip,
+                FromPhone = source.PhoneNumber,
+                FromEmail = source.WarehouseEmail,
+                ToName = model.ToName,
+                ToStreet = model.ToStreet,
+                ToCity = model.ToCity,
+                ToState = model.ToState,
+                ToZip = model.ToZip,
+                ToCountryCode = model.ToCountryCode,
+                ToPhone = model.ToPhone,
+                Weight = model.Weight,
+                Length = model.Length,
+                Width = model.Width,
+                Height = model.Height
+            };
+
+            ShippingRate selectedRate = null;
+            if (!string.IsNullOrEmpty(selectedRateJson))
+            {
+                try
+                {
+                    selectedRate = JsonConvert.DeserializeObject<ShippingRate>(selectedRateJson);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("Error deserializing rate: " + ex.Message);
+                }
+            }
+
+            System.Diagnostics.Debug.WriteLine("Selected rate chosen: " + JsonConvert.SerializeObject(selectedRate));
+
+            if (selectedRate == null)
+            {
+                TempData["Error"] = "Selected rate not found.";
+                return RedirectToAction("Index", "Shipping");
+            }
+
+            var label = await _shippoService.CreateLabelAsync(selectedRate.RateObjectId);
+
+            var shipment = new Shipment
+            {
+                ShipmentName = model.ToName,
+                ProductID = model.ProductID,
+                SourceWarehouseID = model.SourceWarehouseId,
+                Status = "CREATED",
+                Cost = selectedRate.Amount,
+                TrackingNumber = label.TrackingNumber,
+                SelectedRateId = selectedRate.RateObjectId,
+                Rate = selectedRate,
+                Label = new ShippingLabel
+                {
+                    LabelUrl = label.LabelUrl,
+                    LabelObjectId = label.LabelObjectId,
+                    TrackingNumber = label.TrackingNumber,
+                    TrackingUrl = label.TrackingUrl
+                },
+                Tracking = new ShipmentTracking
+                {
+                    Location = model.FromStreet,
+                    StatusDate = "",
+                    Status = "CREATED"
+                },
+                ShippingRequest = request,
+                ShipmentDate = DateTime.UtcNow,
+                GeneratedAt = DateTime.UtcNow
+            };
 
             try
             {
-                var rates = await _shippoService.GetShippingRatesAsync(model);
-                return View("Rates", rates);
+                _context.Shipments.Add(shipment);
+                var result = await _context.SaveChangesAsync();
+                // Check result - should be > 0 if successful
+                if (result > 0)
+                {
+                    TempData["SuccessMessage"] = "Shipment created successfully with tracking number: " + shipment.TrackingNumber;
+                }
+                else
+                {
+                    TempData["Error"] = "No changes were saved to the database.";
+                }
+                return RedirectToAction("Index", "Shipping");
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", $"Error getting rates: {ex.Message}");
-                return View("Index", model);
+                // Log the exception
+                TempData["Error"] = "Error creating shipment: " + ex.Message;
+                if (ex.InnerException != null)
+                {
+                    TempData["Errors"] = new List<string> { ex.InnerException.Message };
+                }
+                return RedirectToAction("Index", "Shipping");
             }
 
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CancelShipment (int id)
+        {
+            var shipment = await _context.Shipments
+                .Include(s => s.Label)
+                .Include(s => s.Tracking)
+                .Include(s => s.ShippingRequest)
+                .FirstOrDefaultAsync(s => s.ShipmentID == id);
+
+            if (shipment == null)
+            {
+                TempData["Error"] = "Shipment not found.";
+                return RedirectToAction("Index");
+            }
+
+            System.Diagnostics.Debug.WriteLine($"Attempting to cancel label with ID: {shipment.Label.LabelObjectId}");
+            
+            try
+            {
+                bool cancelled = await _shippoService.CancelShipmentAsync(shipment.Label.LabelObjectId);
+                System.Diagnostics.Debug.WriteLine("Cancel shipment result: " + cancelled);
+                if (!cancelled)
+                {
+                    TempData["Error"] = "Unable to cancel shipment. It may have already been picked up or processed.";
+                    return RedirectToAction("Index");
+                }
+
+                shipment.Status = "CANCELLED";
+                shipment.Tracking.Status = "CANCELLED";
+                shipment.Tracking.StatusDate = DateTime.UtcNow.ToString("yyy-MM-ddTHH:mm:ssZ");
+
+                _context.Shipments.Update(shipment);
+                await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Shipment cancelled successfully.";
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Exception during shipment cancellation: {ex.Message}");
+                if (ex.InnerException != null)
+                {
+                    System.Diagnostics.Debug.WriteLine("$Inner exception: {ex.InnerException.Message}");
+                }
+                TempData["Error"] = "Error cancelling shipment: " + ex.Message;
+            }
+
+            return RedirectToAction("Index");
+        }
 
     }
 }

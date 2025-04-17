@@ -78,8 +78,8 @@ namespace OrderMgmtRevision.Data
             if (!_context.Warehouses.Any())
             {
                 _context.Warehouses.AddRange(
-                    new Warehouse { WarehouseName = "Arctic Warehouse", Address = "111 New York" },
-                    new Warehouse { WarehouseName = "Backup Warehouse", Address = "444 Los Angeles" }
+                    new Warehouse { WarehouseName = "Amazon DSE2", Address = "6705 E Marginal Wy S", City = "Seattle", State = "WA", Zip = "98108", PhoneNumber = "+12064952580", CountryCode = "US", WarehouseEmail = "amazondse2@example.com"},
+                    new Warehouse { WarehouseName = "eBay New York", Address = "641 6th Ave", City = "New York", State = "NY",  Zip = "10011", PhoneNumber = "+13479498308", CountryCode = "US", WarehouseEmail = "ebaynewyork@example.com" }
                 );
                 await _context.SaveChangesAsync();
             }
@@ -87,8 +87,8 @@ namespace OrderMgmtRevision.Data
             if (!_context.Products.Any())
             {
                 _context.Products.AddRange(
-                        new Product { ProductID = "PROD-20250402-001", Description = "An elite gaming laptop. Very nice and high-end.", ProductName = "ASUS Laptop", SKU = "ASUS-LAP1", Price = 999.99m, Cost = 700.00m, Stock = 20, ShipAmount = 3},
-                        new Product { ProductID = "PROD-20250402-002", Description = "A basic mouse that any user can use.", ProductName = "HP Mouse", SKU = "HP01-0001", Price = 49.99m, Cost = 20.00m, Stock = 40, ShipAmount = 5 }
+                        new Product { ProductID = "PROD-20250402-001", Description = "An elite gaming laptop. Very nice and high-end.", ProductName = "ASUS Laptop", SKU = "ASUS-LAP1", Price = 999.99m, Cost = 700.00m, Stock = 20, ShipAmount = 3, Height = 3, Weight = 15, Width = 8, Length = 10 },
+                        new Product { ProductID = "PROD-20250402-002", Description = "A basic mouse that any user can use.", ProductName = "HP Mouse", SKU = "HP01-0001", Price = 49.99m, Cost = 20.00m, Stock = 40, ShipAmount = 5, Height = 5, Weight = 20, Width = 5, Length = 5 }
                     );
 
                 await _context.SaveChangesAsync();

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Identity.Client;
 using Newtonsoft.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
 
@@ -38,7 +39,7 @@ namespace OrderMgmtRevision.Models
         public decimal Cost { get; set; } = 0;// product cost for inbound calculation, 0 if null
 
         [Required]
-        [Range(0, 9999, ErrorMessage = "Stock must be between 0 and 999.")]
+        [Range(0, 999, ErrorMessage = "Stock must be between 0 and 999.")]
         public int Stock {  get; set; } = 0;
 
         public DateTime? CreatedAt { get; set; } = DateTime.UtcNow; // created date and updated date
@@ -50,6 +51,23 @@ namespace OrderMgmtRevision.Models
         public User? User { get; set; }
 
         public int? ShipAmount { get; set; } = 0;
+
+        [Required(ErrorMessage = "Height (in) is required.")]
+        [Range(0, 999, ErrorMessage = "Height must be between 0 and 999 inches.")]
+        public int? Height { get; set; } = 0;
+
+        [Required(ErrorMessage = "Width (in) is required.")]
+        [Range(0, 999, ErrorMessage = "Width must be between 0 and 999 inches.")]
+        public int? Width { get; set; } = 0;
+
+        [Required(ErrorMessage = "Length (in) is required.")]
+        [Range(0, 999, ErrorMessage = "Length must be between 0 and 999 inches.")]
+        public int? Length { get; set; } = 0;
+
+        [Required(ErrorMessage = "Weight (lbs) is required.")]
+        [Range(0, 999, ErrorMessage = "Height must be between 0 and 150lbs.")]
+        public int? Weight { get; set; } = 0;
+
 
     }
 }

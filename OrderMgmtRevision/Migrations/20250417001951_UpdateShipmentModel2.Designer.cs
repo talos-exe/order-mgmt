@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderMgmtRevision.Data;
 
@@ -11,9 +12,11 @@ using OrderMgmtRevision.Data;
 namespace OrderMgmtRevision.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250417001951_UpdateShipmentModel2")]
+    partial class UpdateShipmentModel2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -207,10 +210,10 @@ namespace OrderMgmtRevision.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int>("Height")
+                    b.Property<int?>("Height")
                         .HasColumnType("int");
 
-                    b.Property<int>("Length")
+                    b.Property<int?>("Length")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
@@ -238,10 +241,10 @@ namespace OrderMgmtRevision.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Weight")
+                    b.Property<int?>("Weight")
                         .HasColumnType("int");
 
-                    b.Property<int>("Width")
+                    b.Property<int?>("Width")
                         .HasColumnType("int");
 
                     b.HasKey("ProductID");
@@ -284,8 +287,8 @@ namespace OrderMgmtRevision.Migrations
 
                     b.Property<string>("ShipmentName")
                         .IsRequired()
-                        .HasMaxLength(36)
-                        .HasColumnType("nvarchar(36)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<int>("SourceWarehouseID")
                         .HasColumnType("int");
@@ -629,10 +632,6 @@ namespace OrderMgmtRevision.Migrations
                         {
                             b1.Property<int>("ShipmentID")
                                 .HasColumnType("int");
-
-                            b1.Property<string>("LabelObjectId")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("LabelUrl")
                                 .IsRequired()

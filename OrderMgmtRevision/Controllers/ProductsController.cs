@@ -27,27 +27,42 @@ namespace OrderMgmtRevision.Controllers
         {
             // Get the current date in the format "yyyyMMdd"
             string datePart = DateTime.Now.ToString("yyyyMMdd");
+            string prefix = $"PROD-{datePart}-";
 
             // Get the last product ID created for today
             var lastProduct = _dbContext.Products
-                .Where(p => p.ProductID.StartsWith($"PROD-{datePart}-"))
+                .Where(p => p.ProductID.StartsWith(prefix))
                 .OrderByDescending(p => p.ProductID)
                 .FirstOrDefault();
 
             // If no product exists for today, start from 001
             string newProductNumber = "001";
+
             if (lastProduct != null)
             {
-                // Extract the number part from the last product's ID (e.g., 001 from PROD-20250402-001)
-                var lastProductNumber = lastProduct.ProductID.Substring(12);
+                try
+                {
+                    // Extract the number part from the last product's ID (e.g., 001 from PROD-20250402-001)
+                    var lastProductNumber = lastProduct.ProductID.Substring(prefix.Length);
 
-                // Increment the last number to create a new sequential number
-                int newProductInt = int.Parse(lastProductNumber) + 1;
-                newProductNumber = newProductInt.ToString("D3"); // Ensure 3 digits (e.g., 001, 002, etc.)
+                    // Make sure we only have digits
+                    if (int.TryParse(lastProductNumber, out int lastNumber))
+                    {
+                        // Increment the last number to create a new sequential number
+                        int newProductInt = lastNumber + 1;
+                        newProductNumber = newProductInt.ToString("D3"); // Ensure 3 digits
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception for debugging
+                    System.Diagnostics.Debug.WriteLine($"Error parsing product ID: {ex.Message}");
+                    // Continue with default "001"
+                }
             }
 
             // Combine the parts to form the new ProductID
-            return $"PROD-{datePart}-{newProductNumber}";
+            return $"{prefix}{newProductNumber}";
         }
         private async Task<bool> IsUserAdmin()
         {
@@ -126,6 +141,10 @@ namespace OrderMgmtRevision.Controllers
                 Price = model.Price,
                 Cost = model.Cost,
                 Stock = model.Stock,
+                Weight = model.Weight,
+                Height = model.Height,
+                Length = model.Length,
+                Width = model.Width,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 CreatedBy = userName,
@@ -190,6 +209,10 @@ namespace OrderMgmtRevision.Controllers
                     Price = p.Price,
                     Cost = p.Cost,
                     Stock = p.Stock,
+                    Height = p.Height,
+                    Width = p.Width,
+                    Length = p.Length,
+                    Weight = p.Weight,
                     CreatedAt = p.CreatedAt,
                     UpdatedAt = p.UpdatedAt,
                     CreatedBy = p.CreatedBy,

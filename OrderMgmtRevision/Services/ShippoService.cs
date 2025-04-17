@@ -37,7 +37,9 @@ namespace OrderMgmtRevision.Services
                     city = request.FromCity,
                     state = request.FromState,
                     zip = request.FromZip,
-                    country = "US"
+                    country = "US",
+                    phone = request.FromPhone,
+                    email = request.FromEmail
                 },
                 address_to = new
                 {
@@ -46,7 +48,7 @@ namespace OrderMgmtRevision.Services
                     city = request.ToCity,
                     state = request.ToState,
                     zip = request.ToZip,
-                    country = "US"
+                    country = request.ToCountryCode
                 },
                 parcels = new[]
                 {
@@ -70,6 +72,7 @@ namespace OrderMgmtRevision.Services
             response.EnsureSuccessStatusCode();
 
             var responseContent = await response.Content.ReadAsStringAsync();
+            System.Diagnostics.Debug.WriteLine("Shippo Request response: " + responseContent);
             dynamic shippoResponse = JsonConvert.DeserializeObject(responseContent);
 
             var rates = new List<ShippingRate>();
@@ -81,7 +84,8 @@ namespace OrderMgmtRevision.Services
                     Service = rate.servicelevel.name,
                     Amount = decimal.Parse(rate.amount.ToString()),
                     Currency = rate.currency,
-                    EstimatedDays = rate.estimated_days
+                    EstimatedDays = rate.estimated_days,
+                    RateObjectId = rate.object_id
                 });
             }
 
@@ -99,20 +103,35 @@ namespace OrderMgmtRevision.Services
             var jsonContent = JsonConvert.SerializeObject(transactionRequest);
             var content = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
 
-            var response = await _httpClient.PostAsync("transactions/", content);
-            response.EnsureSuccessStatusCode();
+            HttpResponseMessage response;
+            try
+            {
+                response = await _httpClient.PostAsync("transactions/", content);
+                response.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Request failed: {ex.Message}");
+                throw; // Re-throw the exception after logging
+            }
+
+            //var response = await _httpClient.PostAsync("transactions/", content);
+            //response.EnsureSuccessStatusCode();
 
             var responseContent = await response.Content.ReadAsStringAsync();
             dynamic transactionResponse = JsonConvert.DeserializeObject(responseContent);
+            System.Diagnostics.Debug.WriteLine("Shippo Label response:" + responseContent);
 
             return new ShippingLabel
             {
                 LabelUrl = transactionResponse.label_url,
+                LabelObjectId = transactionResponse.object_id,
                 TrackingNumber = transactionResponse.tracking_number,
-                TrackingUrl = transactionResponse.tracking_url,
-                Carrier = transactionResponse.tracking_provider,
-                Amount = decimal.Parse(transactionResponse.amount.ToString()),
-                Currency = transactionResponse.currency
+                TrackingUrl = transactionResponse.tracking_url_provider
+                //Carrier = transactionResponse.tracking_provider,
+                //Amount = decimal.Parse(transactionResponse.amount.ToString()),
+                //Currency = transactionResponse.currency
+                // Uncomment above in actual test key.
             };
         }
 
@@ -130,6 +149,49 @@ namespace OrderMgmtRevision.Services
                 StatusDate = trackingResponse.tracking_status?.status_date,
                 Location = $"{trackingResponse.tracking_status?.location?.city}, {trackingResponse.tracking_status?.location?.state}"
             };
+        }
+
+        public async Task<bool> CancelShipmentAsync(string objectid)
+        {
+            try
+            {
+                // Create a properly formatted request body
+                var requestBody = new Dictionary<string, string>
+                    {
+                        { "transaction", objectid }
+                    };
+
+                var content = new StringContent(
+                    JsonConvert.SerializeObject(requestBody),
+                    System.Text.Encoding.UTF8,
+                    "application/json");
+
+                // Try the refunds endpoint instead of the transaction-specific endpoint
+                var response = await _httpClient.PostAsync("refunds", content);
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+                System.Diagnostics.Debug.WriteLine($"Cancel response: {responseContent}");
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Cancel failed with status code: {response.StatusCode}");
+                    System.Diagnostics.Debug.WriteLine($"Response content: {responseContent}");
+                    return false;
+                }
+
+                dynamic result = JsonConvert.DeserializeObject(responseContent);
+                string status = result?.status?.ToString();
+
+                System.Diagnostics.Debug.WriteLine($"Refund status: {status}");
+                return !string.IsNullOrEmpty(status) &&
+                       (status.Equals("REFUNDED", StringComparison.OrdinalIgnoreCase) ||
+                        status.Equals("QUEUED", StringComparison.OrdinalIgnoreCase));
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Exception during cancellation: {ex.Message}");
+                return false;
+            }
         }
 
     }

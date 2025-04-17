@@ -48,19 +48,16 @@ function openProductDetailsTab(productId, productName) {
     // Activate the new tab
     $('#' + tabId + 'Tab').tab('show');
 
-    // Load the product details via AJAX
-    $.ajax({
-        url: '/Products/GetProductDetails',
-        type: 'GET',
-        data: { productId: productId },
-        success: function (data) {
+    // Load the product details via fetch
+    fetch(`/Products/GetProductDetails?productId=${productId}`)
+        .then(response => response.text())
+        .then(data => {
             $('#' + tabId).html(data);
-        },
-        error: function () {
+        })
+        .catch(() => {
             console.log("Product ID: " + productId);
             $('#' + tabId).html('<div class="ms-5 me-5 text-danger">Error loading product details</div>');
-        }
-    });
+        });
 }
 
 function openCreateProductPane() {
@@ -82,23 +79,18 @@ function openCreateProductPane() {
 
     $('#' + tabId + 'Tab').tab('show');
 
-    $.ajax({
-        url: '/Products/_CreateProduct',
-        type: 'GET',
-        success: function (data) {
+    fetch('/Products/_CreateProduct')
+        .then(response => response.text())
+        .then(data => {
             $('#' + tabId).html(data);
-        },
-        error: function () {
+        })
+        .catch(() => {
             $('#' + tabId).html('<div class="ms-5 me-5 text-danger">Error loading Create Product form</div>');
-        }
-    });
+        });
 }
 
-
-
-
 function closeCreateProduct() {
-    // Find the create user tab
+    // Find the create product tab
     var tab = $('#createProductTab');
     if (tab.length) {
         var tabId = tab.attr('href');
@@ -107,10 +99,9 @@ function closeCreateProduct() {
         $(tabId).remove();
     }
 
-    // Activate the user list tab
+    // Activate the product list tab
     $('#productListTab').tab('show');
 }
-
 
 function closeProductDetailsTab() {
     // Find any product details tab
