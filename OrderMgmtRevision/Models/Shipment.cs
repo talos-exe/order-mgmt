@@ -47,7 +47,7 @@ namespace OrderMgmtRevision.Models
 
         public ShippingRequest ShippingRequest { get; set; }
 
-        public string? CreatedBy { get; set; } = "System";
+        public string CreatedBy { get; set; } = "System";
 
         public ICollection<ShipmentStatusHistory> StatusHistory {  get; set; }
 

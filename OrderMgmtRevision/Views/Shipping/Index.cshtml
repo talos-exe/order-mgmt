@@ -142,7 +142,7 @@
                                             @shipment.Status
                                         </span>
                                     </td>
-                                    <td><a style="cursor: pointer" onclick="openShipmentDetailsTab('@shipment.ShipmentID', '@shipment.RecipientName')">@Localizer["View Details"]</a>@shipment.TrackingNumber</td>
+                                    <td><a class="text-primary text-decoration-underline" style="cursor: pointer" onclick="openShipmentDetailsTab('@shipment.ShipmentID', '@shipment.RecipientName')">@shipment.TrackingNumber</a></td>
                                     <td>@shipment.RecipientName</td>
                                     <td>@shipment.Address</td>
                                     <td>@shipment.City</td>

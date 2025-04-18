@@ -276,6 +276,7 @@ namespace OrderMgmtRevision.Controllers
                 .Select(s => new Shipment
                 {
                     ShipmentID = s.ShipmentID,
+                    ShipmentName = s.ShipmentName,
                     Rate = s.Rate,
                     TrackingNumber = s.TrackingNumber,
                     Cost = s.Cost,
