@@ -20,15 +20,15 @@ namespace OrderMgmtRevision.Models
 
         public string? Status { get; set; } = "In Progress";
 
-        public DateTime ShipmentDate { get; set; } = DateTime.Now;
-
         public DateTime? EstimatedArrival { get; set; }
 
         public decimal Cost { get; set; } = 0; // Shipping cost, 0 if null
 
         public string? TrackingNumber { get; set; }  // Shipping Tracking Number
 
-        public DateTime GeneratedAt { get; set; } = DateTime.Now;
+        public DateTime? GeneratedAt { get; set; } = DateTime.UtcNow;
+
+        public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
 
         // Relationships
         public Product Product { get; set; }
@@ -46,6 +46,8 @@ namespace OrderMgmtRevision.Models
         public ShipmentTracking Tracking { get; set; }
 
         public ShippingRequest ShippingRequest { get; set; }
+
+        public string? CreatedBy { get; set; } = "System";
 
         public ICollection<ShipmentStatusHistory> StatusHistory {  get; set; }
 

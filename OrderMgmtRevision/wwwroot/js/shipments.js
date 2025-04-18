@@ -62,6 +62,54 @@ function closeCreateShipment() {
     // Activate the shipping list tab
     $('#shippingListTab').tab('show');
 }
+
+function openShipmentDetailsTab(shipmentId, shipmentName) {
+    // Remove existing product details tab if it exists
+    closeShipmentDetailsTab();
+
+    // Create new tab
+    var tabId = 'shipmentDetails-' + shipmentId;
+    var newTab = $('<li class="nav-item">' +
+        '<a class="nav-link" id="' + tabId + 'Tab" data-bs-toggle="tab" href="#' + tabId + '">' +
+        'Details: ' + shipmentName +
+        '</a>' +
+        '</li>');
+
+    // Add the new tab to the tab list
+    $('#shippingTabs').append(newTab);
+
+    // Create new tab pane
+    var newPane = $('<div class="tab-pane fade" id="' + tabId + '"><div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div></div>');
+    $('.tab-content').append(newPane);
+
+    // Activate the new tab
+    $('#' + tabId + 'Tab').tab('show');
+
+    // Load the product details via fetch
+    fetch(`/Shipping/GetShipmentDetails?shipmentId=${shipmentId}`)
+        .then(response => response.text())
+        .then(data => {
+            $('#' + tabId).html(data);
+        })
+        .catch(() => {
+            console.log("Shipment ID: " + shipmentId);
+            $('#' + tabId).html('<div class="ms-5 me-5 text-danger">Error loading shipment details</div>');
+        });
+}
+
+function closeShipmentDetailsTab() {
+    // Find any product details tab
+    $('a[id^="shipmentDetails-"][id$="Tab"]').each(function () {
+        var tabId = $(this).attr('href');
+        // Remove the tab and its content
+        $(this).parent().remove();
+        $(tabId).remove();
+    });
+
+    // Activate the product list tab
+    $('#shippingListTab').tab('show');
+}
+
 //document.addEventListener('DOMContentLoaded', () => {
     //const createSubmitButton = document.getElementById('createShipmentSubmit');
     //createSubmitButton.addEventListener('click', () => {

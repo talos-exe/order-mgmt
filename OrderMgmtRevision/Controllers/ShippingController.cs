@@ -121,6 +121,13 @@ namespace OrderMgmtRevision.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateShippingRequest(ShippingRequestViewModel model, string selectedRateJson)
         {
+            bool isAdmin = await IsUserAdmin();
+            var user = await _userManager.GetUserAsync(User);
+            string userId = user?.Id ?? "Unknown";
+            string userName = user?.UserName ?? "Unknown";
+            string ipAddress = GetClientIp();
+            string logMessage = "";
+
             System.Diagnostics.Debug.WriteLine("CreateShippingRequest called with Rate JSON: " + selectedRateJson);
 
             ModelState.Remove("Warehouses");
@@ -147,7 +154,7 @@ namespace OrderMgmtRevision.Controllers
                 // Repopulate dropdown lists
                 model.ProductList = await _context.Products.ToListAsync();
                 model.Warehouses = await _context.Warehouses.ToListAsync();
-                return PartialView("_CreateShipmentRequest", model);
+                return View("Index", model);
             }
 
             var source = await _context.Warehouses.FindAsync(model.SourceWarehouseId);
@@ -221,8 +228,9 @@ namespace OrderMgmtRevision.Controllers
                     Status = "CREATED"
                 },
                 ShippingRequest = request,
-                ShipmentDate = DateTime.UtcNow,
-                GeneratedAt = DateTime.UtcNow
+                GeneratedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                CreatedBy = userName
             };
 
             try
@@ -251,6 +259,36 @@ namespace OrderMgmtRevision.Controllers
                 return RedirectToAction("Index", "Shipping");
             }
 
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetShipmentDetails(int shipmentId)
+        {
+            var shipment = await _context.Shipments.FindAsync(shipmentId);
+            if (shipment == null)
+            {
+                return NotFound();
+            }
+
+            var shipmentViewModel = await _context.Shipments
+                .Where(s => s.ShipmentID == shipmentId)
+                .AsNoTracking()
+                .Select(s => new Shipment
+                {
+                    ShipmentID = s.ShipmentID,
+                    Rate = s.Rate,
+                    TrackingNumber = s.TrackingNumber,
+                    Cost = s.Cost,
+                    SourceWarehouse = s.SourceWarehouse,
+                    Product = s.Product,
+                    ShippingRequest = s.ShippingRequest,
+                    Label = s.Label,
+                    GeneratedAt = s.GeneratedAt,
+                    UpdatedAt = s.UpdatedAt
+                })
+                .FirstOrDefaultAsync();
+
+            return PartialView("_ShipmentDetails", shipmentViewModel);
         }
 
         [HttpPost]
