@@ -33,8 +33,8 @@
 
                     <!-- Warehouse -->
                     <div class="form-group mb-3">
-                        <label>Warehouse</label>
-                        <select class="form-control" id="warehouseSelect" required>
+                        <label asp-for="SourceWarehouseId">Warehouse</label>
+                        <select asp-for="SourceWarehouseId" class="form-control" id="warehouseSelect" required>
                             <option value="">Select Warehouse</option>
                             @foreach (var wh in Model.Warehouses)
                             {
@@ -46,7 +46,7 @@
                                         data-zip="@wh.Zip"
                                         data-phone="@wh.PhoneNumber"
                                         data-email="@wh.WarehouseEmail">
-                                        @wh.WarehouseName
+                                    @wh.WarehouseName
                                 </option>
                             }
                         </select>
@@ -55,8 +55,8 @@
 
                     <!-- Product -->
                     <div class="form-group mb-3">
-                        <label>Product</label>
-                        <select class="form-control" id="productSelect">
+                        <label asp-for="ProductID">Product</label>
+                        <select asp-for="ProductID" class="form-control" id="productSelect" name="ProductID" required>
                             <option value="">Select Product</option>
                             @foreach (var prod in Model.ProductList)
                             {
@@ -73,21 +73,21 @@
                         </select>
                     </div>
 
-                    <div class="col-mb-3">
+                    <div class="mb-3">
                         <label asp-for="Weight"></label>
-                        <input asp-for="Weight" class="form-control" readonly />
+                        <input asp-for="Weight" class="form-control" readonly type="number" />
                     </div>
-                    <div class="col-mb-3">
+                    <div class="mb-3">
                         <label asp-for="Length"></label>
-                        <input asp-for="Length" class="form-control" readonly />
+                        <input asp-for="Length" class="form-control" readonly type="number" />
                     </div>
-                    <div class="col-mb-3">
+                    <div class="mb-3">
                         <label asp-for="Width"></label>
-                        <input asp-for="Width" class="form-control" readonly />
+                        <input asp-for="Width" class="form-control" readonly type="number" />
                     </div>
-                    <div class="col-mb-3">
+                    <div class="mb-3">
                         <label asp-for="Height"></label>
-                        <input asp-for="Height" class="form-control" readonly />
+                        <input asp-for="Height" class="form-control" readonly type="number" />
                     </div>
                 </div>
 
@@ -95,58 +95,59 @@
                 <div class="col-md-6">
                     <h5>To Address</h5>
 
-                    <div class="form-group">
+                    <div class="form-group mb-3">
                         <label asp-for="ToName">Shipment Name *</label>
-                        <input asp-for="ToName" class="form-control" />
+                        <input asp-for="ToName" class="form-control" type="text" />
                         <span asp-validation-for="ToName" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group mb-3">
                         <label asp-for="ToStreet">Recipient Address *</label>
-                        <input asp-for="ToStreet" class="form-control" />
+                        <input asp-for="ToStreet" class="form-control" type="text" />
                         <span asp-validation-for="ToStreet" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group mb-3">
                         <label asp-for="ToCity">Recipient City *</label>
-                        <input asp-for="ToCity" class="form-control" />
+                        <input asp-for="ToCity" class="form-control" type="text" />
                         <span asp-validation-for="ToCity" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group mb-3">
                         <label asp-for="ToState">Recipient State *</label>
-                        <input asp-for="ToState" class="form-control" />
+                        <input asp-for="ToState" class="form-control" type="text" />
                         <span asp-validation-for="ToState" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group mb-3">
                         <label asp-for="ToZip">Recipient Zip/Postal Code *</label>
-                        <input asp-for="ToZip" class="form-control" />
+                        <input asp-for="ToZip" class="form-control" type="text" />
                         <span asp-validation-for="ToZip" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mb-3">
                         <label asp-for="ToCountryCode">Recipient Country Code *</label>
-                        <input asp-for="ToCountryCode" class="form-control" />
+                        <input asp-for="ToCountryCode" class="form-control" type="text" />
                         <span asp-validation-for="ToCountryCode" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group mb-3">
                         <label asp-for="ToPhone">Recipient Phone Number (Optional)</label>
-                        <input asp-for="ToPhone" class="form-control" />
+                        <input asp-for="ToPhone" class="form-control" type="tel" />
                         <span asp-validation-for="ToPhone" class="text-danger"></span>
                     </div>
                 </div>
             </div>
 
-            <!-- Hidden From Address -->
-            <input asp-for="SourceWarehouseId" type="hidden" name="SourceWarehouseId" id="SourceWarehouseId" />
-            <input asp-for="FromName" type="hidden" id="FromName" />
-            <input asp-for="FromStreet" type="hidden" id="FromStreet" />
-            <input asp-for="FromCity" type="hidden" id="FromCity" />
-            <input asp-for="FromState" type="hidden" id="FromState" />
-            <input asp-for="FromZip" type="hidden" id="FromZip" />
-            <input asp-for="FromPhone" type="hidden" id="FromPhone" />
-            <input asp-for="FromEmail" type="hidden" id="FromEmail" />
-            <input asp-for="ProductID" type="hidden" id="ProductID"/>
+            @* Hidden From Address *@
+
+            @Html.HiddenFor(m => m.SourceWarehouseId)
+            @Html.HiddenFor(m => m.FromName, new { id = "FromName" })
+            @Html.HiddenFor(m => m.FromStreet, new { id = "FromStreet" })
+            @Html.HiddenFor(m => m.FromCity, new { id = "FromCity" })
+            @Html.HiddenFor(m => m.FromState, new { id = "FromState" })
+            @Html.HiddenFor(m => m.FromZip, new { id = "FromZip" })
+            @Html.HiddenFor(m => m.FromPhone, new { id = "FromPhone" })
+            @Html.HiddenFor(m => m.FromEmail, new { id = "FromEmail" })
+
             <input type="hidden" name="selectedRateJson" id="selectedRateJson" />
 
             <div class="mt-4">
