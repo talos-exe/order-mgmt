@@ -77,7 +77,7 @@ namespace OrderMgmtRevision.Controllers
         }
 
 
-        public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
 
             ViewBag.CurrentSort = sortOrder;
