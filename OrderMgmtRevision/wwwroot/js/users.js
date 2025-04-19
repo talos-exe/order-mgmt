@@ -26,35 +26,7 @@ function toggleAll(source) {
     toggleButtons();
 }
 
-// Table Sorting Function
 
-var isAscending = false;
-function sortTable(columnIndex) {
-    var table = document.getElementById("userTable");
-    var rows = Array.from(table.getElementsByTagName("tr")).slice(1); // Get all rows except the header
-    isAscending = !isAscending; // Toggle sorting order
-
-    var caret = document.getElementById("userCaret");
-    if (isAscending) {
-        caret.classList.remove("fa-caret-down");
-        caret.classList.add("fa-caret-up");
-    } else {
-        caret.classList.remove("fa-caret-up");
-        caret.classList.add("fa-caret-down");
-    }
-
-    rows.sort((a, b) => {
-        var cellA = a.cells[columnIndex].textContent.trim();
-        var cellB = b.cells[columnIndex].textContent.trim();
-        return isAscending
-            ? cellA.localeCompare(cellB) // Ascending sort
-            : cellB.localeCompare(cellA); // Descending sort
-    });
-
-    // Re-append the sorted rows to the table body to maintain styling
-    var tbody = table.querySelector('tbody');
-    rows.forEach(row => tbody.appendChild(row)); // Append sorted rows
-}
 
 // Search Function
 function filterTable() {
@@ -185,3 +157,39 @@ function closeCreateUser() {
     // Activate the user list tab
     $('#userListTab').tab('show');
 }
+
+
+
+
+
+// NOT IN USE
+
+//// Table Sorting Function
+
+//var isAscending = false;
+//function sortTable(columnIndex) {
+//    var table = document.getElementById("userTable");
+//    var rows = Array.from(table.getElementsByTagName("tr")).slice(1); // Get all rows except the header
+//    isAscending = !isAscending; // Toggle sorting order
+
+//    var caret = document.getElementById("userCaret");
+//    if (isAscending) {
+//        caret.classList.remove("fa-caret-down");
+//        caret.classList.add("fa-caret-up");
+//    } else {
+//        caret.classList.remove("fa-caret-up");
+//        caret.classList.add("fa-caret-down");
+//    }
+
+//    rows.sort((a, b) => {
+//        var cellA = a.cells[columnIndex].textContent.trim();
+//        var cellB = b.cells[columnIndex].textContent.trim();
+//        return isAscending
+//            ? cellA.localeCompare(cellB) // Ascending sort
+//            : cellB.localeCompare(cellA); // Descending sort
+//    });
+
+//    // Re-append the sorted rows to the table body to maintain styling
+//    var tbody = table.querySelector('tbody');
+//    rows.forEach(row => tbody.appendChild(row)); // Append sorted rows
+//}

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderMgmtRevision.Data;
 
@@ -11,9 +12,11 @@ using OrderMgmtRevision.Data;
 namespace OrderMgmtRevision.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250419013403_UpdateUsers")]
+    partial class UpdateUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -185,7 +188,7 @@ namespace OrderMgmtRevision.Migrations
 
                     b.HasIndex("WarehouseID");
 
-                    b.ToTable("InventoryAll", (string)null);
+                    b.ToTable("InventoryAll");
                 });
 
             modelBuilder.Entity("OrderMgmtRevision.Models.Product", b =>
@@ -248,7 +251,7 @@ namespace OrderMgmtRevision.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("OrderMgmtRevision.Models.Shipment", b =>
@@ -306,7 +309,7 @@ namespace OrderMgmtRevision.Migrations
 
                     b.HasIndex("SourceWarehouseID");
 
-                    b.ToTable("Shipments", (string)null);
+                    b.ToTable("Shipments");
                 });
 
             modelBuilder.Entity("OrderMgmtRevision.Models.ShipmentStatusHistory", b =>
@@ -335,7 +338,7 @@ namespace OrderMgmtRevision.Migrations
 
                     b.HasIndex("ShipmentID");
 
-                    b.ToTable("ShipmentStatusHistories", (string)null);
+                    b.ToTable("ShipmentStatusHistories");
                 });
 
             modelBuilder.Entity("OrderMgmtRevision.Models.UserLog", b =>
@@ -369,7 +372,7 @@ namespace OrderMgmtRevision.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserLogs", (string)null);
+                    b.ToTable("UserLogs");
                 });
 
             modelBuilder.Entity("OrderMgmtRevision.Models.Warehouse", b =>
@@ -421,7 +424,7 @@ namespace OrderMgmtRevision.Migrations
 
                     b.HasKey("WarehouseID");
 
-                    b.ToTable("Warehouses", (string)null);
+                    b.ToTable("Warehouses");
                 });
 
             modelBuilder.Entity("User", b =>
@@ -607,6 +610,31 @@ namespace OrderMgmtRevision.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.OwnsOne("OrderMgmtRevision.Models.ShipmentTracking", "Tracking", b1 =>
+                        {
+                            b1.Property<int>("ShipmentID")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Location")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Status")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("StatusDate")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("ShipmentID");
+
+                            b1.ToTable("Shipments");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ShipmentID");
+                        });
+
                     b.OwnsOne("OrderMgmtRevision.Models.ShippingLabel", "Label", b1 =>
                         {
                             b1.Property<int>("ShipmentID")
@@ -630,7 +658,7 @@ namespace OrderMgmtRevision.Migrations
 
                             b1.HasKey("ShipmentID");
 
-                            b1.ToTable("Shipments", (string)null);
+                            b1.ToTable("Shipments");
 
                             b1.WithOwner()
                                 .HasForeignKey("ShipmentID");
@@ -665,7 +693,7 @@ namespace OrderMgmtRevision.Migrations
 
                             b1.HasKey("ShipmentID");
 
-                            b1.ToTable("Shipments", (string)null);
+                            b1.ToTable("Shipments");
 
                             b1.WithOwner()
                                 .HasForeignKey("ShipmentID");
@@ -745,32 +773,7 @@ namespace OrderMgmtRevision.Migrations
 
                             b1.HasKey("ShipmentID");
 
-                            b1.ToTable("Shipments", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("ShipmentID");
-                        });
-
-                    b.OwnsOne("OrderMgmtRevision.Models.ShipmentTracking", "Tracking", b1 =>
-                        {
-                            b1.Property<int>("ShipmentID")
-                                .HasColumnType("int");
-
-                            b1.Property<string>("Location")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("Status")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("StatusDate")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("ShipmentID");
-
-                            b1.ToTable("Shipments", (string)null);
+                            b1.ToTable("Shipments");
 
                             b1.WithOwner()
                                 .HasForeignKey("ShipmentID");

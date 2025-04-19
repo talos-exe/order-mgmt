@@ -1,18 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 using OrderMgmtRevision.Models;
 using Microsoft.AspNetCore.Authorization;
 using OrderMgmtRevision.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Azure.Core;
-using OrderMgmtRevision.Extensions;
 using OrderMgmtRevision.Data;
+using X.PagedList.Extensions;
 
 
 namespace OrderMgmtRevision.Controllers
@@ -37,36 +32,127 @@ namespace OrderMgmtRevision.Controllers
             _context = context;
          }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, string statusFilter, int? page)
         {
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.StatusFilter = statusFilter;
+            ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.TrackingSortParm = sortOrder == "Tracking" ? "tracking_desc" : "Tracking";
+            ViewBag.AddressSortParm = sortOrder == "Address" ? "address_desc" : "Address";
+            ViewBag.CitySortParm = sortOrder == "City" ? "city_desc" : "City";
+            ViewBag.StateSortParm = sortOrder == "State" ? "state_desc" : "State";
+            ViewBag.CountrySortParm = sortOrder == "Country" ? "country_desc" : "Country";
+            ViewBag.PostalCodeSortParm = sortOrder == "Postal" ? "postal_desc" : "Postal";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
             // Fetch the shipments, including related entities
-            var shipments = await _context.Shipments
+            var shipmentQuery = _context.Shipments
                 .Include(s => s.Product) // Include related product information
                 .Include(s => s.SourceWarehouse) // Include source warehouse details
                 .Include(s => s.ShippingRequest) // Include the shippingrequest
                 .Include(s => s.Label) // Include shipping label details
                 .Include(s => s.Tracking) // Include tracking details
-                .ToListAsync();
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                shipmentQuery = shipmentQuery.Where(s =>
+                s.ShipmentName.Contains(searchString) ||
+                s.TrackingNumber.Contains(searchString) ||
+                s.ShippingRequest.ToStreet.Contains(searchString) ||
+                s.ShippingRequest.ToCity.Contains(searchString) ||
+                s.ShippingRequest.ToState.Contains(searchString) ||
+                s.ShippingRequest.ToCountryCode.Contains(searchString) ||
+                s.ShippingRequest.ToZip.Contains(searchString));
+            }
+
+            if (statusFilter == "cancelled")
+            {
+                shipmentQuery = shipmentQuery.Where(s => s.Status == "CANCELLED");
+            }
+            else if (statusFilter == "notcancelled")
+            {
+                shipmentQuery = shipmentQuery.Where(s => s.Status != "CANCELLED");
+            }
+
+            // Sorting
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    shipmentQuery = shipmentQuery.OrderByDescending(s => s.ShipmentName);
+                    break;
+                case "Tracking":
+                    shipmentQuery = shipmentQuery.OrderBy(s => s.TrackingNumber);
+                    break;
+                case "tracking_desc":
+                    shipmentQuery = shipmentQuery.OrderByDescending(s => s.TrackingNumber);
+                    break;
+                case "Address":
+                    shipmentQuery = shipmentQuery.OrderBy(s => s.ShippingRequest.ToStreet);
+                    break;
+                case "address_desc":
+                    shipmentQuery = shipmentQuery.OrderByDescending(s => s.ShippingRequest.ToStreet);
+                    break;
+                case "City":
+                    shipmentQuery = shipmentQuery.OrderBy(s => s.ShippingRequest.ToCity);
+                    break;
+                case "city_desc":
+                    shipmentQuery = shipmentQuery.OrderByDescending(s => s.ShippingRequest.ToCity);
+                    break;
+                case "State":
+                    shipmentQuery = shipmentQuery.OrderBy(s => s.ShippingRequest.ToState);
+                    break;
+                case "state_desc":
+                    shipmentQuery = shipmentQuery.OrderByDescending(s => s.ShippingRequest.ToState);
+                    break;
+                case "Country":
+                    shipmentQuery = shipmentQuery.OrderBy(s => s.ShippingRequest.ToCountryCode);
+                    break;
+                case "country_desc":
+                    shipmentQuery = shipmentQuery.OrderByDescending(s => s.ShippingRequest.ToCountryCode);
+                    break;
+                case "Postal":
+                    shipmentQuery = shipmentQuery.OrderBy(s => s.ShippingRequest.ToZip);
+                    break;
+                case "postal_desc":
+                    shipmentQuery = shipmentQuery.OrderByDescending(s => s.ShippingRequest.ToZip);
+                    break;
+                default:
+                    shipmentQuery = shipmentQuery.OrderBy(s => s.ShipmentName);
+                    break;
+            }
+
+            var shipments = await shipmentQuery.ToListAsync();
 
             // Map the shipments to the view model
-            var shipmentViewModels = new List<ShipmentViewModel>();
-            foreach (var shipment in shipments)
+            var shipmentViewModels = shipments.Select(s => new ShipmentViewModel
             {
-                shipmentViewModels.Add(new ShipmentViewModel
-                {
-                    ShipmentID = shipment.ShipmentID.GetValueOrDefault(),
-                    TrackingNumber = shipment.TrackingNumber,
-                    RecipientName = shipment.ShipmentName,
-                    Address = shipment.ShippingRequest?.ToStreet,
-                    City = shipment.ShippingRequest?.ToCity,
-                    CountryCode = shipment.ShippingRequest?.ToCountryCode,
-                    State = shipment.ShippingRequest?.ToState,
-                    PhoneNumber = shipment.ShippingRequest?.ToPhone,
-                    PostalCode = shipment.ShippingRequest?.ToZip,
-                    Status = shipment.Status
-                });
-            }
-            return View(shipmentViewModels);
+                ShipmentID = s.ShipmentID.GetValueOrDefault(),
+                TrackingNumber = s.TrackingNumber,
+                RecipientName = s.ShipmentName,
+                Address = s.ShippingRequest?.ToStreet,
+                City = s.ShippingRequest?.ToCity,
+                CountryCode = s.ShippingRequest?.ToCountryCode,
+                State = s.ShippingRequest?.ToState,
+                PhoneNumber = s.ShippingRequest?.ToPhone,
+                PostalCode = s.ShippingRequest?.ToZip,
+                Status = s.Status
+            }).ToList();
+
+            int pageSize = 15;
+            int pageNumber = (page ?? 1);
+
+            return View(shipmentViewModels.ToPagedList(pageNumber, pageSize));
         }
 
         private async Task<bool> IsUserAdmin()
@@ -203,6 +289,7 @@ namespace OrderMgmtRevision.Controllers
             }
 
             var label = await _shippoService.CreateLabelAsync(selectedRate.RateObjectId);
+            var trackingNumber = string.IsNullOrWhiteSpace(label.TrackingNumber) ? "NOTGIVEN" : label.TrackingNumber;
 
             var shipment = new Shipment
             {
@@ -211,7 +298,7 @@ namespace OrderMgmtRevision.Controllers
                 SourceWarehouseID = model.SourceWarehouseId,
                 Status = "CREATED",
                 Cost = selectedRate.Amount,
-                TrackingNumber = label.TrackingNumber,
+                TrackingNumber = trackingNumber,
                 SelectedRateId = selectedRate.RateObjectId,
                 Rate = selectedRate,
                 Label = new ShippingLabel

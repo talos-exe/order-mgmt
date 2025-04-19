@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using OrderMgmtRevision.Data;
 using OrderMgmtRevision.Models;
 using OrderMgmtRevision.Services;
+using X.PagedList.Extensions;
 
 namespace OrderMgmtRevision.Controllers
 {
@@ -77,37 +77,67 @@ namespace OrderMgmtRevision.Controllers
         }
 
 
-        public async Task<IActionResult> Index()
+        public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            // Enable for debug info.
-            //var productData = new List<Product>
-            //{
-            //  new Product
-            //  {
-            //    SKU = "00054-3010-1420",
-            //    ProductName = "Test Product 1",
-            //    Price = 49.99m,
-            //    Cost = 5.00m
-            //  },
-            //  new Product
-            //  {
-            //    SKU = "00054-3010-1410",
-            //    ProductName = "Test Product 2",
-            //    Price = 29.99m
-            //  },
-            //  new Product
-            //  {
-            //    SKU = "00054-3010-1400",
-            //    ProductName = "Test Product 3",
-            //    Price = 85.50m,
-            //    Cost = 12.34m
-            //  }
-            //};
-            //return View(productData);
 
-            var productList = await _dbContext.Products.ToListAsync();
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.SKUSortParm = sortOrder == "SKU" ? "sku_desc" : "SKU";
+            ViewBag.StockSortParm = sortOrder == "Stock" ? "stock_desc" : "Stock";
+            ViewBag.CreatedBySortParm = sortOrder == "CreatedBy" ? "createdby_desc" : "CreatedBy";
 
-            return View(productList);
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+            var products = from p in _dbContext.Products
+                           select p;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                products = products.Where(p => p.ProductName.Contains(searchString)
+                                            || p.SKU.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    products = products.OrderByDescending(p => p.ProductName);
+                    break;
+                case "SKU":
+                    products = products.OrderBy(p => p.SKU);
+                    break;
+                case "sku_desc":
+                    products = products.OrderByDescending(p => p.SKU);
+                    break;
+                case "Stock":
+                    products = products.OrderBy(p => p.Stock);
+                    break;
+                case "stock_desc":
+                    products = products.OrderByDescending(p => p.Stock);
+                    break;
+                case "CreatedBy":
+                    products = products.OrderBy(p => p.CreatedBy);
+                    break;
+                case "createdby_desc":
+                    products = products.OrderByDescending(p => p.CreatedBy);
+                    break;
+                default:
+                    products = products.OrderBy(p => p.ProductName); // default sort
+                    break;
+            }
+
+            int pageSize = 15;
+            int pageNumber = (page ?? 1);
+
+            return View(products.ToPagedList(pageNumber, pageSize));
         }
 
         private string GetClientIp()

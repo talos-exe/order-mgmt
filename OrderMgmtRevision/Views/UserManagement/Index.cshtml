@@ -1,7 +1,7 @@
-﻿@using X.PagedList
-@using X.PagedList.Extensions
-@using X.PagedList.Mvc.Core
-@model List<OrderMgmtRevision.Models.UserViewModel>
+﻿@model X.PagedList.IPagedList<OrderMgmtRevision.Models.UserViewModel>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
 <!-- Title Centering-->
@@ -55,7 +55,10 @@
                 <button id="btnDelete" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>Delete</button>
 
                 <!-- Search Bar -->
-                <input type="text" id="searchBar" class="form-control-sm me-2" placeholder="Search by Username" onkeyup="filterTable()" />
+                @using (Html.BeginForm("Index", "UserManagement", FormMethod.Get)) {
+                    <input type="text" id="searchBar" class="form-control-sm me-2" name="searchString" value="@ViewBag.CurrentFilter" onkeyup="filterTable()" />
+                    <input type="submit" class="btn btn-primary btn-sm me-2" value="Search" />
+                }
             </div>
 
             <div class="table-responsive">
@@ -65,13 +68,11 @@
                             <th>
                                 <input type="checkbox" id="selectAll" onclick="toggleAll(this);">
                             </th>
-                            <th id="usernameHeader" onclick="sortTable(1)" style="cursor: pointer;">
-                                Username <i id="userCaret" class="fa fa-caret-down"></i>
-                            </th>
-                            <th>Email</th>
-                            <th>Full Name</th>
-                            <th>ID</th>
-                            <th></th>
+                            <th>@Html.ActionLink("Username", "Index", new { sortOrder = ViewBag.UserNameSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th>@Html.ActionLink("Email", "Index", new { sortOrder = ViewBag.EmailSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th>@Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th>@Html.ActionLink("ID", "Index", new { sortOrder = ViewBag.IdSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th>More</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -81,10 +82,10 @@
                                 <td>
                                     <input type="checkbox" class="user-checkbox" value="@user.Id" onclick="toggleButtons();">
                                 </td>
-                                <td>@user.UserName</td>
-                                <td>@user.Email</td>
-                                <td>@user.FullName</td>
-                                <td>@user.Id</td>
+                                <td>@Html.DisplayFor(modelItem => user.UserName)</td>
+                                <td>@Html.DisplayFor(modelItem => user.Email)</td>
+                                <td>@Html.DisplayFor(modelItem => user.FullName)</td>
+                                <td>@Html.DisplayFor(modelItem => user.Id)</td>
                                 <td>
                                     <a class="btn-sm btn-primary" style="cursor: pointer" onclick="openUserDetailsTab('@user.Id', '@user.UserName')">View Details</a>
                                 </td>
@@ -139,17 +140,43 @@
 
                     </tbody>
                 </table>
-            </div>
 
-            <div class="d-flex justify-content-center mt-3">
-                <div>
-                    <button class="btn btn-secondary btn-sm">Previous</button>
-                    <button class="btn btn-secondary btn-sm">Next</button>
+                <div class="d-flex justify-content-center mt-3">
+                    <div>
+                        @if (Model.HasPreviousPage)
+                        {
+                            <a class="btn btn-secondary btn-sm"
+                               href="@Url.Action("Index", new {
+                               page = Model.PageNumber - 1,
+                               sortOrder = ViewBag.CurrentSort,
+                               currentFilter = ViewBag.CurrentFilter
+                           })">&lt;</a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary btn-sm" disabled>&lt;</button>
+                        }
+
+                        @if (Model.HasNextPage)
+                        {
+                            <a class="btn btn-secondary btn-sm"
+                               href="@Url.Action("Index", new {
+                               page = Model.PageNumber + 1,
+                               sortOrder = ViewBag.CurrentSort,
+                               currentFilter = ViewBag.CurrentFilter
+                           })">&gt;</a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary btn-sm" disabled>&gt;</button>
+                        }
+                    </div>
+
+                    <div class="ms-3">
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                    </div>
                 </div>
-                 <div class="ms-3">
-                    Page 1 of 1
-                </div>
-             </div>
+            </div>
         </div>
     </div>
 
