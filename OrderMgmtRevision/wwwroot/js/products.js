@@ -27,10 +27,8 @@ function toggleAll(source) {
 }
 
 function openProductDetailsTab(productId, productName) {
-    // Remove existing product details tab if it exists
     closeProductDetailsTab();
 
-    // Create new tab
     var tabId = 'productDetails-' + productId;
     var newTab = $('<li class="nav-item">' +
         '<a class="nav-link" id="' + tabId + 'Tab" data-bs-toggle="tab" href="#' + tabId + '">' +
@@ -38,14 +36,11 @@ function openProductDetailsTab(productId, productName) {
         '</a>' +
         '</li>');
 
-    // Add the new tab to the tab list
     $('#productTabs').append(newTab);
 
-    // Create new tab pane
     var newPane = $('<div class="tab-pane fade" id="' + tabId + '"><div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div></div>');
     $('.tab-content').append(newPane);
 
-    // Activate the new tab
     $('#' + tabId + 'Tab').tab('show');
 
     // Load the product details via fetch
@@ -78,7 +73,7 @@ function openCreateProductPane() {
     $('.tab-content').append(newPane);
 
     $('#' + tabId + 'Tab').tab('show');
-
+  
     fetch('/Products/_CreateProduct')
         .then(response => response.text())
         .then(data => {
@@ -91,28 +86,23 @@ function openCreateProductPane() {
 
 function closeCreateProduct() {
     // Find the create product tab
-    var tab = $('#createProductTab');
+    var tab = $('#createProductTab, a[href="#createProduct"]');
     if (tab.length) {
         var tabId = tab.attr('href');
-        // Remove the tab and its content
-        tab.parent().remove();
+        tab.closest('li').remove();
         $(tabId).remove();
     }
-
     // Activate the product list tab
     $('#productListTab').tab('show');
 }
 
 function closeProductDetailsTab() {
-    // Find any product details tab
     $('a[id^="productDetails-"][id$="Tab"]').each(function () {
         var tabId = $(this).attr('href');
-        // Remove the tab and its content
         $(this).parent().remove();
         $(tabId).remove();
     });
 
-    // Activate the product list tab
     $('#productListTab').tab('show');
 }
 
@@ -123,7 +113,7 @@ function filterTable() {
     var rows = table.getElementsByTagName("tr");
 
     for (var i = 1; i < rows.length; i++) {
-        var productCell = rows[i].getElementsByTagName("td")[1]; // Get the product cell
+        var productCell = rows[i].getElementsByTagName("td")[1];
         if (productCell) {
             var product = productCell.textContent || productCell.innerText;
             if (product.toLowerCase().includes(filter)) {

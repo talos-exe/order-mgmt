@@ -1,27 +1,29 @@
 @model List<OrderMgmtRevision.Models.Warehouse>
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 @{
     ViewBag.Title = "Warehouse";
 }
 
 <div class="warehouse-container ms-5 me-5">
-  <h2 class="text-center mb-4 pt-4">Warehouses</h2>
+  <h2 class="text-center mb-4 pt-4">@Localizer["Warehouses"]</h2>
   <div class="d-flex justify-content-start mb-2">
-    <button class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#createWarehouseModal">Create</button>
-    <button id="btnEdit" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>Edit</button>
-    <button id="btnDelete" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#deleteWarehouseModal" disabled>Delete</button>
-    <input type="text" id="searchBar" class="form-control-sm me-2" placeholder="Search by Name" onkeyup="filterTable()" />
+    <button class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#createWarehouseModal">@Localizer["Create"]</button>
+    <button id="btnEdit" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>@Localizer["Edit"]</button>
+    <button id="btnDelete" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#deleteWarehouseModal" disabled>@Localizer["Delete"]</button>
+    <input type="text" id="searchBar" class="form-control-sm me-2" placeholder="@Localizer["Search by Name"]" onkeyup="filterTable()" />
   </div>
 
-  <table class="table table-striped">
+      <table class="table table-striped">
     <thead>
         <tr>
             <th>
               <input type="checkbox" id="selectAll" onclick="toggleAll(this);">
             </th>
-            <th>Warehouse Code</th>
-            <th>Name</th>
-            <th>Address</th>
+            <th>@Localizer["Warehouse Code"]</th>
+            <th>@Localizer["Name"]</th>
+            <th>@Localizer["Address"]</th>
         </tr>
     </thead>
     <tbody>
@@ -71,3 +73,4 @@
 </div>
 
 <script src="~/js/warehouses.js"></script>
+

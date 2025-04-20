@@ -1,21 +1,24 @@
 ﻿using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
-using System.Globalization;
+using System;
 
-public class LocalizationController : Controller
+namespace OrderMgmtRevision.Controllers
 {
-    public IActionResult SetLanguage(string lang, string returnUrl = "/")
+    public class LocalizationController : Controller
     {
-        var culture = new CultureInfo(lang);
-        CultureInfo.DefaultThreadCurrentCulture = culture;
-        CultureInfo.DefaultThreadCurrentUICulture = culture;
+        [HttpGet]
+        public IActionResult SetLanguage(string lang, string returnUrl = "/")
+        {
+            if (!string.IsNullOrEmpty(lang))
+            {
+                Response.Cookies.Append(
+                    CookieRequestCultureProvider.DefaultCookieName,
+                    CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(lang)),
+                    new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+                );
+            }
 
-        // Ensure that the return URL includes the lang parameter
-        var uri = new Uri(Request.Headers["Referer"].ToString());
-        var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
-        query.Set("lang", lang);
-        var newUrl = $"{uri.GetLeftPart(UriPartial.Path)}?{query}";
-
-        return Redirect(newUrl);
+            return LocalRedirect(returnUrl);
+        }
     }
 }

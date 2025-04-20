@@ -16,7 +16,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - OrderMgmtRevision</title>
     @RenderSection("Styles", required: false)
-    <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -64,8 +63,6 @@
                             @Localizer["Settings"]
                         </a>
                     </li>
-
-                    <!-- Only show for Admins -->
                     @if (isAdmin)
                     {
                         <li class="sidebar-link">
@@ -87,55 +84,41 @@
                     </div>
                 </div>
                 <div class="topbar-right">
-                    <div class="right-item">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            🌐 <span id="language-display">@Localizer["English"]</span>
+                    <div class="right-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" id="langDropdown">
+                            🌐 <span id="language-display"></span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
                             <li><a class="dropdown-item" href="javascript:void(0);" onclick="updateLanguage('English')">@Localizer["English"]</a></li>
                             <li><a class="dropdown-item" href="javascript:void(0);" onclick="updateLanguage('中文')">@Localizer["中文 (Chinese)"]</a></li>
                         </ul>
                     </div>
-                    <script>
-                        function updateLanguage(language) {
-                            const langCode = language === 'English' ? 'en' : 'zh';
-                            window.location.href = `/Localization/SetLanguage?lang=${langCode}`;
-                        }
-                        window.onload = function() {
-                            const urlParams = new URLSearchParams(window.location.search);
-                            const lang = urlParams.get('lang');
-                            document.getElementById('language-display').textContent = lang === 'zh' ? '中文' : 'English';
-                        };
-                    </script>
 
-                </div>
-                <div class="right-item">
-                    <i class="bi bi-person-circle d-inline"></i>
-                    @if (User.Identity != null && User.Identity.IsAuthenticated)
-                    {
-                        <div class="dropdown ms-2">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="right-item dropdown">
+                        <i class="bi bi-person-circle d-inline"></i>
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <a class="nav-link dropdown-toggle ms-2" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 @User.Identity.Name
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li>
-                                    <a class="dropdown-item" asp-controller="Account" asp-action="Logout">@Localizer["Logout"]</a>
-                                </li>
+                                <li><a class="dropdown-item" asp-controller="Account" asp-action="Logout">@Localizer["Logout"]</a></li>
                             </ul>
-                        </div>
-                    }
-                    else
-                    {
-                        <a class="nav-link ms-2" asp-controller="Account" asp-action="Login">@Localizer["Login"]</a>
-                    }
-                </div>
-                <div class="right-item">
-                    Arctic Warehouse
-                    <i class="bi bi-caret-down-fill"></i>
+                        }
+                        else
+                        {
+                            <a class="nav-link ms-2" asp-controller="Account" asp-action="Login">@Localizer["Login"]</a>
+                        }
+                    </div>
+
+                    <div class="right-item">
+                        Arctic Warehouse
+                        <i class="bi bi-caret-down-fill"></i>
+                    </div>
                 </div>
             </div>
+
             <main role="main">
-                <!-- Loading screen -->
                 <div id="loadingScreen">
                     <div class="spinner"></div>
                 </div>
@@ -143,14 +126,43 @@
             </main>
         </div>
     </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/additional-methods.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/tabs.js"></script>
+
+    <script>
+        function updateLanguage(language) {
+            const langCode = language === 'English' ? 'en' : 'zh';
+            const currentUrl = window.location.pathname + window.location.search + window.location.hash;
+            window.location.href = `/Localization/SetLanguage?lang=${langCode}&returnUrl=${encodeURIComponent(currentUrl)}`;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const cookies = document.cookie.split('; ');
+            const cultureCookie = cookies.find(c => c.startsWith('.AspNetCore.Culture='));
+
+            let lang = 'en';
+            if (cultureCookie) {
+                try {
+                    const encodedValue = cultureCookie.split('=')[1];
+                    const decoded = decodeURIComponent(encodedValue); // e.g. c=zh|uic=zh
+                    const match = decoded.match(/c=([^|]+)/);
+                    if (match && match[1]) {
+                        lang = match[1].toLowerCase();
+                    }
+                } catch (e) {
+                    console.warn('Error decoding culture cookie:', e);
+                }
+            }
+
+            const label = document.getElementById('language-display');
+            if (label) {
+                label.textContent = lang.startsWith('zh') ? '中文' : 'English';
+            }
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
