@@ -106,8 +106,8 @@
                             <th> @Html.ActionLink(Localizer["SKU"].Value, "Index", new { sortOrder = ViewBag.SKUSortParm, currentFilter = ViewBag.CurrentFilter })</th>
                             <th> @Html.ActionLink(Localizer["Product Name"].Value, "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })</th>
                             <th> @Html.ActionLink(Localizer["# Stock"].Value, "Index", new { sortOrder = ViewBag.StockSortParm, currentFilter = ViewBag.CurrentFilter })</th>
-                            <th> @Html.ActionLink("Created By", "Index", new { sortOrder = ViewBag.CreatedBySortParm, currentFilter = ViewBag.CurrentFilter })</th>
-                            <th> @Html.ActionLink("Created At", "Index", new { sortOrder = ViewBag.CreatedAtSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th> @Html.ActionLink(Localizer["Created By"].Value, "Index", new { sortOrder = ViewBag.CreatedBySortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th> @Html.ActionLink(Localizer["Created At"].Value, "Index", new { sortOrder = ViewBag.CreatedAtSortParm, currentFilter = ViewBag.CurrentFilter })</th>
                             <th class="more">@Localizer["More"]</th>
                         </tr>
                     </thead>
