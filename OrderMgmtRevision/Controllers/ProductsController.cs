@@ -85,6 +85,7 @@ namespace OrderMgmtRevision.Controllers
             ViewBag.SKUSortParm = sortOrder == "SKU" ? "sku_desc" : "SKU";
             ViewBag.StockSortParm = sortOrder == "Stock" ? "stock_desc" : "Stock";
             ViewBag.CreatedBySortParm = sortOrder == "CreatedBy" ? "createdby_desc" : "CreatedBy";
+            ViewBag.CreatedAtSortParm = sortOrder == "createdat_desc" ? "CreatedAt" : "createdat_desc";
 
             if (searchString != null)
             {
@@ -129,13 +130,22 @@ namespace OrderMgmtRevision.Controllers
                 case "createdby_desc":
                     products = products.OrderByDescending(p => p.CreatedBy);
                     break;
+                case "CreatedAt":
+                    products = products.OrderBy(p => p.CreatedAt);
+                    break;
+                case "createdat_desc":
+                    products = products.OrderByDescending(p => p.CreatedAt);
+                    break;
                 default:
                     products = products.OrderBy(p => p.ProductName); // default sort
                     break;
             }
 
-            int pageSize = 15;
+            int pageSize = 20;
             int pageNumber = (page ?? 1);
+
+            ViewBag.TotalProducts = await _dbContext.Products.CountAsync();
+            ViewBag.TotalShipped = await _dbContext.Products.SumAsync(p => p.ShipAmount ?? 0);
 
             return View(products.ToPagedList(pageNumber, pageSize));
         }
@@ -155,12 +165,51 @@ namespace OrderMgmtRevision.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateProduct(Product model)
         {
+
             bool isAdmin = await IsUserAdmin();
             var user = await _userManager.GetUserAsync(User);
             string userId = user?.Id ?? "Unknown";
             string userName = user?.UserName ?? "Unknown";
             string ipAddress = GetClientIp();
             string logMessage = "";
+
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage);
+
+                TempData["Error"] = "Invalid model state. Errors: " + string.Join(" | ", errors);
+                logMessage = isAdmin ? $"[Administrator] Failed product creation; invalid model state." : $"Failed product creation; invalid model state.";
+                await _logService.LogUserActivityAsync(userId, logMessage, ipAddress);
+                return RedirectToAction("Index", "Products");
+            }
+
+            bool skuExists = await _dbContext.Products.AnyAsync(p => p.SKU == model.SKU);
+            bool nameExists = await _dbContext.Products.AnyAsync(p => p.ProductName == model.ProductName);
+
+            if (skuExists || nameExists)
+            {
+                if (skuExists)
+                {
+                    TempData["Error"] = $"Product with SKU '{model.SKU}' already exists.";
+                    logMessage = isAdmin
+                        ? $"[Administrator] Product creation failed: SKU '{model.SKU}' already exists."
+                        : $"Product creation failed: SKU '{model.SKU}' already exists.";
+                }
+
+                if (nameExists)
+                {
+                    TempData["Error"] = $"Product with name '{model.ProductName}' already exists.";
+                    logMessage = isAdmin
+                        ? $"[Administrator] Product creation failed: Product name '{model.ProductName}' already exists."
+                        : $"Product creation failed: Product name '{model.ProductName}' already exists.";
+                }
+
+                await _logService.LogUserActivityAsync(userId, logMessage, ipAddress);
+                return RedirectToAction("Index", "Products");
+            }
+
 
             var product = new Product
             {
@@ -201,21 +250,6 @@ namespace OrderMgmtRevision.Controllers
                 await _logService.LogUserActivityAsync(userId, $"Failed to create product. Error: {ex.Message}", ipAddress);
                 return RedirectToAction("Index", "Products");
             }
-
-
-            if (!ModelState.IsValid)
-            {
-                var errors = ModelState.Values
-                .SelectMany(v => v.Errors)
-                .Select(e => e.ErrorMessage);
-
-                TempData["Error"] = "Invalid model state. Errors: " + string.Join(" | ", errors);
-                logMessage = isAdmin ? $"[Administrator] Failed product creation; invalid model state." : $"Failed product creation; invalid model state.";
-                await _logService.LogUserActivityAsync(userId, logMessage, ipAddress);
-                return RedirectToAction("Index", "Products");
-            }
-
-
         }
 
 

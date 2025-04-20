@@ -17,6 +17,39 @@
 
 <h2 class="text-center mb-4 pt-4">@Localizer["Product Management"]</h2>
 
+<div class="summary-container">
+    <div class="summary-item">
+        <div class="item-title">
+            @Localizer["Products"]
+        </div>
+        <div class="item-content">
+            <div class="label-value-block">
+                <div class="item-label">
+                    @Localizer["Ready To Be Shipped"]
+                </div>
+                <div class="item-value">
+                    @ViewBag.TotalProducts
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="summary-item">
+        <div class="item-title">
+            @Localizer["Total Products"]
+        </div>
+        <div class="item-content">
+            <div class="label-value-block">
+                <div class="item-label">
+                    @Localizer["Shipped to Customers"]
+                </div>
+                <div class="item-value">
+                    @ViewBag.TotalShipped
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @if (TempData["SuccessMessage"] != null)
 {
     <div class="alert alert-success alert-dismissible fade show ms-5 me-5" role="alert">
@@ -46,42 +79,6 @@
     </div>
 }
 
-<div class="summary-container">
-    <div class="summary-item">
-        <div class="item-title">
-            @Localizer["Products"]
-        </div>
-        <div class="item-content">
-            <div class="label-value-block">
-                <div class="item-label">
-                    @Localizer["Ready To Be Shipped"]
-                </div>
-                <div class="item-value">
-                    @Model.Count
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="summary-item">
-        <div class="item-title">
-            @Localizer["Total Products"]
-        </div>
-        <div class="item-content">
-            <div class="label-value-block">
-                <div class="item-label">
-                    @Localizer["Shipped to Customers"]
-                </div>
-                <div class="item-value">
-                    @{
-                        int totalShipped = Model.Sum(p => p.ShipAmount ?? 0);
-                    }
-                    @totalShipped
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <ul class="nav nav-tabs ms-5 me-5" id="productTabs">
     <li class="nav-item">
         <a class="nav-link active" id="productListTab" data-bs-toggle="tab" href="#productList">@Localizer["Product List"]</a>
@@ -110,6 +107,7 @@
                             <th> @Html.ActionLink(Localizer["Product Name"].Value, "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })</th>
                             <th> @Html.ActionLink(Localizer["# Stock"].Value, "Index", new { sortOrder = ViewBag.StockSortParm, currentFilter = ViewBag.CurrentFilter })</th>
                             <th> @Html.ActionLink("Created By", "Index", new { sortOrder = ViewBag.CreatedBySortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th> @Html.ActionLink("Created At", "Index", new { sortOrder = ViewBag.CreatedAtSortParm, currentFilter = ViewBag.CurrentFilter })</th>
                             <th class="more">@Localizer["More"]</th>
                         </tr>
                     </thead>
@@ -122,6 +120,7 @@
                                 <td>@Html.DisplayFor(modelItem => product.ProductName)</td>
                                 <td>@Html.DisplayFor(modelItem => product.Stock)</td>
                                 <td>@Html.DisplayFor(modelItem => product.CreatedBy)</td>
+                                <td>@Html.DisplayFor(modelItem => product.CreatedAt)</td>
                                 <td>
                                     <a class="btn-sm btn-primary" style="cursor: pointer" onclick="openProductDetailsTab('@product.ProductID', '@product.ProductName')">@Localizer["View Details"]</a>
                                 </td>
