@@ -1,0 +1,31 @@
+@model OrderMgmtRevision.Models.StripePaymentModel
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
+@{
+    ViewData["Title"] = "Invoice Payment";
+    var stripePublishableKey = Configuration["Stripe:PublishableKey"];
+}
+
+<h1>Invoice Payment</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <h3>Save Payment Method (Card)</h3>
+        <form id="payment-form" data-stripe-key="@stripePublishableKey" data-amount="@Model.Amount">
+            <div id="card-element" class="form-control"></div>
+            <div id="card-errors" class="text-danger"></div>
+            <button type="submit" class="btn btn-primary mt-2">Save Card</button>
+        </form>
+
+        <h3 class="mt-4">Checkout</h3>
+        <p>Amount: $@((Model.Amount / 100.0).ToString("F2"))</p>
+        <button id="checkout-card" class="btn btn-success" disabled>Pay with Card</button>
+        <button id="checkout-ach" class="btn btn-success" disabled>Pay with Bank Account (ACH)</button>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="~/js/stripe.js" asp-append-version="true"></script>
+}
