@@ -3,20 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OrderMgmtRevision.Models;
-using System.Threading.Tasks;
-using System.Linq;
-using Azure.Identity;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
-using Microsoft.EntityFrameworkCore.Metadata;
 using OrderMgmtRevision.Data;
 using OrderMgmtRevision.Services;
-using X.PagedList;
-using X.PagedList.Mvc.Core;
 using X.PagedList.Extensions;
-using NuGet.Protocol.Plugins;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-
 
 namespace OrderMgmtRevision.Controllers
 {
@@ -37,11 +26,65 @@ namespace OrderMgmtRevision.Controllers
         }
 
         // When clicked on UserManagement Page, Index loads
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            var users = await _userManager.Users
-                .Include(u => u.Logs)
-                .ToListAsync();
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.EmailSortParm = sortOrder == "Email" ? "email_desc" : "Email";
+            ViewBag.UserNameSortParm = sortOrder == "Username" ? "username_desc" : "Username";
+            ViewBag.IdSortParm = sortOrder == "ID" ? "id_desc" : "ID";
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+            var usersQuery = _userManager.Users.AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                usersQuery = usersQuery.Where(u =>
+                    u.UserName.Contains(searchString) ||
+                    u.Email.Contains(searchString) ||
+                    u.FullName.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    usersQuery = usersQuery.OrderByDescending(u => u.FullName);
+                    break;
+                case "Email":
+                    usersQuery = usersQuery.OrderBy(u => u.Email);
+                    break;
+                case "email_desc":
+                    usersQuery = usersQuery.OrderByDescending(u => u.Email);
+                    break;
+                case "Username":
+                    usersQuery = usersQuery.OrderBy(u => u.UserName);
+                    break;
+                case "username_desc":
+                    usersQuery = usersQuery.OrderByDescending(u => u.UserName);
+                    break;
+                case "ID":
+                    usersQuery = usersQuery.OrderBy(u => u.Id);
+                    break;
+                case "id_desc":
+                    usersQuery = usersQuery.OrderByDescending(u => u.Id);
+                    break;
+                default:
+                    usersQuery = usersQuery.OrderBy(u => u.UserName);
+                    break;
+            }
+
+            usersQuery = usersQuery.Include(u => u.Logs);
+            var users = await usersQuery.ToListAsync();
 
             var userViewModels = new List<UserViewModel>();
             foreach (var user in users)
@@ -58,8 +101,13 @@ namespace OrderMgmtRevision.Controllers
                     Logs = user.Logs ?? new List<UserLog>()
                 });
             }
-            return View(userViewModels);
+
+            int pageSize = 15;
+            int pageNumber = (page ?? 1);
+
+            return View(userViewModels.ToPagedList(pageNumber, pageSize));
         }
+
 
         [HttpGet]
         public IActionResult _CreateUser()

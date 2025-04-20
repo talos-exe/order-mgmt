@@ -43,18 +43,16 @@ function openProductDetailsTab(productId, productName) {
 
     $('#' + tabId + 'Tab').tab('show');
 
-    $.ajax({
-        url: '/Products/GetProductDetails',
-        type: 'GET',
-        data: { productId: productId },
-        success: function (data) {
+    // Load the product details via fetch
+    fetch(`/Products/GetProductDetails?productId=${productId}`)
+        .then(response => response.text())
+        .then(data => {
             $('#' + tabId).html(data);
-        },
-        error: function () {
+        })
+        .catch(() => {
             console.log("Product ID: " + productId);
             $('#' + tabId).html('<div class="ms-5 me-5 text-danger">Error loading product details</div>');
-        }
-    });
+        });
 }
 
 function openCreateProductPane() {
@@ -75,32 +73,26 @@ function openCreateProductPane() {
     $('.tab-content').append(newPane);
 
     $('#' + tabId + 'Tab').tab('show');
-
-    $.ajax({
-        url: '/Products/_CreateProduct',
-        type: 'GET',
-        success: function (data) {
-            const container = $('#' + tabId);
-            container.html(data);
-
-            container.find('[data-bs-toggle="dropdown"]').each(function () {
-                new bootstrap.Dropdown(this);
-            });
-        },
-        error: function () {
+  
+    fetch('/Products/_CreateProduct')
+        .then(response => response.text())
+        .then(data => {
+            $('#' + tabId).html(data);
+        })
+        .catch(() => {
             $('#' + tabId).html('<div class="ms-5 me-5 text-danger">Error loading Create Product form</div>');
-        }
-    });
+        });
 }
 
 function closeCreateProduct() {
+    // Find the create product tab
     var tab = $('#createProductTab, a[href="#createProduct"]');
     if (tab.length) {
         var tabId = tab.attr('href');
         tab.closest('li').remove();
         $(tabId).remove();
     }
-
+    // Activate the product list tab
     $('#productListTab').tab('show');
 }
 

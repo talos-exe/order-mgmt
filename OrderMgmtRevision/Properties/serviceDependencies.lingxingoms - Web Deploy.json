@@ -3,8 +3,7 @@
     "mssql1": {
       "secretStore": "AzureAppSettings",
       "type": "mssql.onprem",
-      "connectionId": "OrderMgmtApp_ConnectionString",
-      "dynamicId": null
+      "connectionId": "OrderMgmtApp_ConnectionString"
     }
   }
 }
