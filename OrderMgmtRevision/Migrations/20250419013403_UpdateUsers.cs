@@ -5,25 +5,24 @@
 namespace OrderMgmtRevision.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateProductModel : Migration
+    public partial class UpdateUsers : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "ShipAmount",
-                table: "Products",
-                type: "int",
-                nullable: false,
-                defaultValue: 0);
+            migrationBuilder.AddColumn<decimal>(
+                name: "AccountBalance",
+                table: "AspNetUsers",
+                type: "decimal(18,2)",
+                nullable: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "ShipAmount",
-                table: "Products");
+                name: "AccountBalance",
+                table: "AspNetUsers");
         }
     }
 }

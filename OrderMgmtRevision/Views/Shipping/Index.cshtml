@@ -1,4 +1,7 @@
-@model List<OrderMgmtRevision.Models.FedExShipment>
+@model X.PagedList.IPagedList<OrderMgmtRevision.Models.ShipmentViewModel>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
+
 
 @{
     ViewBag.Title = "Shipping";
@@ -95,14 +98,23 @@
      <div class="tab-pane fade show active" id="shippingList">
         <div class="ms-5 me-5">
             <div class="d-flex justify-content-start mb-2">
-                <button id="btnCreateShipmentRequest" class="btn btn-primary btn-sm me-2" onclick="openCreateShipmentPane()">Calculate Rate</button>
-                <button id="btnCreate" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#createShipmentModal">
+                <button id="btnCreateShipmentRequest" class="btn btn-primary btn-sm me-2" onclick="openCreateShipmentPane()">
                     @Localizer["Create Shipping Order"]
                 </button>
                 <button id="btnCancel" class="btn btn-danger btn-sm me-2" data-bs-toggle="modal" disabled>
                     @Localizer["Cancel"]
                 </button>
-                <input type="text" id="searchBar" class="form-control-sm me-2" placeholder="@Localizer["Search by Tracking Number"]" onkeyup="filterTable()" />
+                <!-- Search Bar -->
+                @using (Html.BeginForm("Index", "Shipping", FormMethod.Get))
+                {
+                    <input type="text" id="searchBar" class="form-control-sm me-2" name="searchString" value="@ViewBag.CurrentFilter" placeholder="Search by tracking number or name" onkeyup="filterTable()" />
+                    <input type="submit" class="btn btn-primary btn-sm me-2" value="Search" />
+                    <select name="statusFilter" class="form-select-sm me-2" onchange="this.form.submit()">
+                        <option value="">All Shipments</option>
+                        <option value="cancelled" selected="@(ViewBag.StatusFilter == "cancelled")">Cancelled Only</option>
+                        <option value="notcancelled" selected="@(ViewBag.StatusFilter == "notcancelled")">All Except Cancelled</option>
+                    </select>
+                }
             </div>
 
             <div class="table-responsive">
@@ -110,37 +122,109 @@
                     <thead class="table-light">
                         <tr>
                             <th><input type="checkbox" id="selectAll" onclick="toggleAll(this);"></th>
-                            <th>@Localizer["Tracking Number"]</th>
-                            <th>@Localizer["Name"]</th>
-                            <th>@Localizer["Address"]</th>
-                            <th>@Localizer["City"]</th>
-                            <th>@Localizer["State"]</th>
-                            <th>@Localizer["Postal Code"]</th>
-                            <th>@Localizer["Country"]</th>
+                            <th>Shipment ID</th>
+                            <th>Status</th>
+                            <th>@Html.ActionLink(Localizer["Tracking Number"].Value, "Index", new { sortOrder = ViewBag.TrackingSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th>@Html.ActionLink(Localizer["Name"].Value, "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th>@Html.ActionLink(Localizer["Address"].Value, "Index", new { sortOrder = ViewBag.AddressSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th>@Html.ActionLink(Localizer["City"].Value, "Index", new { sortOrder = ViewBag.CitySortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th>@Html.ActionLink(Localizer["State"].Value, "Index", new { sortOrder = ViewBag.StateSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th>@Html.ActionLink(Localizer["Postal Code"].Value, "Index", new { sortOrder = ViewBag.PostalCodeSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th>@Html.ActionLink(Localizer["Country"].Value, "Index", new { sortOrder = ViewBag.CountrySortParm, currentFilter = ViewBag.CurrentFilter })</th>
                             <th>@Localizer["Phone"]</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var shipment in Model)
+                        @if (Model != null && Model.Any())
                         {
-                            <tr onclick="toggleButtons(this)">
-                                <td><input type="checkbox" class="shipment-checkbox" value="@shipment.TrackingNumber" onclick="toggleButtons();"></td>
-                                <td>@shipment.TrackingNumber</td>
-                                <td>@shipment.RecipientName</td>
-                                <td>@shipment.Address</td>
-                                <td>@shipment.City</td>
-                                <td>@shipment.State</td>
-                                <td>@shipment.PostalCode</td>
-                                <td>@shipment.CountryCode</td>
-                                <td>@shipment.PhoneNumber</td>
-                                <td>
-                                    <button class="btn-sm btn-danger" data-tracking-number="@shipment.TrackingNumber" data-bs-toggle="modal" data-bs-target="#cancelShipmentModal">@Localizer["Cancel"]</button>
-                                </td>
+                            @foreach (var shipment in Model)
+                            {
+                                <tr onclick="toggleButtons(this)">
+                                    <td>
+                                        <input type="checkbox" class="shipment-checkbox" value="@shipment.ShipmentID" onclick="toggleButtons();">
+                                    </td>
+                                    <td>@Html.DisplayFor(modelItem => shipment.ShipmentID)</td>
+                                    <td>
+                                        <!-- New status column with color coding -->
+                                        <span class="badge @(shipment.Status == "CANCELLED" ? "bg-danger" :
+                                       shipment.Status == "DELIVERED" ? "bg-success" :
+                                       shipment.Status == "TRANSIT" ? "bg-primary" :
+                                       shipment.Status == "UNKNOWN" ? "bg-dark" :
+                                       shipment.Status == "CREATED" ? "bg-info" : "bg-secondary")">
+                                            @shipment.Status
+                                        </span>
+                                    </td>
+                                    <td><a class="text-primary text-decoration-underline" style="cursor: pointer" onclick="openShipmentDetailsTab('@shipment.ShipmentID', '@shipment.RecipientName')">@Html.DisplayFor(modelItem => shipment.TrackingNumber)</a></td>
+                                    <td>@Html.DisplayFor(modelItem => shipment.RecipientName)</td>
+                                    <td>@Html.DisplayFor(modelItem => shipment.Address)</td>
+                                    <td>@Html.DisplayFor(modelItem => shipment.City)</td>
+                                    <td>@Html.DisplayFor(modelItem => shipment.State)</td>
+                                    <td>@Html.DisplayFor(modelItem => shipment.PostalCode)</td>
+                                    <td>@Html.DisplayFor(modelItem => shipment.CountryCode)</td>
+                                    <td>@Html.DisplayFor(modelItem => shipment.PhoneNumber)</td>
+                                </tr>
+
+                                <!-- Cancel Shipment Modal -->
+                                <div class="modal fade" id="cancelShipmentModal-@shipment.ShipmentID" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">@Localizer["Cancel Shipment"]</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                @Localizer["Are you sure you want to cancel this shipment? This action cannot be undone."]
+                                                <partial name="_CancelShipment" model="@shipment" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="10" class="text-center">No shipments found</td>
                             </tr>
                         }
                     </tbody>
                 </table>
+                <div class="d-flex justify-content-center mt-3">
+                    <div>
+                        @if (Model.HasPreviousPage)
+                        {
+                            <a class="btn btn-secondary btn-sm"
+                               href="@Url.Action("Index", new {
+                               page = Model.PageNumber - 1,
+                               sortOrder = ViewBag.CurrentSort,
+                               currentFilter = ViewBag.CurrentFilter
+                           })">&lt;</a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary btn-sm" disabled>&lt;</button>
+                        }
+
+                        @if (Model.HasNextPage)
+                        {
+                            <a class="btn btn-secondary btn-sm"
+                               href="@Url.Action("Index", new {
+                               page = Model.PageNumber + 1,
+                               sortOrder = ViewBag.CurrentSort,
+                               currentFilter = ViewBag.CurrentFilter
+                           })">&gt;</a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary btn-sm" disabled>&gt;</button>
+                        }
+                    </div>
+
+                    <div class="ms-3">
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                    </div>
+                </div>
             </div>
          </div>
      </div>
@@ -176,99 +260,70 @@
                     </tbody>
                 </table>
             </div>
-
-            <div class="d-flex justify-content-center mt-3">
-                <div>
-                    <button class="btn btn-secondary btn-sm">Previous</button>
-                    <button class="btn btn-secondary btn-sm">Next</button>
-                </div>
-                <div class="ms-3">
-                    Page 1 of 1
-                </div>
-            </div>
         </div>
     </div>
 
 </div>
 
-<!-- Currently not in use as I am using panes rather than modals to add on this code. Not commented out in case we need to fall back on it. -->
+<!-- Currently not in use as I am using panes rather than modals to add on this code. Now commented out in case we need to fall back on it. -->
 <!-- Create Shipment Modal -->
-<div class="modal fade" id="createShipmentModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">@Localizer["Create Shipping Order"]</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <form id="createShipmentForm">
-                    <div class="mb-3">
-                        <label for="recipientName" class="form-label">@Localizer["Recipient Name"]</label>
-                        <input type="text" class="form-control" id="recipientName" name="recipientName" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="address" class="form-label">@Localizer["Address"]</label>
-                        <input type="text" class="form-control" id="address" name="address" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="city" class="form-label">@Localizer["City"]</label>
-                        <input type="text" class="form-control" id="city" name="city" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="state" class="form-label">@Localizer["State"]</label>
-                        <input type="text" class="form-control" id="state" name="state" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="postalCode" class="form-label">@Localizer["Postal Code"]</label>
-                        <input type="text" class="form-control" id="postalCode" name="postalCode" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="countryCode" class="form-label">@Localizer["Country Code"]</label>
-                        <input type="text" class="form-control" id="countryCode" name="countryCode" value="US" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="phoneNumber" class="form-label">@Localizer["Phone Number"]</label>
-                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["Close"]</button>
-                <button type="button" class="btn btn-primary" id="createShipmentSubmit">@Localizer["Create"]</button>
-            </div>
-        </div>
-    </div>
-</div>
+@* <div class="modal fade" id="createShipmentModal" tabindex="-1"> *@
+@*     <div class="modal-dialog"> *@
+@*         <div class="modal-content"> *@
+@*             <div class="modal-header"> *@
+@*                 <h5 class="modal-title">@Localizer["Create Shipping Order"]</h5> *@
+@*                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button> *@
+@*             </div> *@
+@*             <div class="modal-body"> *@
+@*                 <form id="createShipmentForm"> *@
+@*                     <div class="mb-3"> *@
+@*                         <label for="recipientName" class="form-label">@Localizer["Recipient Name"]</label> *@
+@*                         <input type="text" class="form-control" id="recipientName" name="recipientName" required> *@
+@*                     </div> *@
+@*                     <div class="mb-3"> *@
+@*                         <label for="address" class="form-label">@Localizer["Address"]</label> *@
+@*                         <input type="text" class="form-control" id="address" name="address" required> *@
+@*                     </div> *@
+@*                     <div class="mb-3"> *@
+@*                         <label for="city" class="form-label">@Localizer["City"]</label> *@
+@*                         <input type="text" class="form-control" id="city" name="city" required> *@
+@*                     </div> *@
+@*                     <div class="mb-3"> *@
+@*                         <label for="state" class="form-label">@Localizer["State"]</label> *@
+@*                         <input type="text" class="form-control" id="state" name="state" required> *@
+@*                     </div> *@
+@*                     <div class="mb-3"> *@
+@*                         <label for="postalCode" class="form-label">@Localizer["Postal Code"]</label> *@
+@*                         <input type="text" class="form-control" id="postalCode" name="postalCode" required> *@
+@*                     </div> *@
+@*                     <div class="mb-3"> *@
+@*                         <label for="countryCode" class="form-label">@Localizer["Country Code"]</label> *@
+@*                         <input type="text" class="form-control" id="countryCode" name="countryCode" value="US" required> *@
+@*                     </div> *@
+@*                     <div class="mb-3"> *@
+@*                         <label for="phoneNumber" class="form-label">@Localizer["Phone Number"]</label> *@
+@*                         <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" required> *@
+@*                     </div> *@
+@*                 </form> *@
+@*             </div> *@
+@*             <div class="modal-footer"> *@
+@*                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["Close"]</button> *@
+@*                 <button type="button" class="btn btn-primary" id="createShipmentSubmit">@Localizer["Create"]</button> *@
+@*             </div> *@
+@*         </div> *@
+@*     </div> *@
+@* </div> *@
 
-<!-- Cancel Shipment Modal -->
-<div class="modal fade" id="cancelShipmentModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">@Localizer["Cancel Shipment"]</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                @Localizer["Are you sure you want to cancel this shipment? This action cannot be undone."]
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">@Localizer["Go Back"]</button>
-                <button type="button" class="btn btn-danger" id="confirmCancel">@Localizer["Confirm"]</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Toast -->
-<div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="resultToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <div class="toast-header-text"></div>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body"></div>
-    </div>
-</div>
+@* <!-- Toast --> *@
+@* <div class="toast-container position-fixed bottom-0 end-0 p-3"> *@
+@*     <div id="resultToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true"> *@
+@*         <div class="toast-header"> *@
+@*             <div class="toast-header-text"></div> *@
+@*             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button> *@
+@*         </div> *@
+@*         <div class="toast-body"></div> *@
+@*     </div> *@
+@* </div> *@
 
 <script src="~/js/shipments.js"></script>
 

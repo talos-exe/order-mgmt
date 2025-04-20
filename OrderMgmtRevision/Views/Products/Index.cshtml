@@ -1,6 +1,6 @@
-@using X.PagedList
-@using X.PagedList.Mvc.Core
-@model List<OrderMgmtRevision.Models.Product>
+@model X.PagedList.IPagedList<OrderMgmtRevision.Models.Product>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
 
 @{
     ViewBag.Title = "Products";
@@ -16,6 +16,39 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
 <h2 class="text-center mb-4 pt-4">@Localizer["Product Management"]</h2>
+
+<div class="summary-container">
+    <div class="summary-item">
+        <div class="item-title">
+            @Localizer["Products"]
+        </div>
+        <div class="item-content">
+            <div class="label-value-block">
+                <div class="item-label">
+                    @Localizer["Ready To Be Shipped"]
+                </div>
+                <div class="item-value">
+                    @ViewBag.TotalProducts
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="summary-item">
+        <div class="item-title">
+            @Localizer["Total Products"]
+        </div>
+        <div class="item-content">
+            <div class="label-value-block">
+                <div class="item-label">
+                    @Localizer["Shipped to Customers"]
+                </div>
+                <div class="item-value">
+                    @ViewBag.TotalShipped
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @if (TempData["SuccessMessage"] != null)
 {
@@ -46,42 +79,6 @@
     </div>
 }
 
-<div class="summary-container">
-    <div class="summary-item">
-        <div class="item-title">
-            @Localizer["Products"]
-        </div>
-        <div class="item-content">
-            <div class="label-value-block">
-                <div class="item-label">
-                    @Localizer["Ready To Be Shipped"]
-                </div>
-                <div class="item-value">
-                    @Model.Count
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="summary-item">
-        <div class="item-title">
-            @Localizer["Total Products"]
-        </div>
-        <div class="item-content">
-            <div class="label-value-block">
-                <div class="item-label">
-                    @Localizer["Shipped to Customers"]
-                </div>
-                <div class="item-value">
-                    @{
-                        int totalShipped = Model.Sum(p => p.ShipAmount ?? 0);
-                    }
-                    @totalShipped
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <ul class="nav nav-tabs ms-5 me-5" id="productTabs">
     <li class="nav-item">
         <a class="nav-link active" id="productListTab" data-bs-toggle="tab" href="#productList">@Localizer["Product List"]</a>
@@ -95,7 +92,10 @@
                 <button id="btnCreate" class="btn btn-primary btn-sm me-2" onclick="openCreateProductPane()">@Localizer["Create"]</button>
                 <button id="btnEdit" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>@Localizer["Edit"]</button>
                 <button id="btnDelete" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>@Localizer["Delete"]</button>
-                <input type="text" id="searchBar" class="form-control-sm me-2" placeholder="@Localizer["Search by SKU"]" onkeyup="filterTable()" />
+                @using (Html.BeginForm("Index", "Products", FormMethod.Get)) {
+                        <input type="text" id="searchBar" class="form-control-sm me-2" name="searchString" value="@ViewBag.CurrentFilter" onkeyup="filterTable()" />
+                        <input type="submit" class="btn btn-primary btn-sm me-2" value="Search" />
+                }
             </div>
 
             <div class="table-responsive">
@@ -103,9 +103,11 @@
                     <thead class="table-light">
                         <tr>
                             <th><input type="checkbox" id="selectAll" onclick="toggleAll(this);"></th>
-                            <th>@Localizer["SKU"]</th>
-                            <th>@Localizer["Product Name"]</th>
-                            <th>@Localizer["# Stock"]</th>
+                            <th> @Html.ActionLink(Localizer["SKU"].Value, "Index", new { sortOrder = ViewBag.SKUSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th> @Html.ActionLink(Localizer["Product Name"].Value, "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th> @Html.ActionLink(Localizer["# Stock"].Value, "Index", new { sortOrder = ViewBag.StockSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th> @Html.ActionLink(Localizer["Created By"].Value, "Index", new { sortOrder = ViewBag.CreatedBySortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th> @Html.ActionLink(Localizer["Created At"].Value, "Index", new { sortOrder = ViewBag.CreatedAtSortParm, currentFilter = ViewBag.CurrentFilter })</th>
                             <th class="more">@Localizer["More"]</th>
                         </tr>
                     </thead>
@@ -114,9 +116,11 @@
                         {
                             <tr onclick="toggleButtons(this)">
                                 <td><input type="checkbox" class="product-checkbox" value="@product.ProductID" onclick="toggleButtons();"></td>
-                                <td>@product.SKU</td>
-                                <td>@product.ProductName</td>
-                                <td>@product.Stock</td>
+                                <td>@Html.DisplayFor(modelItem => product.SKU)</td>
+                                <td>@Html.DisplayFor(modelItem => product.ProductName)</td>
+                                <td>@Html.DisplayFor(modelItem => product.Stock)</td>
+                                <td>@Html.DisplayFor(modelItem => product.CreatedBy)</td>
+                                <td>@Html.DisplayFor(modelItem => product.CreatedAt)</td>
                                 <td>
                                     <a class="btn-sm btn-primary" style="cursor: pointer" onclick="openProductDetailsTab('@product.ProductID', '@product.ProductName')">@Localizer["View Details"]</a>
                                 </td>
@@ -124,10 +128,47 @@
                         }
                     </tbody>
                 </table>
+                <div class="d-flex justify-content-center mt-3">
+                    <div>
+                        @if (Model.HasPreviousPage)
+                        {
+                            <a class="btn btn-secondary btn-sm"
+                               href="@Url.Action("Index", new {
+                               page = Model.PageNumber - 1,
+                               sortOrder = ViewBag.CurrentSort,
+                               currentFilter = ViewBag.CurrentFilter
+                           })">&lt;</a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary btn-sm" disabled>&lt;</button>
+                        }
+
+                        @if (Model.HasNextPage)
+                        {
+                            <a class="btn btn-secondary btn-sm"
+                               href="@Url.Action("Index", new {
+                               page = Model.PageNumber + 1,
+                               sortOrder = ViewBag.CurrentSort,
+                               currentFilter = ViewBag.CurrentFilter
+                           })">&gt;</a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary btn-sm" disabled>&gt;</button>
+                        }
+                    </div>
+
+                    <div class="ms-3">
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+
 
 <!-- Remove Product Modal -->
 <div class="modal fade" id="removeProductModal" tabindex="-1">

@@ -132,6 +132,12 @@
   <data name="Create" xml:space="preserve">
     <value>创建</value>
   </data>
+  <data name="Created At" xml:space="preserve">
+    <value>创建时间</value>
+  </data>
+  <data name="Created By" xml:space="preserve">
+    <value>创建者</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>删除</value>
   </data>

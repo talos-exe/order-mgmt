@@ -1,5 +1,6 @@
-﻿@model OrderMgmtRevision.Models.ShippingRequest
+﻿@model OrderMgmtRevision.Models.ShippingRequestViewModel
 
+@* Required scripts *@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@3.2.11/dist/jquery.validate.unobtrusive.min.js"></script>
@@ -22,97 +23,237 @@
     </div>
 
     <div class="d-flex mt-3">
-        <form id="createShippingRequestForm" asp-action="CreateShippingRequest" asp-controller="Shipping" method="post" novalidate="novalidate" class="w-100">
+        <form id="createShippingRequestForm" asp-action="CreateShippingRequest" asp-controller="Shipping" method="post" class="w-100">
+            @Html.AntiForgeryToken()
             <div class="row">
-                <!-- From Address -->
-                <div class="col-md-4">
-                    <h5>From Address</h5>
-                    <div class="form-group">
-                        <label asp-for="FromName"></label>
-                        <input asp-for="FromName" class="form-control" required />
-                        <span asp-validation-for="FromName" class="text-danger"></span>
+
+                <!-- Warehouse & Product Selection -->
+                <div class="col-md-6">
+                    <h5>Shipment Details</h5>
+
+                    <!-- Warehouse -->
+                    <div class="form-group mb-3">
+                        <label asp-for="SourceWarehouseId">Warehouse</label>
+                        <select asp-for="SourceWarehouseId" class="form-control" id="warehouseSelect" required>
+                            <option value="">Select Warehouse</option>
+                            @foreach (var wh in Model.Warehouses)
+                            {
+                                <option value="@wh.WarehouseID"
+                                        data-name="@wh.WarehouseName"
+                                        data-street="@wh.Address"
+                                        data-city="@wh.City"
+                                        data-state="@wh.State"
+                                        data-zip="@wh.Zip"
+                                        data-phone="@wh.PhoneNumber"
+                                        data-email="@wh.WarehouseEmail">
+                                    @wh.WarehouseName
+                                </option>
+                            }
+                        </select>
+                        <div class="invalid-feedback">Please select a warehouse</div>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="FromStreet"></label>
-                        <input asp-for="FromStreet" class="form-control" required />
-                        <span asp-validation-for="FromStreet" class="text-danger"></span>
+
+                    <!-- Product -->
+                    <div class="form-group mb-3">
+                        <label asp-for="ProductID">Product</label>
+                        <select asp-for="ProductID" class="form-control" id="productSelect" name="ProductID" required>
+                            <option value="">Select Product</option>
+                            @foreach (var prod in Model.ProductList)
+                            {
+                                <option value="@prod.ProductID"
+                                        data-sku="@prod.SKU"
+                                        data-weight="@prod.Weight"
+                                        data-desc="@prod.Description"
+                                        data-length="@prod.Length"
+                                        data-width="@prod.Width"
+                                        data-height="@prod.Height">
+                                    @prod.ProductName | @prod.SKU
+                                </option>
+                            }
+                        </select>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="FromCity"></label>
-                        <input asp-for="FromCity" class="form-control" required />
-                        <span asp-validation-for="FromCity" class="text-danger"></span>
+
+                    <div class="mb-3">
+                        <label asp-for="Weight"></label>
+                        <input asp-for="Weight" class="form-control" readonly type="number" />
                     </div>
-                    <div class="form-group">
-                        <label asp-for="FromState"></label>
-                        <input asp-for="FromState" class="form-control" required />
-                        <span asp-validation-for="FromState" class="text-danger"></span>
+                    <div class="mb-3">
+                        <label asp-for="Length"></label>
+                        <input asp-for="Length" class="form-control" readonly type="number" />
                     </div>
-                    <div class="form-group">
-                        <label asp-for="FromZip"></label>
-                        <input asp-for="FromZip" class="form-control" required />
-                        <span asp-validation-for="FromZip" class="text-danger"></span>
+                    <div class="mb-3">
+                        <label asp-for="Width"></label>
+                        <input asp-for="Width" class="form-control" readonly type="number" />
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Height"></label>
+                        <input asp-for="Height" class="form-control" readonly type="number" />
                     </div>
                 </div>
 
                 <!-- To Address -->
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <h5>To Address</h5>
-                    <div class="form-group">
-                        <label asp-for="ToName"></label>
-                        <input asp-for="ToName" class="form-control" required />
+
+                    <div class="form-group mb-3">
+                        <label asp-for="ToName">Shipment Name *</label>
+                        <input asp-for="ToName" class="form-control" type="text" />
                         <span asp-validation-for="ToName" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="ToStreet"></label>
-                        <input asp-for="ToStreet" class="form-control" required />
+
+                    <div class="form-group mb-3">
+                        <label asp-for="ToStreet">Recipient Address *</label>
+                        <input asp-for="ToStreet" class="form-control" type="text" />
                         <span asp-validation-for="ToStreet" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="ToCity"></label>
-                        <input asp-for="ToCity" class="form-control" required />
+
+                    <div class="form-group mb-3">
+                        <label asp-for="ToCity">Recipient City *</label>
+                        <input asp-for="ToCity" class="form-control" type="text" />
                         <span asp-validation-for="ToCity" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="ToState"></label>
-                        <input asp-for="ToState" class="form-control" required />
+
+                    <div class="form-group mb-3">
+                        <label asp-for="ToState">Recipient State *</label>
+                        <input asp-for="ToState" class="form-control" type="text" />
                         <span asp-validation-for="ToState" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="ToZip"></label>
-                        <input asp-for="ToZip" class="form-control" required />
+
+                    <div class="form-group mb-3">
+                        <label asp-for="ToZip">Recipient Zip/Postal Code *</label>
+                        <input asp-for="ToZip" class="form-control" type="text" />
                         <span asp-validation-for="ToZip" class="text-danger"></span>
                     </div>
-                </div>
-
-                <!-- Package Dimensions -->
-                <div class="col-md-4">
-                    <h5>Package Dimensions</h5>
-                    <div class="form-group">
-                        <label asp-for="Weight"></label>
-                        <input asp-for="Weight" class="form-control" required />
-                        <span asp-validation-for="Weight" class="text-danger"></span>
+                    <div class="form-group mb-3">
+                        <label asp-for="ToCountryCode">Recipient Country Code *</label>
+                        <input asp-for="ToCountryCode" class="form-control" type="text" />
+                        <span asp-validation-for="ToCountryCode" class="text-danger"></span>
                     </div>
-                    <div class="form-group">
-                        <label asp-for="Length"></label>
-                        <input asp-for="Length" class="form-control" required />
-                        <span asp-validation-for="Length" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Width"></label>
-                        <input asp-for="Width" class="form-control" required />
-                        <span asp-validation-for="Width" class="text-danger"></span>
-                    </div>
-                    <div class="form-group">
-                        <label asp-for="Height"></label>
-                        <input asp-for="Height" class="form-control" required />
-                        <span asp-validation-for="Height" class="text-danger"></span>
+                    <div class="form-group mb-3">
+                        <label asp-for="ToPhone">Recipient Phone Number (Optional)</label>
+                        <input asp-for="ToPhone" class="form-control" type="tel" />
+                        <span asp-validation-for="ToPhone" class="text-danger"></span>
                     </div>
                 </div>
             </div>
 
-            <div class="text-center mt-4">
-                <button type="submit" class="btn btn-success px-5">Submit Request</button>
+            @* Hidden From Address *@
+
+            @Html.HiddenFor(m => m.SourceWarehouseId)
+            @Html.HiddenFor(m => m.FromName, new { id = "FromName" })
+            @Html.HiddenFor(m => m.FromStreet, new { id = "FromStreet" })
+            @Html.HiddenFor(m => m.FromCity, new { id = "FromCity" })
+            @Html.HiddenFor(m => m.FromState, new { id = "FromState" })
+            @Html.HiddenFor(m => m.FromZip, new { id = "FromZip" })
+            @Html.HiddenFor(m => m.FromPhone, new { id = "FromPhone" })
+            @Html.HiddenFor(m => m.FromEmail, new { id = "FromEmail" })
+
+            <input type="hidden" name="selectedRateJson" id="selectedRateJson" />
+
+            <div class="mt-4">
+                <button type="button" id="nextButton" class="btn btn-primary px-5">Next: Choose Rates</button>
             </div>
         </form>
+
+        <div id="rateSelectionSection" class="mt-5" style="display:none;">
+            <h5>Select a Shipping Rate</h5>
+            <div id="rateOptions" class="row g-3">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+
     </div>
 </div>
+
+<script>
+    function updateProductFields() {
+        const prod = $('#productSelect').find(':selected');
+        if (prod.val()) {
+            $('[name="Weight"]').val(prod.data('weight'));
+            $('[name="Length"]').val(prod.data('length'));
+            $('[name="Width"]').val(prod.data('width'));
+            $('[name="Height"]').val(prod.data('height'));
+            $('#ProductID').val(prod.val());
+        }
+    }
+
+    $('#productSelect').on('change', updateProductFields);
+
+    $('#warehouseSelect').on('change', function () {
+        const selected = $(this).find(':selected');
+        if (selected.val()) {
+            $('#SourceWarehouseId').val(selected.val());
+            $('#FromName').val(selected.data('name'));
+            $('#FromStreet').val(selected.data('street'));
+            $('#FromCity').val(selected.data('city'));
+            $('#FromState').val(selected.data('state'));
+            $('#FromZip').val(selected.data('zip'));
+            $('#FromPhone').val(selected.data('phone'));
+            $('#FromEmail').val(selected.data('email'));
+        }
+    });
+
+    $('#nextButton').on('click', function () {
+        // Validate manually
+        if ($('#warehouseSelect').val() === '' || $('#productSelect').val() === '') {
+            alert('Please select a warehouse and product.');
+            return;
+        }
+
+        // Serialize form data
+        const formData = $('#createShippingRequestForm').serialize();
+
+        $.ajax({
+            url: '@Url.Action("GetRates", "Shipping")',
+            type: 'POST',
+            data: formData,
+            success: function (rates) {
+                $('#createShippingRequestForm').hide();
+
+                $('#rateOptions').empty();
+
+                    rates.forEach(rate => {
+                        $('#rateOptions').append(`
+                            <div class="col-md-4">
+                                <div class="card p-3">
+                                    <p><strong>Provider:</strong> ${rate.provider}</p>
+                                    <p><strong>Service:</strong> ${rate.service}</p>
+                                    <p><strong>Amount:</strong> $${rate.amount}</p>
+                                    <button class="btn btn-sm btn-success select-rate"
+                                            data-rate='${JSON.stringify(rate)}'>
+                                            Select
+                                    </button>
+                                </div>
+                            </div>
+                        `);
+                    });
+                $('#rateSelectionSection').show();
+            },
+            error: function () {
+                alert('Error retrieving shipping rates.');
+            }
+        });
+    });
+
+        //Handler for rate
+            $(document).on('click', '.select-rate', function () {
+                const selectedRate = $(this).data('rate');
+                const formData = $('#createShippingRequestForm').serializeArray();
+
+                // Append a hidden input for selectedRateJson
+                if ($('#selectedRateJson').length === 0) {
+                    $('#createShippingRequestForm').append(
+                        $('<input>', {
+                            type: 'hidden',
+                            id: 'selectedRateJson',
+                            name: 'selectedRateJson',
+                            value: JSON.stringify(selectedRate)
+                        })
+                    );
+                } else {
+                    $('#selectedRateJson').val(JSON.stringify(selectedRate));
+                }
+
+                $('#createShippingRequestForm').submit();
+            });
+</script>

@@ -1,0 +1,8 @@
+﻿@model OrderMgmtRevision.Models.ShipmentViewModel
+
+<form method="post" asp-action="CancelShipment" asp-controller="Shipping">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" value="@Model.ShipmentID" asp-for="ShipmentID" />
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+    <button type="submit" class="btn btn-danger">Yes, Cancel</button>
+</form>

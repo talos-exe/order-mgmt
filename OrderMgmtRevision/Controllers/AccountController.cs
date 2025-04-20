@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using OrderMgmtRevision.Models;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using OrderMgmtRevision.Services;
 using System.Security.Claims;
 
@@ -78,7 +76,7 @@ namespace OrderMgmtRevision.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            var user = new User { UserName = model.UserName, Email = model.Email, FullName = model.FullName, DateCreated = DateTime.UtcNow, LastPasswordChange = DateTime.UtcNow, IsActive = true };
+            var user = new User { UserName = model.UserName, Email = model.Email, FullName = model.FullName, DateCreated = DateTime.UtcNow, LastPasswordChange = DateTime.UtcNow, IsActive = true, AccountBalance = 0 };
             var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)

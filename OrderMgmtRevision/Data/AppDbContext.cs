@@ -46,11 +46,6 @@ namespace OrderMgmtRevision.Data
                 .HasForeignKey(s => s.SourceWarehouseID)
                 .OnDelete(DeleteBehavior.NoAction); // No cascading delete on source warehouse
 
-            modelBuilder.Entity<Shipment>()
-                .HasOne(s => s.DestinationWarehouse)
-                .WithMany()
-                .HasForeignKey(s => s.DestinationWarehouseID)
-                .OnDelete(DeleteBehavior.NoAction); // Restricted delete, so throw an error if there is no shipment attached.
             modelBuilder.Entity<Shipment>(shipment =>
             {
                 shipment.OwnsOne(s => s.Rate);

@@ -17,7 +17,7 @@ namespace OrderMgmtRevision.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -207,6 +207,12 @@ namespace OrderMgmtRevision.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<int>("Height")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Length")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -232,6 +238,12 @@ namespace OrderMgmtRevision.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("Weight")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Width")
+                        .HasColumnType("int");
+
                     b.HasKey("ProductID");
 
                     b.HasIndex("UserId");
@@ -250,39 +262,45 @@ namespace OrderMgmtRevision.Migrations
                     b.Property<decimal>("Cost")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("DestinationWarehouseID")
-                        .HasColumnType("int");
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("EstimatedArrival")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("GeneratedAt")
+                    b.Property<DateTime?>("GeneratedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ProductID")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ShipmentDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("SelectedRateId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShipmentName")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .HasColumnType("nvarchar(36)");
 
                     b.Property<int>("SourceWarehouseID")
                         .HasColumnType("int");
 
                     b.Property<string>("Status")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TrackingNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ShipmentID");
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
 
-                    b.HasIndex("DestinationWarehouseID");
+                    b.HasKey("ShipmentID");
 
                     b.HasIndex("ProductID");
 
@@ -366,16 +384,40 @@ namespace OrderMgmtRevision.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CountryCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("WarehouseEmail")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WarehouseName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Zip")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("WarehouseID");
 
@@ -389,6 +431,9 @@ namespace OrderMgmtRevision.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
+
+                    b.Property<decimal?>("AccountBalance")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -550,12 +595,6 @@ namespace OrderMgmtRevision.Migrations
 
             modelBuilder.Entity("OrderMgmtRevision.Models.Shipment", b =>
                 {
-                    b.HasOne("OrderMgmtRevision.Models.Warehouse", "DestinationWarehouse")
-                        .WithMany()
-                        .HasForeignKey("DestinationWarehouseID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
                     b.HasOne("OrderMgmtRevision.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductID")
@@ -598,14 +637,7 @@ namespace OrderMgmtRevision.Migrations
                             b1.Property<int>("ShipmentID")
                                 .HasColumnType("int");
 
-                            b1.Property<decimal>("Amount")
-                                .HasColumnType("decimal(18,2)");
-
-                            b1.Property<string>("Carrier")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("Currency")
+                            b1.Property<string>("LabelObjectId")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
@@ -664,7 +696,85 @@ namespace OrderMgmtRevision.Migrations
                                 .HasForeignKey("ShipmentID");
                         });
 
-                    b.Navigation("DestinationWarehouse");
+                    b.OwnsOne("OrderMgmtRevision.Models.ShippingRequest", "ShippingRequest", b1 =>
+                        {
+                            b1.Property<int>("ShipmentID")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("FromCity")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("FromEmail")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("FromName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("FromPhone")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("FromState")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("FromStreet")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("FromZip")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<decimal>("Height")
+                                .HasColumnType("decimal(18,2)");
+
+                            b1.Property<decimal>("Length")
+                                .HasColumnType("decimal(18,2)");
+
+                            b1.Property<string>("ToCity")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("ToCountryCode")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("ToName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("ToPhone")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("ToState")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("ToStreet")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("ToZip")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<decimal>("Weight")
+                                .HasColumnType("decimal(18,2)");
+
+                            b1.Property<decimal>("Width")
+                                .HasColumnType("decimal(18,2)");
+
+                            b1.HasKey("ShipmentID");
+
+                            b1.ToTable("Shipments");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ShipmentID");
+                        });
 
                     b.Navigation("Label")
                         .IsRequired();
@@ -672,6 +782,9 @@ namespace OrderMgmtRevision.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Rate")
+                        .IsRequired();
+
+                    b.Navigation("ShippingRequest")
                         .IsRequired();
 
                     b.Navigation("SourceWarehouse");

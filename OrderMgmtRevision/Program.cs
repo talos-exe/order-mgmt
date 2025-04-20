@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Linq;
 using OrderMgmtRevision.Services;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -82,35 +83,38 @@ builder.Services.AddControllersWithViews()
     .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
     .AddDataAnnotationsLocalization();
 
+// Custom Request Culture Provider (Query String Based)
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new[]
+    {
+        new CultureInfo("en"),
+        new CultureInfo("zh")
+    };
+
+    options.DefaultRequestCulture = new RequestCulture("en");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+
+    // Add the standard providers in the correct order
+    options.RequestCultureProviders = new List<IRequestCultureProvider>
+    {
+        // 1. First check for cookie
+        new CookieRequestCultureProvider(),
+        // 2. Then check query string
+        new QueryStringRequestCultureProvider(),
+        // 3. Then check Accept-Language header
+        new AcceptLanguageHeaderRequestCultureProvider()
+    };
+});
+
+
 builder.Services.AddRazorPages();
 builder.Services.AddTransient<DataSeeder>();
 builder.Services.AddSingleton<FedExService>();
 builder.Services.AddHttpClient<ShippoService>();
-builder.Services.AddHttpClient<StripeService>();
-
-// Supported cultures
-var supportedCultures = new[] { "en", "zh" };
-var defaultCulture = "en";
-
-// Custom Request Culture Provider (Query String Based)
-var localizationOptions = new RequestLocalizationOptions()
-    .SetDefaultCulture(defaultCulture)
-    .AddSupportedCultures(supportedCultures)
-    .AddSupportedUICultures(supportedCultures)
-    .AddInitialRequestCultureProvider(new CustomRequestCultureProvider(context =>
-    {
-        var queryLang = context.Request.Query["lang"].ToString();
-        var culture = supportedCultures.Contains(queryLang) ? queryLang : defaultCulture;
-        return Task.FromResult(new ProviderCultureResult(culture, culture));
-    }));
-
-
-// Add other services
-builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
-builder.Services.AddTransient<DataSeeder>();
-builder.Services.AddSingleton<FedExService>();
 builder.Services.AddScoped<ILogService, LogService>();
+builder.Services.AddHttpClient<StripeService>();
 
 var app = builder.Build();
 
@@ -124,7 +128,8 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Use Request Localization Middleware
-app.UseRequestLocalization(localizationOptions);
+app.UseRequestLocalization(app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
+
 
 // Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())

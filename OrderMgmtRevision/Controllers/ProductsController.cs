@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using OrderMgmtRevision.Data;
 using OrderMgmtRevision.Models;
 using OrderMgmtRevision.Services;
+using X.PagedList.Extensions;
 
 namespace OrderMgmtRevision.Controllers
 {
@@ -27,27 +27,42 @@ namespace OrderMgmtRevision.Controllers
         {
             // Get the current date in the format "yyyyMMdd"
             string datePart = DateTime.Now.ToString("yyyyMMdd");
+            string prefix = $"PROD-{datePart}-";
 
             // Get the last product ID created for today
             var lastProduct = _dbContext.Products
-                .Where(p => p.ProductID.StartsWith($"PROD-{datePart}-"))
+                .Where(p => p.ProductID.StartsWith(prefix))
                 .OrderByDescending(p => p.ProductID)
                 .FirstOrDefault();
 
             // If no product exists for today, start from 001
             string newProductNumber = "001";
+
             if (lastProduct != null)
             {
-                // Extract the number part from the last product's ID (e.g., 001 from PROD-20250402-001)
-                var lastProductNumber = lastProduct.ProductID.Substring(12);
+                try
+                {
+                    // Extract the number part from the last product's ID (e.g., 001 from PROD-20250402-001)
+                    var lastProductNumber = lastProduct.ProductID.Substring(prefix.Length);
 
-                // Increment the last number to create a new sequential number
-                int newProductInt = int.Parse(lastProductNumber) + 1;
-                newProductNumber = newProductInt.ToString("D3"); // Ensure 3 digits (e.g., 001, 002, etc.)
+                    // Make sure we only have digits
+                    if (int.TryParse(lastProductNumber, out int lastNumber))
+                    {
+                        // Increment the last number to create a new sequential number
+                        int newProductInt = lastNumber + 1;
+                        newProductNumber = newProductInt.ToString("D3"); // Ensure 3 digits
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception for debugging
+                    System.Diagnostics.Debug.WriteLine($"Error parsing product ID: {ex.Message}");
+                    // Continue with default "001"
+                }
             }
 
             // Combine the parts to form the new ProductID
-            return $"PROD-{datePart}-{newProductNumber}";
+            return $"{prefix}{newProductNumber}";
         }
         private async Task<bool> IsUserAdmin()
         {
@@ -62,37 +77,77 @@ namespace OrderMgmtRevision.Controllers
         }
 
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            // Enable for debug info.
-            //var productData = new List<Product>
-            //{
-            //  new Product
-            //  {
-            //    SKU = "00054-3010-1420",
-            //    ProductName = "Test Product 1",
-            //    Price = 49.99m,
-            //    Cost = 5.00m
-            //  },
-            //  new Product
-            //  {
-            //    SKU = "00054-3010-1410",
-            //    ProductName = "Test Product 2",
-            //    Price = 29.99m
-            //  },
-            //  new Product
-            //  {
-            //    SKU = "00054-3010-1400",
-            //    ProductName = "Test Product 3",
-            //    Price = 85.50m,
-            //    Cost = 12.34m
-            //  }
-            //};
-            //return View(productData);
 
-            var productList = await _dbContext.Products.ToListAsync();
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.SKUSortParm = sortOrder == "SKU" ? "sku_desc" : "SKU";
+            ViewBag.StockSortParm = sortOrder == "Stock" ? "stock_desc" : "Stock";
+            ViewBag.CreatedBySortParm = sortOrder == "CreatedBy" ? "createdby_desc" : "CreatedBy";
+            ViewBag.CreatedAtSortParm = sortOrder == "createdat_desc" ? "CreatedAt" : "createdat_desc";
 
-            return View(productList);
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+            var products = from p in _dbContext.Products
+                           select p;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                products = products.Where(p => p.ProductName.Contains(searchString)
+                                            || p.SKU.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    products = products.OrderByDescending(p => p.ProductName);
+                    break;
+                case "SKU":
+                    products = products.OrderBy(p => p.SKU);
+                    break;
+                case "sku_desc":
+                    products = products.OrderByDescending(p => p.SKU);
+                    break;
+                case "Stock":
+                    products = products.OrderBy(p => p.Stock);
+                    break;
+                case "stock_desc":
+                    products = products.OrderByDescending(p => p.Stock);
+                    break;
+                case "CreatedBy":
+                    products = products.OrderBy(p => p.CreatedBy);
+                    break;
+                case "createdby_desc":
+                    products = products.OrderByDescending(p => p.CreatedBy);
+                    break;
+                case "CreatedAt":
+                    products = products.OrderBy(p => p.CreatedAt);
+                    break;
+                case "createdat_desc":
+                    products = products.OrderByDescending(p => p.CreatedAt);
+                    break;
+                default:
+                    products = products.OrderBy(p => p.ProductName); // default sort
+                    break;
+            }
+
+            int pageSize = 20;
+            int pageNumber = (page ?? 1);
+
+            ViewBag.TotalProducts = await _dbContext.Products.CountAsync();
+            ViewBag.TotalShipped = await _dbContext.Products.SumAsync(p => p.ShipAmount ?? 0);
+
+            return View(products.ToPagedList(pageNumber, pageSize));
         }
 
         private string GetClientIp()
@@ -110,12 +165,51 @@ namespace OrderMgmtRevision.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateProduct(Product model)
         {
+
             bool isAdmin = await IsUserAdmin();
             var user = await _userManager.GetUserAsync(User);
             string userId = user?.Id ?? "Unknown";
             string userName = user?.UserName ?? "Unknown";
             string ipAddress = GetClientIp();
             string logMessage = "";
+
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage);
+
+                TempData["Error"] = "Invalid model state. Errors: " + string.Join(" | ", errors);
+                logMessage = isAdmin ? $"[Administrator] Failed product creation; invalid model state." : $"Failed product creation; invalid model state.";
+                await _logService.LogUserActivityAsync(userId, logMessage, ipAddress);
+                return RedirectToAction("Index", "Products");
+            }
+
+            bool skuExists = await _dbContext.Products.AnyAsync(p => p.SKU == model.SKU);
+            bool nameExists = await _dbContext.Products.AnyAsync(p => p.ProductName == model.ProductName);
+
+            if (skuExists || nameExists)
+            {
+                if (skuExists)
+                {
+                    TempData["Error"] = $"Product with SKU '{model.SKU}' already exists.";
+                    logMessage = isAdmin
+                        ? $"[Administrator] Product creation failed: SKU '{model.SKU}' already exists."
+                        : $"Product creation failed: SKU '{model.SKU}' already exists.";
+                }
+
+                if (nameExists)
+                {
+                    TempData["Error"] = $"Product with name '{model.ProductName}' already exists.";
+                    logMessage = isAdmin
+                        ? $"[Administrator] Product creation failed: Product name '{model.ProductName}' already exists."
+                        : $"Product creation failed: Product name '{model.ProductName}' already exists.";
+                }
+
+                await _logService.LogUserActivityAsync(userId, logMessage, ipAddress);
+                return RedirectToAction("Index", "Products");
+            }
+
 
             var product = new Product
             {
@@ -126,6 +220,10 @@ namespace OrderMgmtRevision.Controllers
                 Price = model.Price,
                 Cost = model.Cost,
                 Stock = model.Stock,
+                Weight = model.Weight,
+                Height = model.Height,
+                Length = model.Length,
+                Width = model.Width,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
                 CreatedBy = userName,
@@ -152,22 +250,8 @@ namespace OrderMgmtRevision.Controllers
                 await _logService.LogUserActivityAsync(userId, $"Failed to create product. Error: {ex.Message}", ipAddress);
                 return RedirectToAction("Index", "Products");
             }
-
-
-            if (!ModelState.IsValid)
-            {
-                var errors = ModelState.Values
-                .SelectMany(v => v.Errors)
-                .Select(e => e.ErrorMessage);
-
-                TempData["Error"] = "Invalid model state. Errors: " + string.Join(" | ", errors);
-                logMessage = isAdmin ? $"[Administrator] Failed product creation; invalid model state." : $"Failed product creation; invalid model state.";
-                await _logService.LogUserActivityAsync(userId, logMessage, ipAddress);
-                return RedirectToAction("Index", "Products");
-            }
-
-
         }
+
 
 
         [HttpGet]
@@ -190,6 +274,10 @@ namespace OrderMgmtRevision.Controllers
                     Price = p.Price,
                     Cost = p.Cost,
                     Stock = p.Stock,
+                    Height = p.Height,
+                    Width = p.Width,
+                    Length = p.Length,
+                    Weight = p.Weight,
                     CreatedAt = p.CreatedAt,
                     UpdatedAt = p.UpdatedAt,
                     CreatedBy = p.CreatedBy,

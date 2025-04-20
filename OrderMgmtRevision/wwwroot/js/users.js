@@ -1,4 +1,38 @@
-﻿function toggleButtons() {
+﻿document.addEventListener('DOMContentLoaded', function () {
+    // Set the active tab based on URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const activeTab = urlParams.get('activeTab') || 'userList';
+    const userListTab = document.getElementById('userListTab');
+    const userLogsTab = document.getElementById('userLogsTab');
+
+    if (activeTab === 'userLogs') {
+        userLogsTab.click();
+    } else {
+        userListTab.click();
+    }
+
+    // Add click handlers for updating URL...
+
+
+    // Add click handlers to update the active tab in URL
+    userListTab.addEventListener('click', function (e) {
+        updateUrlParameter('activeTab', 'userList');
+    });
+
+    userLogsTab.addEventListener('click', function (e) {
+        updateUrlParameter('activeTab', 'userLogs');
+    });
+
+    // Function to update URL parameters without refreshing the page
+    function updateUrlParameter(key, value) {
+        const url = new URL(window.location.href);
+        url.searchParams.set(key, value);
+        window.history.replaceState({}, '', url);
+    }
+});
+
+
+function toggleButtons() {
     let checkboxes = document.querySelectorAll(".user-checkbox:checked");
     let btnEdit = document.getElementById("btnEdit");
     let btnDelete = document.getElementById("btnDelete");
@@ -26,35 +60,7 @@ function toggleAll(source) {
     toggleButtons();
 }
 
-// Table Sorting Function
 
-var isAscending = false;
-function sortTable(columnIndex) {
-    var table = document.getElementById("userTable");
-    var rows = Array.from(table.getElementsByTagName("tr")).slice(1); // Get all rows except the header
-    isAscending = !isAscending; // Toggle sorting order
-
-    var caret = document.getElementById("userCaret");
-    if (isAscending) {
-        caret.classList.remove("fa-caret-down");
-        caret.classList.add("fa-caret-up");
-    } else {
-        caret.classList.remove("fa-caret-up");
-        caret.classList.add("fa-caret-down");
-    }
-
-    rows.sort((a, b) => {
-        var cellA = a.cells[columnIndex].textContent.trim();
-        var cellB = b.cells[columnIndex].textContent.trim();
-        return isAscending
-            ? cellA.localeCompare(cellB) // Ascending sort
-            : cellB.localeCompare(cellA); // Descending sort
-    });
-
-    // Re-append the sorted rows to the table body to maintain styling
-    var tbody = table.querySelector('tbody');
-    rows.forEach(row => tbody.appendChild(row)); // Append sorted rows
-}
 
 // Search Function
 function filterTable() {
@@ -116,19 +122,16 @@ function openUserDetailsTab(userId, userName) {
     // Activate the new tab
     $('#' + tabId + 'Tab').tab('show');
 
-    // Load the user details via AJAX
-    $.ajax({
-        url: '/UserManagement/GetUserDetails',
-        type: 'GET',
-        data: { userId: userId },
-        success: function (data) {
+    // Fetch user details
+    fetch(`/UserManagement/GetUserDetails?userId=${userId}`)
+        .then(response => response.text())
+        .then(data => {
             $('#' + tabId).html(data);
-        },
-        error: function () {
+        })
+        .catch(() => {
             console.log("User ID: " + userId);
             $('#' + tabId).html('<div class="ms-5 me-5 text-danger">Error loading user details</div>');
-        }
-    });
+        });
 }
 
 function closeUserDetailsTab() {
@@ -164,20 +167,16 @@ function openCreateUserPane() {
 
     $('#' + tabId + 'Tab').tab('show');
 
-    $.ajax({
-        url: '/UserManagement/_CreateUser',
-        type: 'GET',
-        success: function (data) {
+    // Fetch the Create User form
+    fetch('/UserManagement/_CreateUser')
+        .then(response => response.text())
+        .then(data => {
             $('#' + tabId).html(data);
-        },
-        error: function () {
+        })
+        .catch(() => {
             $('#' + tabId).html('<div class="ms-5 me-5 text-danger">Error loading Create User form</div>');
-        }
-    });
+        });
 }
-
-
-
 
 function closeCreateUser() {
     // Find the create user tab
@@ -192,3 +191,50 @@ function closeCreateUser() {
     // Activate the user list tab
     $('#userListTab').tab('show');
 }
+
+$(document).ready(function () {
+    // Check if there's an active tab parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const activeTab = urlParams.get('activeTab');
+
+    // Set active tab if specified
+    if (activeTab === 'userLogs') {
+        $('#adminTabs a[href="#userLogs"]').tab('show');
+    }
+});
+
+
+
+
+
+// NOT IN USE
+
+//// Table Sorting Function
+
+//var isAscending = false;
+//function sortTable(columnIndex) {
+//    var table = document.getElementById("userTable");
+//    var rows = Array.from(table.getElementsByTagName("tr")).slice(1); // Get all rows except the header
+//    isAscending = !isAscending; // Toggle sorting order
+
+//    var caret = document.getElementById("userCaret");
+//    if (isAscending) {
+//        caret.classList.remove("fa-caret-down");
+//        caret.classList.add("fa-caret-up");
+//    } else {
+//        caret.classList.remove("fa-caret-up");
+//        caret.classList.add("fa-caret-down");
+//    }
+
+//    rows.sort((a, b) => {
+//        var cellA = a.cells[columnIndex].textContent.trim();
+//        var cellB = b.cells[columnIndex].textContent.trim();
+//        return isAscending
+//            ? cellA.localeCompare(cellB) // Ascending sort
+//            : cellB.localeCompare(cellA); // Descending sort
+//    });
+
+//    // Re-append the sorted rows to the table body to maintain styling
+//    var tbody = table.querySelector('tbody');
+//    rows.forEach(row => tbody.appendChild(row)); // Append sorted rows
+//}
