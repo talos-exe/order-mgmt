@@ -1,4 +1,6 @@
-﻿@model OrderMgmtRevision.Models.Product
+@model OrderMgmtRevision.Models.Product
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 <div class="ms-5 me-5">
     <div class="d-flex justify-content-between mb-3">
@@ -9,22 +11,22 @@
     <div class="row">
         <div class="col-md-6">
             <p><strong>ProductID: </strong>@Model.ProductID</p>
-            <p><strong>Product Name: </strong>@Model.ProductName</p>
-            <p><strong>SKU: </strong>@Model.SKU</p>
-            <p><strong>Description: </strong>@Model.Description</p>
+            <p><strong>@Localizer["Product Name"]: </strong>@Model.ProductName</p>
+            <p><strong>@Localizer["SKU"]: </strong>@Model.SKU</p>
+            <p><strong>@Localizer["Description"]: </strong>@Model.Description</p>
             <p><strong>Weight: </strong>@Model.Weight</p>
             <p><strong>Width(in) </strong>@Model.Width</p>
             <p><strong>Height(in): </strong>@Model.Height</p>
             <p><strong>Length(in): </strong>@Model.Length</p>
-            <p><strong>Price: </strong>@Model.Price</p>
-            <p><strong>Cost: </strong>@Model.Cost</p>
-            <p><strong>Stock: </strong>@Model.Stock</p>
-            <p><strong>Created At: </strong>@(Model.CreatedAt.HasValue ? Model.CreatedAt.Value.ToString("yyyy-MM-dd HH:mm:ss") : "N/A")</p>
-            <p><strong>Last Updated: </strong>@(Model.UpdatedAt.HasValue ? Model.UpdatedAt.Value.ToString("yyyy-MM-dd HH:mm:ss") : "N/A")</p>
+            <p><strong>@Localizer["Price"]: </strong>@Model.Price</p>
+            <p><strong>@Localizer["Cost"]: </strong>@Model.Cost</p>
+            <p><strong>@Localizer["Stock"]: </strong>@Model.Stock</p>
+            <p><strong>@Localizer["Created At"]: </strong>@(Model.CreatedAt.HasValue ? Model.CreatedAt.Value.ToString("yyyy-MM-dd HH:mm:ss") : "N/A")</p>
+            <p><strong>@Localizer["Last Updated"]: </strong>@(Model.UpdatedAt.HasValue ? Model.UpdatedAt.Value.ToString("yyyy-MM-dd HH:mm:ss") : "N/A")</p>
             <p><strong>Amount Shipped: </strong>@Model.ShipAmount</p>
             @if (User.IsInRole("Admin"))
             {
-                <p><strong>Created By: </strong>@Model.CreatedBy</p>
+                <p><strong>@Localizer["Created By"]: </strong>@Model.CreatedBy</p>
             }
         </div>
     </div>
