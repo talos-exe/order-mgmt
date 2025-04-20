@@ -1,4 +1,38 @@
-﻿function toggleButtons() {
+﻿document.addEventListener('DOMContentLoaded', function () {
+    // Set the active tab based on URL parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const activeTab = urlParams.get('activeTab') || 'userList';
+    const userListTab = document.getElementById('userListTab');
+    const userLogsTab = document.getElementById('userLogsTab');
+
+    if (activeTab === 'userLogs') {
+        userLogsTab.click();
+    } else {
+        userListTab.click();
+    }
+
+    // Add click handlers for updating URL...
+
+
+    // Add click handlers to update the active tab in URL
+    userListTab.addEventListener('click', function (e) {
+        updateUrlParameter('activeTab', 'userList');
+    });
+
+    userLogsTab.addEventListener('click', function (e) {
+        updateUrlParameter('activeTab', 'userLogs');
+    });
+
+    // Function to update URL parameters without refreshing the page
+    function updateUrlParameter(key, value) {
+        const url = new URL(window.location.href);
+        url.searchParams.set(key, value);
+        window.history.replaceState({}, '', url);
+    }
+});
+
+
+function toggleButtons() {
     let checkboxes = document.querySelectorAll(".user-checkbox:checked");
     let btnEdit = document.getElementById("btnEdit");
     let btnDelete = document.getElementById("btnDelete");
@@ -157,6 +191,17 @@ function closeCreateUser() {
     // Activate the user list tab
     $('#userListTab').tab('show');
 }
+
+$(document).ready(function () {
+    // Check if there's an active tab parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const activeTab = urlParams.get('activeTab');
+
+    // Set active tab if specified
+    if (activeTab === 'userLogs') {
+        $('#adminTabs a[href="#userLogs"]').tab('show');
+    }
+});
 
 
 

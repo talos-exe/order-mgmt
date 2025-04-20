@@ -26,13 +26,14 @@ namespace OrderMgmtRevision.Controllers
         }
 
         // When clicked on UserManagement Page, Index loads
-        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page)
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page, int? logPage, string activeTab = "userList")
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.EmailSortParm = sortOrder == "Email" ? "email_desc" : "Email";
             ViewBag.UserNameSortParm = sortOrder == "Username" ? "username_desc" : "Username";
             ViewBag.IdSortParm = sortOrder == "ID" ? "id_desc" : "ID";
+            ViewBag.ActiveTab = activeTab;
 
             if (searchString != null)
             {
@@ -102,8 +103,16 @@ namespace OrderMgmtRevision.Controllers
                 });
             }
 
-            int pageSize = 15;
+            var allLogs = userViewModels.SelectMany(u => u.Logs)
+                .OrderByDescending(l => l.Timestamp)
+                .ToList();
+
+            int pageSize = 20;
+            int logPageSize = 20;
             int pageNumber = (page ?? 1);
+            int logPageNumber = (logPage ?? 1);
+
+            ViewBag.LogsPagedList = allLogs.ToPagedList(logPageNumber, logPageSize);
 
             return View(userViewModels.ToPagedList(pageNumber, pageSize));
         }
@@ -184,7 +193,6 @@ namespace OrderMgmtRevision.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditConfirm(string id, UserViewModel model)
         {
-            System.Diagnostics.Debug.WriteLine("EditUser Set User to: " + model.UserName);
             if (!ModelState.IsValid)
             {
                 TempData["Error"] = "Invalid model state.";

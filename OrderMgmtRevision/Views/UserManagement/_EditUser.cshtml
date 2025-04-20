@@ -34,11 +34,6 @@
         <span asp-validation-for="FullName" class="text-danger"></span>
     </div>
 
-    <input type="hidden" name="sortOrder" value="@ViewBag.CurrentSort" />
-    <input type="hidden" name="searchString" value="@ViewBag.CurrentFilter" />
-    <input type="hidden" name="currentFilter" value="@ViewBag.CurrentFilter" />
-    <input type="hidden" name="page" value="@ViewBag.PageNumber" />
-
     <br />
     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
     <button type="submit" class="btn btn-success">Save Changes</button>
