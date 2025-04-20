@@ -184,6 +184,7 @@ namespace OrderMgmtRevision.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditConfirm(string id, UserViewModel model)
         {
+            System.Diagnostics.Debug.WriteLine("EditUser Set User to: " + model.UserName);
             if (!ModelState.IsValid)
             {
                 TempData["Error"] = "Invalid model state.";
@@ -214,30 +215,32 @@ namespace OrderMgmtRevision.Controllers
                 await _logService.LogUserActivityAdmin("[Administrator] Email conflict while updating. Email " + existingUserEmail.Email + " is already taken by user " + model.UserName, GetClientIp());
                 return RedirectToAction("Index");
             }
-            
-                                        // Enable for specific logging. 
-                                        //
-                                        //// Check if username is different and log it
-                                        //if (user.UserName != model.UserName)
-                                        //{
-                                        //    await _logService.LogUserActivityAdmin("[Administrator] Changed Username from " + user.UserName + " to " + model.UserName, GetClientIp());
-                                        //    user.UserName = model.UserName;
-                                        //}
 
-                                        //// Check if email is different and log it
-                                        //if (user.Email != model.Email)
-                                        //{
-                                        //    await _logService.LogUserActivityAdmin($"[Administrator] Changed User {model.Email} Email Address from " + user.Email + " to " + model.Email, GetClientIp());
-                                        //    user.Email = model.Email;
-                                        //}
+            // Enable for specific logging. 
+            //
+            //// Check if username is different and log it
+            //if (user.UserName != model.UserName)
+            //{
+            //    await _logService.LogUserActivityAdmin("[Administrator] Changed Username from " + user.UserName + " to " + model.UserName, GetClientIp());
+            //    user.UserName = model.UserName;
+            //}
 
-                                        //// Check if full name is different and log it
-                                        //if (user.FullName != model.FullName)
-                                        //{
-                                        //    await _logService.LogUserActivityAdmin("[Administrator] Changed Full Name from "+ user.FullName + " to " + model.FullName, GetClientIp());
-                                        //    user.FullName = model.FullName;
-                                        //}
+            //// Check if email is different and log it
+            //if (user.Email != model.Email)
+            //{
+            //    await _logService.LogUserActivityAdmin($"[Administrator] Changed User {model.Email} Email Address from " + user.Email + " to " + model.Email, GetClientIp());
+            //    user.Email = model.Email;
+            //}
 
+            //// Check if full name is different and log it
+            //if (user.FullName != model.FullName)
+            //{
+            //    await _logService.LogUserActivityAdmin("[Administrator] Changed Full Name from "+ user.FullName + " to " + model.FullName, GetClientIp());
+            //    user.FullName = model.FullName;
+
+            user.UserName = model.UserName;
+            user.Email = model.Email;
+            user.FullName = model.FullName;
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
             {
@@ -254,6 +257,8 @@ namespace OrderMgmtRevision.Controllers
                 return RedirectToAction("Index", "UserManagement");
             }
 
+
+            System.Diagnostics.Debug.WriteLine("End user result : " + user.UserName);
             TempData["SuccessMessage"] = "Successfully edited user.";
 
             return RedirectToAction("Index", "UserManagement");
