@@ -26,7 +26,7 @@
     <div class="summary-container">
         @foreach (var item in summaryData)
         {
-            <div class="summary-item">
+            <div class="summary-item card shadow-sm">
                 <div class="item-title">
                     @Localizer[item.Title]
                 </div>
@@ -46,16 +46,30 @@
             </div>
         }
 
-        <div class="row">
-            <div class="col" style="width: 40vw; height: 40vh;">
-                <h2>@Localizer["Products Sold Over Time"]</h2>
-                <canvas id="lineChart"></canvas>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0 w-300">
+                    <div class="card-body">
+                        <h5 class="card-title">@Localizer["Products Sold Over Time"]</h5>
+                        <div style="height: 300px; position: relative;">
+                            <canvas id="lineChart"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col" style="width: 40vw; height: 40vh;">
-                <h2>@Localizer["Top Shippers"]</h2>
-                <canvas id="pieChart"></canvas>
+
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0 w-300">
+                    <div class="card-body">
+                        <h5 class="card-title">@Localizer["Top Shippers"]</h5>
+                        <div style="height: 300px; position: relative;">
+                            <canvas id="pieChart"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>

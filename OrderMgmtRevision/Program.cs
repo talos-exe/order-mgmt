@@ -16,10 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Determine environment
 var environment = builder.Environment.EnvironmentName;
 
-// Get FedEx Credentials From Environment Variable
-var fedexConnectionString = Environment.GetEnvironmentVariable("FEDEX_CONNECTION_STRING") ??
-    builder.Configuration["FedEx:ConnectionString"]; // fallback to appsettings.json
-
 // Get connection string from environment variable (Azure or local)
 var connectionString = Environment.GetEnvironmentVariable("OrderMgmtApp_ConnectionString") ??
                         builder.Configuration.GetConnectionString("DefaultConnection");
@@ -27,8 +23,22 @@ var connectionString = Environment.GetEnvironmentVariable("OrderMgmtApp_Connecti
 var shippoApiKey = Environment.GetEnvironmentVariable("SHIPPO_API_KEY") ??
     builder.Configuration["Shippo:ApiKey"];
 
-var stripeSecretKey = Environment.GetEnvironmentVariable("STRIPE_SECRET_KEY") ??
-    builder.Configuration["Stripe:SecretKey"];
+var stripeConnectionString = Environment.GetEnvironmentVariable("STRIPE_CONNECTION_STRING") ??
+    builder.Configuration["Stripe:ConnectionString"];
+
+var stripeConfig = stripeConnectionString?
+    .Split(';', StringSplitOptions.RemoveEmptyEntries)
+    .Select(part => part.Split('=', 2))
+    .ToDictionary(split => split[0].Trim(), split => split.Length > 1 ? split[1].Trim() : "");
+
+var emailSettingsConnectionString = Environment.GetEnvironmentVariable("EMAILSETTINGS_CONNECTION_STRING") ??
+                                     builder.Configuration["EmailSettings:ConnectionString"];
+
+var emailSettings = emailSettingsConnectionString?
+    .Split(';', StringSplitOptions.RemoveEmptyEntries)
+    .Select(part => part.Split('=', 2))
+    .ToDictionary(split => split[0].Trim(), split => split.Length > 1 ? split[1].Trim() : "");
+
 
 // Register AppDbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -36,28 +46,22 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
-// Parse FedEx connection string
-var fedexConfig = fedexConnectionString?
-    .Split(';', StringSplitOptions.RemoveEmptyEntries)
-    .Select(part => part.Split('=', 2))
-    .ToDictionary(split => split[0].Trim(), split => split.Length > 1 ? split[1].Trim() : "");
-
-// Bind to IConfiguration
-builder.Configuration["FedEx:ApiKey"] = fedexConfig?.GetValueOrDefault("ApiKey", "") ?? "";
-builder.Configuration["FedEx:ApiSecret"] = fedexConfig?.GetValueOrDefault("ApiSecret", "") ?? "";
-builder.Configuration["FedEx:AccountNumber"] = fedexConfig?.GetValueOrDefault("AccountNumber", "") ?? "";
-builder.Configuration["FedEx:LtlShipperAccountNumber"] = fedexConfig?.GetValueOrDefault("LtlShipperAccountNumber", "") ?? "";
-builder.Configuration["FedEx:BaseUrl"] = fedexConfig?.GetValueOrDefault("BaseUrl", "") ?? "";
-
 // Bind Shippo to IConfiguration
 builder.Configuration["Shippo:ApiKey"] = shippoApiKey ?? "";
 
-builder.Configuration["Stripe:SecretKey"] = stripeSecretKey ?? "";
+builder.Configuration["Stripe:PublishableKey"] = stripeConfig?.GetValueOrDefault("PublishableKey", "") ?? "";
+builder.Configuration["Stripe:SecretKey"] = stripeConfig?.GetValueOrDefault("SecretKey", "") ?? "";
+
+// Set into IConfiguration for DI
+builder.Configuration["EmailSettings:Sender"] = emailSettings?.GetValueOrDefault("Sender", "") ?? "";
+builder.Configuration["EmailSettings:Password"] = emailSettings?.GetValueOrDefault("Password", "") ?? "";
+builder.Configuration["EmailSettings:SmtpServer"] = emailSettings?.GetValueOrDefault("SmtpServer", "") ?? "";
+builder.Configuration["EmailSettings:Port"] = emailSettings?.GetValueOrDefault("Port", "587") ?? "587";
 
 // Register Identity services
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
-    options.SignIn.RequireConfirmedAccount = false;
+    options.SignIn.RequireConfirmedAccount = true;
     options.Password.RequireDigit = true;
     options.Password.RequiredLength = 8;
     options.Password.RequireLowercase = true;
@@ -111,10 +115,12 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 
 builder.Services.AddRazorPages();
 builder.Services.AddTransient<DataSeeder>();
+builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddSingleton<FedExService>();
 builder.Services.AddHttpClient<ShippoService>();
 builder.Services.AddScoped<ILogService, LogService>();
 builder.Services.AddHttpClient<StripeService>();
+builder.Services.AddSession();
 
 var app = builder.Build();
 
@@ -141,6 +147,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseStaticFiles();
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 

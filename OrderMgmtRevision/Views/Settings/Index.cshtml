@@ -1,4 +1,84 @@
-﻿@{
-    ViewBag.Title = "Settings";
+﻿@model OrderMgmtRevision.Models.UserViewModel
+@{
+    ViewData["Title"] = "My Account";
 }
-<h1>Settings</h1>
+
+<div class="container mt-5">
+    <h2 class="mb-4">My Account</h2>
+
+    <div class="row g-4">
+        <!-- Profile Info -->
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body text-center">
+                    <i class="bi bi-person-circle fs-1 text-primary"></i>
+                    <h4 class="mt-2">@Model.UserName</h4>
+                    <p class="text-muted">@Model.Email</p>
+                    <a href="@Url.Action("EditProfile", "Account")" class="btn btn-outline-primary btn-sm mt-2">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="col-md-8">
+            <div class="row g-3">
+                <div class="col-sm-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-box-seam fs-3 text-info"></i>
+                            <h5 class="mt-2">Products Added</h5>
+                            <p class="fs-4 fw-bold">ProductCount</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-truck fs-3 text-success"></i>
+                            <h5 class="mt-2">Shipments Made</h5>
+                            <p class="fs-4 fw-bold">ShipmentsCount</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-wallet2 fs-3 text-warning"></i>
+                            <h5 class="mt-2">Account Invoice:</h5>
+
+                            @if (Model.AccountBalance == null || Model.AccountBalance == 0)
+                            {
+                                <p class="fs-4 fw-bold text-success">All Paid Up</p>
+                                <!-- Disabled button if balance is 0 or null -->
+                                <a href="javascript:void(0);" class="btn btn-success btn-lg w-100 shadow-sm disabled">
+                                    <i class="bi bi-credit-card me-2"></i> Pay with Stripe
+                                </a>
+                            }
+                            else
+                            {
+                                <p class="fs-4 fw-bold text-success">$@Model.AccountBalance</p>
+                                <!-- Active button if there's a balance -->
+                                <a href="@Url.Action("DirectCheckout", "Invoice", new { amount = Model.AccountBalance })"
+                                   class="btn btn-success btn-lg w-100 shadow-sm">
+                                    <i class="bi bi-credit-card me-2"></i> Pay with Stripe
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6">
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-clock-history fs-3 text-secondary"></i>
+                            <h5 class="mt-2">Last Login</h5>
+                            <p class="fs-6">@Model.User.LastLogin?.ToString("g")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

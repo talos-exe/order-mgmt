@@ -14,8 +14,7 @@ namespace OrderMgmtRevision.Services
         public StripeService(HttpClient httpClient, IConfiguration configuration)
         {
              _httpClient = httpClient;
-            var stripeSec = configuration.GetSection("Stripe");
-            _secretKey = stripeSec["SecretKey"];
+            var _secretKey = configuration["Stripe:SecretKey"];
             StripeConfiguration.ApiKey = _secretKey;
         }
 
@@ -56,36 +55,63 @@ namespace OrderMgmtRevision.Services
             }
         }
 
-        public async Task<string> CreateCardCheckoutSessionAsync(string customerId, long amount, string currency = "usd")
+        public async Task<string> CreateDirectCheckoutSessionAsync(string email, long amount, string successUrl, string cancelUrl, string currency = "usd")
         {
             try
             {
+                // Create or retrieve a customer first
+                var customerService = new CustomerService();
+                var customers = await customerService.ListAsync(new CustomerListOptions
+                {
+                    Email = email,
+                    Limit = 1
+                });
+
+                string customerId;
+                if (customers.Data.Count > 0)
+                {
+                    // Use existing customer
+                    customerId = customers.Data[0].Id;
+                }
+                else
+                {
+                    // Create new customer
+                    var customer = await customerService.CreateAsync(new CustomerCreateOptions
+                    {
+                        Email = email
+                    });
+                    customerId = customer.Id;
+                }
+
+                // Create checkout session with the customer ID
                 var sessionService = new SessionService();
                 var sessionOptions = new SessionCreateOptions
                 {
                     Customer = customerId,
                     PaymentMethodTypes = new List<string> { "card" },
                     LineItems = new List<SessionLineItemOptions>
+            {
+                new SessionLineItemOptions
+                {
+                    PriceData = new SessionLineItemPriceDataOptions
                     {
-                        new SessionLineItemOptions
+                        UnitAmount = amount, // in cents
+                        Currency = currency,
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
                         {
-                            PriceData = new SessionLineItemPriceDataOptions
-                            {
-                                UnitAmount = amount, // in cents
-                                Currency = currency,
-                                ProductData = new SessionLineItemPriceDataProductDataOptions
-                                {
-                                    Name = "Payment"
-                                }
-                            },
-                            Quantity = 1
+                            Name = "Account Balance Payment"
                         }
                     },
-                    Mode = "payment"
+                    Quantity = 1
+                }
+            },
+                    Mode = "payment",
+                    SuccessUrl = successUrl,
+                    CancelUrl = cancelUrl
                 };
 
                 var session = await sessionService.CreateAsync(sessionOptions);
-                return session.Id;
+                return session.Url;
             }
             catch (StripeException ex)
             {

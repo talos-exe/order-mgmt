@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Localization;
 using System.Text.Json;
 
+[Authorize]
 public class DashboardController : Controller
 {
     private readonly IStringLocalizer<DashboardController> _localizer;
@@ -12,7 +13,6 @@ public class DashboardController : Controller
         _localizer = localizer;
     }
 
-    [Authorize]
     public IActionResult Index()
     {
         var summaryData = new List<SummaryItem>

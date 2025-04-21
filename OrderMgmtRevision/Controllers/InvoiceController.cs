@@ -1,17 +1,22 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.General;
 using OrderMgmtRevision.Models;
 using OrderMgmtRevision.Services;
 
 namespace OrderMgmtRevision.Controllers
 {
+    [Authorize]
     public class InvoiceController : Controller
     {
         private readonly StripeService _stripeService;
+        private readonly UserManager<User> _userManager;
 
-        public InvoiceController(StripeService stripeService)
+        public InvoiceController(StripeService stripeService, UserManager<User> userManager)
         {
             _stripeService = stripeService;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -23,37 +28,68 @@ namespace OrderMgmtRevision.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SavePaymentMethod([FromBody] SavePaymentMethodRequest request)
-        {
-            var (success, error, customerId) = await _stripeService.SavePaymentMethodAsync(request.PaymentMethodId, request.Email);
-            return Json(new { success, error, customerId });
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateCheckoutSession([FromBody] CreateCheckoutRequest request)
+        [HttpGet]
+        [Authorize] // Ensure the user is logged in
+        public async Task<IActionResult> DirectCheckout(long amount)
         {
             try
             {
-                string sessionId;
-                if (request.PaymentType == "card")
+                // Get the current user's email
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
                 {
-                    sessionId = await _stripeService.CreateCardCheckoutSessionAsync(request.CustomerId, request.Amount);
+                    return RedirectToAction("Login", "Account");
                 }
-                else if (request.PaymentType == "ach")
-                {
-                    sessionId = await _stripeService.CreateACHCheckoutSessionAsync(request.CustomerId, request.Amount);
-                }
-                else
-                {
-                    return Json(new { success = false, error = "Invalid payment type" });
-                }
-                return Json(new { success = true, sessionId });
+
+                string userEmail = user.Email;
+
+                string baseSuccessUrl = Url.Action("PaymentSuccess", "Invoice", null, Request.Scheme);
+                string baseCancelUrl = Url.Action("PaymentCancel", "Invoice", null, Request.Scheme);
+
+                string successUrl = $"{baseSuccessUrl}?sessionId={{CHECKOUT_SESSION_ID}}";
+                string cancelUrl = $"{baseCancelUrl}?sessionId={{CHECKOUT_SESSION_ID}}";
+
+                HttpContext.Session.SetString("AccessGranted", "true");
+
+                string checkoutUrl = await _stripeService.CreateDirectCheckoutSessionAsync(userEmail, amount, successUrl, cancelUrl);
+                return Redirect(checkoutUrl);
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, error = ex.Message });
+                TempData["Error"] = $"Error creating checkout session: {ex.Message}";
+                return RedirectToAction("Index");
             }
+        }
+
+        public IActionResult PaymentSuccess(string sessionId)
+        {
+            // Check if the session is valid
+            var access = HttpContext.Session.GetString("AccessGranted");
+            if (access != "true")
+            {
+                return RedirectToAction("Index", "Dashboard"); // Use only the controller name without the prefix
+            }
+
+            // Optional: Remove session after accessing the page
+            HttpContext.Session.Remove("AccessGranted");
+
+            ViewBag.SessionId = sessionId;
+            return View("PaymentSuccess");
+        }
+
+        public IActionResult PaymentCancel(string sessionId)
+        {
+            // Check if the session is valid
+            var access = HttpContext.Session.GetString("AccessGranted");
+            if (access != "true")
+            {
+                return RedirectToAction("Index", "Dashboard"); // Correct relative redirect
+            }
+
+            // Optional: Remove session after accessing the page
+            HttpContext.Session.Remove("AccessGranted");
+
+            return View("PaymentCancel");
         }
     }
 }

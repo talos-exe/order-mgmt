@@ -99,6 +99,8 @@ namespace OrderMgmtRevision.Controllers
                     FullName = user.FullName,
                     LastLoginDate = user.LastLogin,
                     LastLoginIP = user.LastLoginIP,
+                    IsActive = user.IsActive,
+                    IsConfirmed = user.EmailConfirmed,
                     Logs = user.Logs ?? new List<UserLog>()
                 });
             }
@@ -249,6 +251,9 @@ namespace OrderMgmtRevision.Controllers
             user.UserName = model.UserName;
             user.Email = model.Email;
             user.FullName = model.FullName;
+            user.EmailConfirmed = model.IsConfirmed;
+            user.IsActive = model.IsActive;
+
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
             {

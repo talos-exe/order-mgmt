@@ -165,7 +165,18 @@
     </div>
 </div>
 
+<div id="loading-overlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background-color:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+    <div class="spinner-border text-light" role="status" style="width: 4rem; height: 4rem;">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
 <script>
+    function showLoader(show) {
+        const loader = document.getElementById('loading-overlay');
+        if (loader) loader.style.display = show ? 'flex' : 'none';
+    }
+
     function updateProductFields() {
         const prod = $('#productSelect').find(':selected');
         if (prod.val()) {
@@ -200,6 +211,8 @@
             return;
         }
 
+        showLoader(true);
+
         // Serialize form data
         const formData = $('#createShippingRequestForm').serialize();
 
@@ -228,9 +241,11 @@
                         `);
                     });
                 $('#rateSelectionSection').show();
+                showLoader(false);
             },
             error: function () {
                 alert('Error retrieving shipping rates.');
+                showLoader(false);
             }
         });
     });
@@ -253,7 +268,6 @@
                 } else {
                     $('#selectedRateJson').val(JSON.stringify(selectedRate));
                 }
-
                 $('#createShippingRequestForm').submit();
             });
 </script>

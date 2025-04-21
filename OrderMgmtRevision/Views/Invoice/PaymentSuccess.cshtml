@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Payment Success";
+}
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="text-center">
+        <div class="mb-3">
+            <i class="bi bi-check-circle text-success" style="font-size: 4rem;"></i>
+        </div>
+
+        <h1>Payment Successful</h1>
+        <p>Your payment was successful!</p>
+        <p>Session ID: @ViewBag.SessionId</p>
+        <p>Thank you for your payment. Your invoice will be processed shortly.</p>
+
+        <a href="@Url.Action("Index", "Dashboard")" class="btn btn-primary mt-3">Return to Dashboard</a>
+    </div>
+</div>

@@ -1,5 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.Identity.Client;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
+using System.Diagnostics.Eventing.Reader;
 
 namespace OrderMgmtRevision.Models
 {
@@ -23,11 +25,16 @@ namespace OrderMgmtRevision.Models
         [Display(Name = "Password")]
         public string? Password { get; set; }
 
-
         public DateTime? LastLoginDate { get; set; }
         public string? LastLoginIP { get; set; }
         //[Display(Name = "Role")]
         //public string Roles { get; set; }
+
+        public bool IsConfirmed { get; set; }
+
+        public bool IsActive {  get; set; }
+
+        public decimal? AccountBalance { get; set; }
 
         public List<UserLog>? Logs {  get; set; } = new List<UserLog>();
         public User? User { get; set; }

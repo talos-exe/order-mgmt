@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Payment Cancelled";
+}
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="text-center">
+        <div class="mb-3">
+            <i class="bi bi-x-circle text-danger" style="font-size: 4rem;"></i>
+        </div>
+        <h1>Payment Cancelled</h1>
+        <p>Your payment was cancelled.</p>
+        <p>We couldn't process your payment. Please try again or contact support if the issue persists.</p>
+
+        <a href="@Url.Action("Index", "Invoice")" class="btn btn-danger mt-3">Try Again</a>
+        <a href="@Url.Action("Index", "Dashboard")" class="btn btn-secondary mt-3">Return to Dashboard</a>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Registration Pending";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - OrderMgmtRevision</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #07183D;
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex flex-column min-vh-100 justify-content-center align-items-center py-4 px-4 overflow-auto">
+        <div class="text-white mb-3 fs-1 fw-bold">领星 OMS</div>
+        <div class="card login-card p-4 shadow-sm w-100 text-center" style="max-width: 450px;">
+            <h2 class="text-dark mb-3">Registration Received</h2>
+            <p class="text-muted">
+                Thank you for registering! Your account is currently pending approval.
+                <br />
+                An administrator will review your registration shortly.
+            </p>
+            <a href="@Url.Action("Login", "Account")" class="btn btn-primary mt-3 w-100">
+                Back to Login
+            </a>
+        </div>
+    </div>
+</body>
+</html>
