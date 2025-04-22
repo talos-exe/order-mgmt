@@ -15,6 +15,10 @@
             @* <p><strong>Account Created: </strong>@(Model.DateCreated.HasValue ? Model.DateCreated.Value.ToString("yyyy-MM-dd HH:mm:ss") : "N/A")</p> *@
             <p><strong>Last Login: </strong>@(Model.LastLoginDate.HasValue ? Model.LastLoginDate.Value.ToString("yyyy-MM-dd HH:mm:ss") : "N/A")</p>
             <p><strong>Last Login IP: </strong>@(Model.LastLoginIP ?? "N/A")</p>
+            <p><strong>Date Created: </strong>@(Model.DateCreated.HasValue ? Model.DateCreated.Value.ToString("yyyy-MM-dd HH:mm:ss") : "N/A")</p>
+            <p><strong>Account Balance: </strong>$@Model.AccountBalance</p>
+            <p><strong>Confirmed User: </strong>@Model.IsConfirmed <strong>| Active User: </strong>@Model.IsActive</p>
+            <p><strong>Has Administrator Privileges: @Model.IsAdmin</strong></p>
         </div>
     </div>
 

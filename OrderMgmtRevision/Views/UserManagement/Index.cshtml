@@ -69,9 +69,10 @@
                             <th>@Html.ActionLink(Localizer["Username"].Value, "Index", new { sortOrder = ViewBag.UserNameSortParm, currentFilter = ViewBag.CurrentFilter })</th>
                             <th>@Html.ActionLink(Localizer["Email"].Value, "Index", new { sortOrder = ViewBag.EmailSortParm, currentFilter = ViewBag.CurrentFilter })</th>
                             <th>@Html.ActionLink(Localizer["Full Name"].Value, "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th>@Html.ActionLink(Localizer["ID"].Value, "Index", new { sortOrder = ViewBag.IdSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th>Role</th>
                             <th>Confirmed User?</th>
                             <th>Active User?</th>
-                            <th>@Html.ActionLink(Localizer["ID"].Value, "Index", new { sortOrder = ViewBag.IdSortParm, currentFilter = ViewBag.CurrentFilter })</th>
                             <th>More</th>
                         </tr>
                     </thead>
@@ -85,27 +86,31 @@
                                 <td>@Html.DisplayFor(modelItem => user.UserName)</td>
                                 <td>@Html.DisplayFor(modelItem => user.Email)</td>
                                 <td>@Html.DisplayFor(modelItem => user.FullName)</td>
-                                <td>
-                                        @if (user.IsConfirmed)
-                                        {
-                                        <span class="badge bg-success">Yes</span>
-                                        }
-                                        else
-                                        {
-                                        <span class="badge bg-danger">No</span>
-                                        }
-                                </td>
-                                    <td>
-                                        @if (user.IsActive)
-                                        {
-                                        <span class="badge bg-success">Yes</span>
-                                        }
-                                        else
-                                        {
-                                        <span class="badge bg-danger">No</span>
-                                        }
-                                </td>
                                 <td>@Html.DisplayFor(modelItem => user.Id)</td>
+                                <td>@if (user.IsAdmin){
+                                    <span>Admin</span>
+                                } else { <span>User</span>}
+                                </td>
+                                <td>
+                                    @if (user.IsConfirmed)
+                                    {
+                                        <span class="badge bg-success">YES</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">NO</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (user.IsActive)
+                                    {
+                                        <span class="badge bg-success">YES</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">NO</span>
+                                    }
+                                </td>
                                 <td>
                                     <a class="btn-sm btn-primary" style="cursor: pointer" onclick="openUserDetailsTab('@user.Id', '@user.UserName')">@Localizer["View Details"]</a>
                                 </td>

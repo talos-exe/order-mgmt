@@ -109,7 +109,8 @@ namespace OrderMgmtRevision.Controllers
                 LastPasswordChange = DateTime.UtcNow, 
                 IsActive = false, 
                 AccountBalance = 0, 
-                EmailConfirmed = false 
+                EmailConfirmed = false,
+                IsAdmin = false
             };
             var result = await _userManager.CreateAsync(user, model.Password);
 

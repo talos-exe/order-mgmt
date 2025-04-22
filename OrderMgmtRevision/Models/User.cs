@@ -22,7 +22,9 @@ public class User : IdentityUser
     public string? LastLoginIP {  get; set; }
 
     [Range(0, double.MaxValue, ErrorMessage = "Balance must be a positive value.")]
-    public decimal? AccountBalance {  get; set; }
+    public decimal? AccountBalance { get; set; } = 0;
+
+    public bool IsAdmin {  get; set; }
 
     public List<UserLog>? Logs { get; set; } = new List<UserLog>();
 

@@ -9,15 +9,16 @@ namespace OrderMgmtRevision.Models
     {
         public string? Id { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Username is required.")]
         [Display(Name = "Username")]
         public string UserName { get; set; }
 
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid email format")]
         [Display(Name = "Email")]
         public string Email { get; set; }
 
+        [Required(ErrorMessage = "Full Name is required")]
         [Display(Name = "Full Name")]
         public string FullName { get; set; }
 
@@ -34,7 +35,12 @@ namespace OrderMgmtRevision.Models
 
         public bool IsActive {  get; set; }
 
-        public decimal? AccountBalance { get; set; }
+        public decimal? AccountBalance { get; set; } = 0;
+
+        public bool IsAdmin {  get; set; }
+
+        [DataType(DataType.DateTime)]
+        public DateTime? DateCreated { get; set; } = DateTime.UtcNow;
 
         public List<UserLog>? Logs {  get; set; } = new List<UserLog>();
         public User? User { get; set; }
