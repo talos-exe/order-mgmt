@@ -43,7 +43,9 @@ namespace OrderMgmtRevision.Data
                     DateCreated = DateTime.UtcNow,
                     LastLogin = DateTime.UtcNow,
                     LastLoginIP = "127.0.0.1",
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    IsActive = true,
+                    IsAdmin = true
                 };
 
                 var result = await _userManager.CreateAsync(adminUser, "Admin@123");
@@ -65,7 +67,8 @@ namespace OrderMgmtRevision.Data
                     DateCreated = DateTime.UtcNow,
                     LastLogin = DateTime.UtcNow,
                     LastLoginIP = "127.0.0.1",
-                    EmailConfirmed = true
+                    EmailConfirmed = true,
+                    IsActive = true
                 };
 
                 var result = await _userManager.CreateAsync(guestAccount, "User@123");
