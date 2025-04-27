@@ -1,0 +1,9 @@
+﻿<h2>Verify Two-Factor Authentication</h2>
+
+<form asp-action="Verify2FA" method="post">
+    <div class="form-group">
+        <label for="code">Enter the code from your authenticator app</label>
+        <input type="text" id="code" name="code" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Verify Code</button>
+</form>

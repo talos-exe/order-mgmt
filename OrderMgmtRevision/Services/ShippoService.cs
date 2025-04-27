@@ -26,6 +26,23 @@ namespace OrderMgmtRevision.Services
                 new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
+        public class AddressValidationResult
+        {
+            public bool IsValid { get; set; }
+            public List<AddressSuggestion> Suggestions { get; set; } = new List<AddressSuggestion>();
+        }
+
+        public class AddressSuggestion
+        {
+            public string Street1 { get; set; }
+            public string Street2 { get; set; }
+            public string City { get; set; }
+            public string State { get; set; }
+            public string Zip { get; set; }
+            public string Country { get; set; }
+        }
+
+
         public async Task<List<ShippingRate>> GetShippingRatesAsync(ShippingRequest request)
         {
             var shippoRequest = new
@@ -194,5 +211,81 @@ namespace OrderMgmtRevision.Services
             }
         }
 
+        public async Task<AddressValidationResult> ValidateAddressAsync(Dictionary<string, object> addressData)
+        {
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("Authorization", $"ShippoToken {_apiKey}");
+
+            addressData["validate"] = true;
+            addressData["validation_results"] = new Dictionary<string, object>
+            {
+                ["allow_distance_threshold"] = true,  // Allow addresses within a reasonable distance
+                ["distance_threshold"] = 10,          // Distance in miles
+                ["return_alternatives"] = true,       // Ensure we get alternative addresses
+                ["return_fuzzy_alternatives"] = true  // Include less exact matches
+            };
+
+            var content = new StringContent(
+                JsonConvert.SerializeObject(addressData),
+                System.Text.Encoding.UTF8,
+                "application/json");
+
+            System.Diagnostics.Debug.WriteLine($"Sending address validation request: {JsonConvert.SerializeObject(addressData)}");
+
+            var response = await client.PostAsync("https://api.goshippo.com/addresses/", content);
+            var responseContent = await response.Content.ReadAsStringAsync();
+
+            System.Diagnostics.Debug.WriteLine($"Shippo address validation response: {responseContent}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Shippo API Error: {responseContent}");
+            }
+
+            dynamic addressResponse = JsonConvert.DeserializeObject(responseContent);
+
+            var result = new AddressValidationResult
+            {
+                IsValid = addressResponse.validation_results?.is_valid ?? false
+            };
+
+            // Add suggestions if available
+            if (addressResponse.validation_results?.address_alternatives != null)
+            {
+                foreach (var alt in addressResponse.validation_results.address_alternatives)
+                {
+                    result.Suggestions.Add(new AddressSuggestion
+                    {
+                        Street1 = alt.street1 ?? "",
+                        Street2 = alt.street2 ?? "",
+                        City = alt.city ?? "",
+                        State = alt.state ?? "",
+                        Zip = alt.zip ?? "",
+                        Country = alt.country ?? "US"
+                    });
+                }
+            }
+
+            // If the address is valid but no alternatives were provided,
+            // add the validated address as a suggestion
+            if (result.Suggestions.Count == 0)
+            {
+                // Add the original validated address as a suggestion
+                result.Suggestions.Add(new AddressSuggestion
+                {
+                    Street1 = addressResponse.street1 ?? "",
+                    Street2 = addressResponse.street2 ?? "",
+                    City = addressResponse.city ?? "",
+                    State = addressResponse.state ?? "",
+                    Zip = addressResponse.zip ?? "",
+                    Country = addressResponse.country ?? "US"
+                });
+            }
+
+            return result;
+        }
+
     }
+
+
 }

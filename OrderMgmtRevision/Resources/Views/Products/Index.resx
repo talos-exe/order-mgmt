@@ -132,6 +132,12 @@
   <data name="Create" xml:space="preserve">
     <value>Create</value>
   </data>
+  <data name="Created At" xml:space="preserve">
+    <value>Created At</value>
+  </data>
+  <data name="Created By" xml:space="preserve">
+    <value>Created By</value>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>

@@ -10,7 +10,7 @@ namespace OrderMgmtRevision.Models
     {
         [Key]
         [BindNever]
-        public string ProductID { get; set; } // Product ID
+        public string? ProductID { get; set; } // Product ID
 
         [Required (ErrorMessage = "Product name/title is required.")]
         [MaxLength(255)]

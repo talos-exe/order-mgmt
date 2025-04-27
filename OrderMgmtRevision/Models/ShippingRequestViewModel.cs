@@ -13,5 +13,7 @@ namespace OrderMgmtRevision.Models
 
         [BindNever]
         public List<Warehouse> Warehouses { get; set; }
+
+        public List<SelectListItem> StateList { get; set; } = new List<SelectListItem>();
     }
 }

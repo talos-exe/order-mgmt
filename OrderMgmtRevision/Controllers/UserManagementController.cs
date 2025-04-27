@@ -26,13 +26,14 @@ namespace OrderMgmtRevision.Controllers
         }
 
         // When clicked on UserManagement Page, Index loads
-        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page)
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page, int? logPage, string activeTab = "userList")
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.EmailSortParm = sortOrder == "Email" ? "email_desc" : "Email";
             ViewBag.UserNameSortParm = sortOrder == "Username" ? "username_desc" : "Username";
             ViewBag.IdSortParm = sortOrder == "ID" ? "id_desc" : "ID";
+            ViewBag.ActiveTab = activeTab;
 
             if (searchString != null)
             {
@@ -52,7 +53,8 @@ namespace OrderMgmtRevision.Controllers
                 usersQuery = usersQuery.Where(u =>
                     u.UserName.Contains(searchString) ||
                     u.Email.Contains(searchString) ||
-                    u.FullName.Contains(searchString));
+                    u.FullName.Contains(searchString) ||
+                    u.Id.Contains(searchString));
             }
 
             switch (sortOrder)
@@ -98,12 +100,23 @@ namespace OrderMgmtRevision.Controllers
                     FullName = user.FullName,
                     LastLoginDate = user.LastLogin,
                     LastLoginIP = user.LastLoginIP,
+                    IsActive = user.IsActive,
+                    IsConfirmed = user.EmailConfirmed,
+                    IsAdmin = user.IsAdmin,
                     Logs = user.Logs ?? new List<UserLog>()
                 });
             }
 
-            int pageSize = 15;
+            var allLogs = userViewModels.SelectMany(u => u.Logs)
+                .OrderByDescending(l => l.Timestamp)
+                .ToList();
+
+            int pageSize = 20;
+            int logPageSize = 20;
             int pageNumber = (page ?? 1);
+            int logPageNumber = (logPage ?? 1);
+
+            ViewBag.LogsPagedList = allLogs.ToPagedList(logPageNumber, logPageSize);
 
             return View(userViewModels.ToPagedList(pageNumber, pageSize));
         }
@@ -121,7 +134,32 @@ namespace OrderMgmtRevision.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["Error"] = "Invalid model state.";
+                var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .Select(x => new {
+                    Property = x.Key,
+                    ErrorMessages = x.Value.Errors.Select(e => e.ErrorMessage).ToList()
+                })
+                .ToList();
+
+                // Create a list to store formatted error messages
+                var errorMessages = new List<string>();
+
+                // Format each error message
+                foreach (var error in errors)
+                {
+                    foreach (var message in error.ErrorMessages)
+                    {
+                        // Add property name if available
+                        if (!string.IsNullOrEmpty(error.Property))
+                            errorMessages.Add($"{error.Property}: {message}");
+                        else
+                            errorMessages.Add(message);
+                    }
+                }
+
+                // Store the error messages in TempData
+                TempData["Errors"] = errorMessages;
 
                 await _logService.LogUserActivityAdmin("[Administrator] Failed user creation due to invalid model state", GetClientIp());
 
@@ -136,7 +174,8 @@ namespace OrderMgmtRevision.Controllers
                 DateCreated = DateTime.UtcNow,
                 LastLoginIP = "::",
                 CreatedBy = User.Identity.Name,
-                LastPasswordChange = DateTime.UtcNow
+                LastPasswordChange = DateTime.UtcNow,
+                IsAdmin = model.IsAdmin
             };
 
             //var existingUser = await _userManager.FindByNameAsync(model.UserName);
@@ -144,6 +183,7 @@ namespace OrderMgmtRevision.Controllers
             //{
             //    ModelState.AddModelError("UserName", "Username is already taken.");
             //    await _logService.LogUserActivityAdmin("[Administrator] Username conflict: " + model.UserName + " already taken.", GetClientIp());
+            //    return RedirectToAction("Index");
             //}
 
             //var existingUserEmail = await _userManager.FindByEmailAsync(model.Email);
@@ -151,6 +191,7 @@ namespace OrderMgmtRevision.Controllers
             //{
             //    ModelState.AddModelError("Email", "Email is already taken.");
             //    await _logService.LogUserActivityAdmin("[Administrator] Email conflict: " + model.Email + " already taken.", GetClientIp());
+            //    return RedirectToAction("Index");
             //}
 
             //if (!ModelState.IsValid)
@@ -162,9 +203,10 @@ namespace OrderMgmtRevision.Controllers
 
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(user, "User");
-                await _logService.LogUserActivityAdmin("[Administrator] Created User " + user.UserName, GetClientIp());
-                TempData["SuccessMessage"] = "Successfully created user.";
+                string roleName = model.IsAdmin ? "Admin" : "User";
+                await _userManager.AddToRoleAsync(user, roleName);
+                await _logService.LogUserActivityAdmin("[Administrator] Created " + roleName + " " + user.UserName, GetClientIp());
+                TempData["SuccessMessage"] = $"Successfully created {roleName.ToLower()}.";
 
                 return RedirectToAction("Index", "UserManagement");
             }
@@ -186,7 +228,32 @@ namespace OrderMgmtRevision.Controllers
         {
             if (!ModelState.IsValid)
             {
-                TempData["Error"] = "Invalid model state.";
+                var errors = ModelState
+                .Where(x => x.Value.Errors.Count > 0)
+                .Select(x => new {
+                    Property = x.Key,
+                    ErrorMessages = x.Value.Errors.Select(e => e.ErrorMessage).ToList()
+                })
+                .ToList();
+
+                // Create a list to store formatted error messages
+                var errorMessages = new List<string>();
+
+                // Format each error message
+                foreach (var error in errors)
+                {
+                    foreach (var message in error.ErrorMessages)
+                    {
+                        // Add property name if available
+                        if (!string.IsNullOrEmpty(error.Property))
+                            errorMessages.Add($"{error.Property}: {message}");
+                        else
+                            errorMessages.Add(message);
+                    }
+                }
+
+                // Store the error messages in TempData
+                TempData["Errors"] = errorMessages;
                 await _logService.LogUserActivityAdmin("[Administrator] User edit failed due to invalid model state. UserId: " + id, GetClientIp());
                 return RedirectToAction("Index");
             }
@@ -214,29 +281,34 @@ namespace OrderMgmtRevision.Controllers
                 await _logService.LogUserActivityAdmin("[Administrator] Email conflict while updating. Email " + existingUserEmail.Email + " is already taken by user " + model.UserName, GetClientIp());
                 return RedirectToAction("Index");
             }
-            
-                                        // Enable for specific logging. 
-                                        //
-                                        //// Check if username is different and log it
-                                        //if (user.UserName != model.UserName)
-                                        //{
-                                        //    await _logService.LogUserActivityAdmin("[Administrator] Changed Username from " + user.UserName + " to " + model.UserName, GetClientIp());
-                                        //    user.UserName = model.UserName;
-                                        //}
 
-                                        //// Check if email is different and log it
-                                        //if (user.Email != model.Email)
-                                        //{
-                                        //    await _logService.LogUserActivityAdmin($"[Administrator] Changed User {model.Email} Email Address from " + user.Email + " to " + model.Email, GetClientIp());
-                                        //    user.Email = model.Email;
-                                        //}
+            // Enable for specific logging. 
+            //
+            //// Check if username is different and log it
+            //if (user.UserName != model.UserName)
+            //{
+            //    await _logService.LogUserActivityAdmin("[Administrator] Changed Username from " + user.UserName + " to " + model.UserName, GetClientIp());
+            //    user.UserName = model.UserName;
+            //}
 
-                                        //// Check if full name is different and log it
-                                        //if (user.FullName != model.FullName)
-                                        //{
-                                        //    await _logService.LogUserActivityAdmin("[Administrator] Changed Full Name from "+ user.FullName + " to " + model.FullName, GetClientIp());
-                                        //    user.FullName = model.FullName;
-                                        //}
+            //// Check if email is different and log it
+            //if (user.Email != model.Email)
+            //{
+            //    await _logService.LogUserActivityAdmin($"[Administrator] Changed User {model.Email} Email Address from " + user.Email + " to " + model.Email, GetClientIp());
+            //    user.Email = model.Email;
+            //}
+
+            //// Check if full name is different and log it
+            //if (user.FullName != model.FullName)
+            //{
+            //    await _logService.LogUserActivityAdmin("[Administrator] Changed Full Name from "+ user.FullName + " to " + model.FullName, GetClientIp());
+            //    user.FullName = model.FullName;
+
+            user.UserName = model.UserName;
+            user.Email = model.Email;
+            user.FullName = model.FullName;
+            user.EmailConfirmed = model.IsConfirmed;
+            user.IsActive = model.IsActive;
 
             var result = await _userManager.UpdateAsync(user);
             if (result.Succeeded)
@@ -254,6 +326,8 @@ namespace OrderMgmtRevision.Controllers
                 return RedirectToAction("Index", "UserManagement");
             }
 
+
+            System.Diagnostics.Debug.WriteLine("End user result : " + user.UserName);
             TempData["SuccessMessage"] = "Successfully edited user.";
 
             return RedirectToAction("Index", "UserManagement");
@@ -323,6 +397,10 @@ namespace OrderMgmtRevision.Controllers
                     FullName = u.FullName,
                     LastLoginDate = u.LastLogin,
                     LastLoginIP = u.LastLoginIP,
+                    IsAdmin = u.IsAdmin,
+                    IsActive = u.IsActive,
+                    IsConfirmed = u.EmailConfirmed,
+                    DateCreated = u.DateCreated,
                     Logs = _dbContext.UserLogs
                     .Where(log => log.UserId == u.Id)
                     .OrderByDescending(log => log.Timestamp)

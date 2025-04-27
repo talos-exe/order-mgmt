@@ -102,12 +102,6 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label asp-for="ToStreet">Recipient Address *</label>
-                        <input asp-for="ToStreet" class="form-control" type="text" />
-                        <span asp-validation-for="ToStreet" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group mb-3">
                         <label asp-for="ToCity">Recipient City *</label>
                         <input asp-for="ToCity" class="form-control" type="text" />
                         <span asp-validation-for="ToCity" class="text-danger"></span>
@@ -115,7 +109,9 @@
 
                     <div class="form-group mb-3">
                         <label asp-for="ToState">Recipient State *</label>
-                        <input asp-for="ToState" class="form-control" type="text" />
+                        <select asp-for="ToState" class="form-control" asp-items="Model.StateList">
+                            <option value="">-- Select State --</option>
+                        </select>
                         <span asp-validation-for="ToState" class="text-danger"></span>
                     </div>
 
@@ -124,6 +120,14 @@
                         <input asp-for="ToZip" class="form-control" type="text" />
                         <span asp-validation-for="ToZip" class="text-danger"></span>
                     </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="ToStreet">Recipient Address *</label>
+                        <input asp-for="ToStreet" id="toStreetInput" class="form-control" type="text" />
+                        <div id="addressSuggestions" class="list-group mt-2" style="display:none;"></div>
+                        <span asp-validation-for="ToStreet" class="text-danger"></span>
+                    </div>
+
                     <div class="form-group mb-3">
                         <label asp-for="ToCountryCode">Recipient Country Code *</label>
                         <input asp-for="ToCountryCode" class="form-control" type="text" />
@@ -165,7 +169,18 @@
     </div>
 </div>
 
+<div id="loading-overlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background-color:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+    <div class="spinner-border text-light" role="status" style="width: 4rem; height: 4rem;">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
 <script>
+    function showLoader(show) {
+        const loader = document.getElementById('loading-overlay');
+        if (loader) loader.style.display = show ? 'flex' : 'none';
+    }
+
     function updateProductFields() {
         const prod = $('#productSelect').find(':selected');
         if (prod.val()) {
@@ -193,12 +208,98 @@
         }
     });
 
+    let typingTimer;
+    const doneTypingInterval = 500;
+
+    $('#toStreetInput').on('input', function() {
+        clearTimeout(typingTimer);
+
+        const addressInput = $(this).val();
+        if (addressInput.length > 5) {
+            typingTimer = setTimeout(function() {
+                validateAddress(addressInput);
+            }, doneTypingInterval);
+        } else {
+            $('#addressSuggestions').hide();
+        }
+    });
+
+    function validateAddress(addressInput) {
+        const city = $('#ToCity').val();
+        const state = $('#ToState').val();
+        const zip = $('#ToZip').val();
+        const country = $('#ToCountryCode').val();
+
+        showLoader(true);
+
+        $.ajax({
+            url: '@Url.Action("ValidateAddress", "Shipping")',
+            type: 'POST',
+            data: {
+                street: addressInput,
+                city: city,
+                state: state,
+                zip: zip,
+                country: country
+            },
+            success: function(result) {
+                if (result && result.suggestions && result.suggestions.length > 0) {
+                    displayAddressSuggestions(result.suggestions);
+                } else {   
+                    $('#addressSuggestions').empty().show().append('<div class="list-group-item">No address found</div>');
+                }
+                showLoader(false);
+            },
+            error: function(error) {
+                console.error('Address validation error:', error);
+                showLoader(false);
+            }
+        });
+    }
+
+    function displayAddressSuggestions(suggestions) {
+        const container = $('#addressSuggestions');
+        container.empty();
+
+        suggestions.forEach(suggestion => {
+            const formatted = suggestion.street1 +
+                (suggestion.street2 ? ', ' + suggestion.street2 : '') +
+                ', ' + suggestion.city +
+                ', ' + suggestion.state +
+                ' ' + suggestion.zip;
+
+            const item = $('<button>')
+                .addClass('list-group-item list-group-item-action')
+                .text(formatted)
+                .on('click', function(e) {
+                    e.preventDefault();
+                    // Fill in all address fields with the selected address
+                    $('#toStreetInput').val(suggestion.street1);
+                    $('#ToCity').val(suggestion.city);
+                    $('#ToState').val(suggestion.state);
+                    $('#ToZip').val(suggestion.zip);
+                    $('#ToCountryCode').val(suggestion.country);
+
+                    // Hide suggestions
+                    container.hide();
+
+                    return false;
+                });
+
+            container.append(item);
+        });
+
+        container.show();
+    }
+
     $('#nextButton').on('click', function () {
         // Validate manually
         if ($('#warehouseSelect').val() === '' || $('#productSelect').val() === '') {
             alert('Please select a warehouse and product.');
             return;
         }
+
+        showLoader(true);
 
         // Serialize form data
         const formData = $('#createShippingRequestForm').serialize();
@@ -228,9 +329,11 @@
                         `);
                     });
                 $('#rateSelectionSection').show();
+                showLoader(false);
             },
             error: function () {
                 alert('Error retrieving shipping rates.');
+                showLoader(false);
             }
         });
     });
@@ -253,7 +356,6 @@
                 } else {
                     $('#selectedRateJson').val(JSON.stringify(selectedRate));
                 }
-
                 $('#createShippingRequestForm').submit();
             });
 </script>

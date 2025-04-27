@@ -15,11 +15,9 @@ namespace OrderMgmtRevision.Data
         public DbSet<Inventory> InventoryAll { get; set; }
         public DbSet<Shipment> Shipments { get; set; }
         public DbSet<UserLog> UserLogs { get; set; }
-<<<<<<< Updated upstream
-=======
         public DbSet<ShipmentStatusHistory> ShipmentStatusHistories { get; set; }
         public DbSet<WorkOrder> WorkOrders { get; set; }
->>>>>>> Stashed changes
+        public DbSet<UserInvoice> UserInvoices { get; set; }
 
         // Configure model
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -63,7 +61,17 @@ namespace OrderMgmtRevision.Data
                 .HasForeignKey(h => h.ShipmentID)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<UserInvoice>()
+                .HasOne(i => i.User)
+                .WithMany()
+                .HasForeignKey(i => i.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<UserInvoice>()
+                .HasOne(i => i.Shipment)
+                .WithMany()
+                .HasForeignKey(i => i.ShipmentId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -17,7 +17,7 @@ namespace OrderMgmtRevision.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.1")
+                .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -185,7 +185,7 @@ namespace OrderMgmtRevision.Migrations
 
                     b.HasIndex("WarehouseID");
 
-                    b.ToTable("InventoryAll", (string)null);
+                    b.ToTable("InventoryAll");
                 });
 
             modelBuilder.Entity("OrderMgmtRevision.Models.Product", b =>
@@ -248,7 +248,7 @@ namespace OrderMgmtRevision.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("OrderMgmtRevision.Models.Shipment", b =>
@@ -306,7 +306,7 @@ namespace OrderMgmtRevision.Migrations
 
                     b.HasIndex("SourceWarehouseID");
 
-                    b.ToTable("Shipments", (string)null);
+                    b.ToTable("Shipments");
                 });
 
             modelBuilder.Entity("OrderMgmtRevision.Models.ShipmentStatusHistory", b =>
@@ -335,7 +335,39 @@ namespace OrderMgmtRevision.Migrations
 
                     b.HasIndex("ShipmentID");
 
-                    b.ToTable("ShipmentStatusHistories", (string)null);
+                    b.ToTable("ShipmentStatusHistories");
+                });
+
+            modelBuilder.Entity("OrderMgmtRevision.Models.UserInvoice", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("InvoiceAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("ShipmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShipmentId");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
+
+                    b.ToTable("UserInvoices");
                 });
 
             modelBuilder.Entity("OrderMgmtRevision.Models.UserLog", b =>
@@ -369,7 +401,7 @@ namespace OrderMgmtRevision.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("UserLogs", (string)null);
+                    b.ToTable("UserLogs");
                 });
 
             modelBuilder.Entity("OrderMgmtRevision.Models.Warehouse", b =>
@@ -421,7 +453,7 @@ namespace OrderMgmtRevision.Migrations
 
                     b.HasKey("WarehouseID");
 
-                    b.ToTable("Warehouses", (string)null);
+                    b.ToTable("Warehouses");
                 });
 
             modelBuilder.Entity("OrderMgmtRevision.Models.WorkOrder", b =>
@@ -486,6 +518,9 @@ namespace OrderMgmtRevision.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsAdmin")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastLogin")
@@ -636,6 +671,31 @@ namespace OrderMgmtRevision.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
+                    b.OwnsOne("OrderMgmtRevision.Models.ShipmentTracking", "Tracking", b1 =>
+                        {
+                            b1.Property<int>("ShipmentID")
+                                .HasColumnType("int");
+
+                            b1.Property<string>("Location")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("Status")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("StatusDate")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("ShipmentID");
+
+                            b1.ToTable("Shipments");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ShipmentID");
+                        });
+
                     b.OwnsOne("OrderMgmtRevision.Models.ShippingLabel", "Label", b1 =>
                         {
                             b1.Property<int>("ShipmentID")
@@ -659,7 +719,7 @@ namespace OrderMgmtRevision.Migrations
 
                             b1.HasKey("ShipmentID");
 
-                            b1.ToTable("Shipments", (string)null);
+                            b1.ToTable("Shipments");
 
                             b1.WithOwner()
                                 .HasForeignKey("ShipmentID");
@@ -694,7 +754,7 @@ namespace OrderMgmtRevision.Migrations
 
                             b1.HasKey("ShipmentID");
 
-                            b1.ToTable("Shipments", (string)null);
+                            b1.ToTable("Shipments");
 
                             b1.WithOwner()
                                 .HasForeignKey("ShipmentID");
@@ -774,32 +834,7 @@ namespace OrderMgmtRevision.Migrations
 
                             b1.HasKey("ShipmentID");
 
-                            b1.ToTable("Shipments", (string)null);
-
-                            b1.WithOwner()
-                                .HasForeignKey("ShipmentID");
-                        });
-
-                    b.OwnsOne("OrderMgmtRevision.Models.ShipmentTracking", "Tracking", b1 =>
-                        {
-                            b1.Property<int>("ShipmentID")
-                                .HasColumnType("int");
-
-                            b1.Property<string>("Location")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("Status")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<string>("StatusDate")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("ShipmentID");
-
-                            b1.ToTable("Shipments", (string)null);
+                            b1.ToTable("Shipments");
 
                             b1.WithOwner()
                                 .HasForeignKey("ShipmentID");
@@ -831,6 +866,27 @@ namespace OrderMgmtRevision.Migrations
                         .IsRequired();
 
                     b.Navigation("Shipment");
+                });
+
+            modelBuilder.Entity("OrderMgmtRevision.Models.UserInvoice", b =>
+                {
+                    b.HasOne("OrderMgmtRevision.Models.Shipment", "Shipment")
+                        .WithMany()
+                        .HasForeignKey("ShipmentId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("User", null)
+                        .WithMany("UserInvoices")
+                        .HasForeignKey("UserId1");
+
+                    b.Navigation("Shipment");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("OrderMgmtRevision.Models.UserLog", b =>
@@ -866,6 +922,8 @@ namespace OrderMgmtRevision.Migrations
             modelBuilder.Entity("User", b =>
                 {
                     b.Navigation("Logs");
+
+                    b.Navigation("UserInvoices");
                 });
 #pragma warning restore 612, 618
         }
