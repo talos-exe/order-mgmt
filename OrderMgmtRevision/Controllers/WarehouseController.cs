@@ -10,28 +10,6 @@ namespace OrderMgmtRevision.Controllers
     public class WarehouseController : Controller
     {
         private readonly AppDbContext _context;
-
-        public WarehouseController(AppDbContext context)
-        {
-            var warehouseData = new List<Warehouse>
-            {
-              new Warehouse 
-              {
-                WarehouseID = 123,
-                WarehouseName = "Arctic Warehouse",
-                Address = "123 Test St"
-              },
-              new Warehouse 
-              {
-                WarehouseID = 456,
-                WarehouseName = "Warehouse 2",
-                Address = "456 Test St"
-              }
-            };
-
-<<<<<<< Updated upstream
-            return View(warehouseData);
-=======
         public WarehouseController(AppDbContext context)
         {
             _context = context;
@@ -97,7 +75,6 @@ namespace OrderMgmtRevision.Controllers
 
             ViewBag.WarehouseName = (await _context.Warehouses.FindAsync(warehouseId))?.WarehouseName;
             return View(workOrders);
->>>>>>> Stashed changes
         }
     }
 }
