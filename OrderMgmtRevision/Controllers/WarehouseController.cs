@@ -1,14 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OrderMgmtRevision.Data;
 using OrderMgmtRevision.Models;
 
 namespace OrderMgmtRevision.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class WarehouseController : Controller
     {
-        public IActionResult Index()
+        private readonly AppDbContext _context;
+
+        public WarehouseController(AppDbContext context)
         {
             var warehouseData = new List<Warehouse>
             {

@@ -1,9 +1,8 @@
-﻿@using X.PagedList
-@using X.PagedList.Extensions
-@using X.PagedList.Mvc.Core
+@model X.PagedList.IPagedList<OrderMgmtRevision.Models.UserViewModel>
 @using Microsoft.AspNetCore.Mvc.Localization
+@using X.PagedList.Mvc.Core;
+@using X.PagedList;
 @inject IViewLocalizer Localizer
-@model List<OrderMgmtRevision.Models.UserViewModel>
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
@@ -55,32 +54,38 @@
                 <button id="btnCreate" class="btn btn-primary btn-sm me-2" onclick="openCreateUserPane()">@Localizer["Create"]</button>
                 <button id="btnEdit" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>@Localizer["Edit"]</button>
                 <button id="btnDelete" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>@Localizer["Delete"]</button>
-                <input type="text" id="searchBar" class="form-control-sm me-2" placeholder="@Localizer["Search by Username"]" onkeyup="filterTable()" />
+                <!-- Search Bar -->
+                @using (Html.BeginForm("Index", "UserManagement", FormMethod.Get)) {
+                    <input type="text" id="searchBar" class="form-control-sm me-2" name="searchString" value="@ViewBag.CurrentFilter" onkeyup="filterTable()" />
+                    <input type="submit" class="btn btn-primary btn-sm me-2" value="Search" />
+                }
             </div>
 
             <div class="table-responsive">
                 <table class="table table-striped table-sm table-hover align-middle" id="userTable">
                     <thead class="table-light">
                         <tr>
-                            <th><input type="checkbox" id="selectAll" onclick="toggleAll(this);"></th>
-                            <th id="usernameHeader" onclick="sortTable(1)" style="cursor: pointer;">
-                                @Localizer["Username"] <i id="userCaret" class="fa fa-caret-down"></i>
+                            <th>
+                                <input type="checkbox" id="selectAll" onclick="toggleAll(this);">
                             </th>
-                            <th>@Localizer["Email"]</th>
-                            <th>@Localizer["Full Name"]</th>
-                            <th>@Localizer["ID"]</th>
-                            <th></th>
+                            <th>@Html.ActionLink(Localizer["Username"].Value, "Index", new { sortOrder = ViewBag.UserNameSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th>@Html.ActionLink(Localizer["Email"].Value, "Index", new { sortOrder = ViewBag.EmailSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th>@Html.ActionLink(Localizer["Full Name"].Value, "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th>@Html.ActionLink(Localizer["ID"].Value, "Index", new { sortOrder = ViewBag.IdSortParm, currentFilter = ViewBag.CurrentFilter })</th>
+                            <th>More</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var user in Model)
                         {
                             <tr onclick="toggleButtons(this)">
-                                <td><input type="checkbox" class="user-checkbox" value="@user.Id" onclick="toggleButtons();"></td>
-                                <td>@user.UserName</td>
-                                <td>@user.Email</td>
-                                <td>@user.FullName</td>
-                                <td>@user.Id</td>
+                                <td>
+                                    <input type="checkbox" class="user-checkbox" value="@user.Id" onclick="toggleButtons();">
+                                </td>
+                                <td>@Html.DisplayFor(modelItem => user.UserName)</td>
+                                <td>@Html.DisplayFor(modelItem => user.Email)</td>
+                                <td>@Html.DisplayFor(modelItem => user.FullName)</td>
+                                <td>@Html.DisplayFor(modelItem => user.Id)</td>
                                 <td>
                                     <a class="btn-sm btn-primary" style="cursor: pointer" onclick="openUserDetailsTab('@user.Id', '@user.UserName')">@Localizer["View Details"]</a>
                                 </td>
@@ -89,14 +94,41 @@
                         }
                     </tbody>
                 </table>
-            </div>
+                <div class="d-flex justify-content-center mt-3">
+                    <div>
+                        @if (Model.HasPreviousPage)
+                        {
+                            <a class="btn btn-secondary btn-sm"
+                               href="@Url.Action("Index", new {
+                               page = Model.PageNumber - 1,
+                               sortOrder = ViewBag.CurrentSort,
+                               currentFilter = ViewBag.CurrentFilter
+                           })">&lt;</a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary btn-sm" disabled>&lt;</button>
+                        }
 
-            <div class="d-flex justify-content-center mt-3">
-                <div>
-                    <button class="btn btn-secondary btn-sm">@Localizer["Previous"]</button>
-                    <button class="btn btn-secondary btn-sm">@Localizer["Next"]</button>
+                        @if (Model.HasNextPage)
+                        {
+                            <a class="btn btn-secondary btn-sm"
+                               href="@Url.Action("Index", new {
+                               page = Model.PageNumber + 1,
+                               sortOrder = ViewBag.CurrentSort,
+                               currentFilter = ViewBag.CurrentFilter
+                           })">&gt;</a>
+                        }
+                        else
+                        {
+                            <button class="btn btn-secondary btn-sm" disabled>&gt;</button>
+                        }
+                    </div>
+
+                    <div class="ms-3">
+                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                    </div>
                 </div>
-                <div class="ms-3">@Localizer["Page 1 of 1"]</div>
             </div>
         </div>
     </div>

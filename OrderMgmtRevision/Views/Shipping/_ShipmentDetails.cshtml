@@ -1,0 +1,37 @@
+﻿@model OrderMgmtRevision.Models.Shipment
+
+<div class="ms-5 me-5">
+    <div class="d-flex justify-content-between mb-3">
+        <h4>Shipment Details for @Model.ShipmentName</h4>
+        <button type="button" class="btn-close" onclick="closeShipmentDetailsTab()"></button>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <p><strong>ShipmentID: </strong>@Model.ShipmentID</p>
+            <p><strong>Shipping Provider: </strong>@Model.Rate.Provider</p>
+            <p><strong>Shipping Service: </strong>@Model.Rate.Service</p>
+            <p><strong>Estimated Days To Destination: </strong>@Model.Rate.EstimatedDays</p>
+            <p><strong>Tracking Number: </strong>@Model.TrackingNumber</p>
+            <p><strong>Shipment Cost: </strong>$@Model.Cost</p>
+            <p><strong>Warehouse Source Name: </strong>@Model.SourceWarehouse.WarehouseName</p>
+            <p><strong>Warehouse Source Address: </strong>@Model.SourceWarehouse.Address</p>
+            <p><strong>Product Shipped: </strong>@Model.Product.ProductName | SKU: @Model.Product.SKU</p>
+            <p><strong>Recipient Name: </strong>@Model.ShippingRequest.ToName</p>
+            <p><strong>Destination Address: </strong>@Model.ShippingRequest.ToStreet</p>
+            <p><strong>Destination City: </strong>@Model.ShippingRequest.ToCity</p>
+            <p><strong>Destination State: </strong>@Model.ShippingRequest.ToState</p>
+            <p><strong>Destination Zip: </strong>@Model.ShippingRequest.ToZip</p>
+            <p><strong>Destination Phone: </strong>@Model.ShippingRequest.ToPhone</p>
+            @if (User.IsInRole("Admin"))
+            {
+                <p><strong>Created By: </strong>@Model.CreatedBy</p>
+            }
+        </div>
+        <div class="col-md-6">
+            <p><a href="@Model.Label.LabelUrl" target="_blank">Download Label (PDF)</a></p>
+            <p><strong>Tracking Url: </strong>@Model.Label.TrackingUrl</p>
+            <p><strong>Created At: </strong>@(Model.GeneratedAt.HasValue ? Model.GeneratedAt.Value.ToString("yyyy-MM-dd HH:mm:ss") : "N/A")</p>
+            <p><strong>Last Updated: </strong>@(Model.UpdatedAt.HasValue ? Model.UpdatedAt.Value.ToString("yyyy-MM-dd HH:mm:ss") : "N/A")</p>
+        </div>
+</div>

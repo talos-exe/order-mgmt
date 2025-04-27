@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace OrderMgmtRevision.Migrations
 {
     /// <inheritdoc />
-    public partial class initcreate : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -64,7 +64,11 @@ namespace OrderMgmtRevision.Migrations
                     WarehouseID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     WarehouseName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    State = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Zip = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -193,7 +197,12 @@ namespace OrderMgmtRevision.Migrations
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    ShipAmount = table.Column<int>(type: "int", nullable: true),
+                    Height = table.Column<int>(type: "int", nullable: true),
+                    Width = table.Column<int>(type: "int", nullable: true),
+                    Length = table.Column<int>(type: "int", nullable: true),
+                    Weight = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -263,16 +272,62 @@ namespace OrderMgmtRevision.Migrations
                 {
                     ShipmentID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ShipmentName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     ProductID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: true),
                     SourceWarehouseID = table.Column<int>(type: "int", nullable: false),
                     DestinationWarehouseID = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ShipmentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EstimatedArrival = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Cost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    TrackingNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GeneratedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    TrackingNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    GeneratedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    SelectedRateId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rate_RateObjectId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rate_Provider = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rate_Service = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rate_Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Rate_Currency = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rate_EstimatedDays = table.Column<int>(type: "int", nullable: true),
+                    Rate_ShippingRequestId = table.Column<int>(type: "int", nullable: false),
+                    Rate_ShippingRequest_FromName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rate_ShippingRequest_FromStreet = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rate_ShippingRequest_FromCity = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rate_ShippingRequest_FromState = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rate_ShippingRequest_FromZip = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rate_ShippingRequest_ToName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rate_ShippingRequest_ToStreet = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rate_ShippingRequest_ToCity = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rate_ShippingRequest_ToState = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rate_ShippingRequest_ToZip = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Rate_ShippingRequest_Weight = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Rate_ShippingRequest_Length = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Rate_ShippingRequest_Width = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Rate_ShippingRequest_Height = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Label_LabelUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Label_TrackingNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Label_TrackingUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Label_Carrier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Label_Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Label_Currency = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Tracking_Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Tracking_StatusDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Tracking_Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShippingRequest_FromName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShippingRequest_FromStreet = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShippingRequest_FromCity = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShippingRequest_FromState = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShippingRequest_FromZip = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShippingRequest_ToName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShippingRequest_ToStreet = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShippingRequest_ToCity = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShippingRequest_ToState = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShippingRequest_ToZip = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShippingRequest_Weight = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ShippingRequest_Length = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ShippingRequest_Width = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ShippingRequest_Height = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -292,6 +347,28 @@ namespace OrderMgmtRevision.Migrations
                         column: x => x.SourceWarehouseID,
                         principalTable: "Warehouses",
                         principalColumn: "WarehouseID");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ShipmentStatusHistories",
+                columns: table => new
+                {
+                    ShipmentStatusHistoryId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ShipmentID = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShipmentStatusHistories", x => x.ShipmentStatusHistoryId);
+                    table.ForeignKey(
+                        name: "FK_ShipmentStatusHistories_Shipments_ShipmentID",
+                        column: x => x.ShipmentID,
+                        principalTable: "Shipments",
+                        principalColumn: "ShipmentID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -364,6 +441,11 @@ namespace OrderMgmtRevision.Migrations
                 column: "SourceWarehouseID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ShipmentStatusHistories_ShipmentID",
+                table: "ShipmentStatusHistories",
+                column: "ShipmentID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserLogs_UserId",
                 table: "UserLogs",
                 column: "UserId");
@@ -391,13 +473,16 @@ namespace OrderMgmtRevision.Migrations
                 name: "InventoryAll");
 
             migrationBuilder.DropTable(
-                name: "Shipments");
+                name: "ShipmentStatusHistories");
 
             migrationBuilder.DropTable(
                 name: "UserLogs");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Shipments");
 
             migrationBuilder.DropTable(
                 name: "Products");

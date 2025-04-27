@@ -26,35 +26,7 @@ function toggleAll(source) {
     toggleButtons();
 }
 
-// Table Sorting Function
 
-var isAscending = false;
-function sortTable(columnIndex) {
-    var table = document.getElementById("userTable");
-    var rows = Array.from(table.getElementsByTagName("tr")).slice(1); // Get all rows except the header
-    isAscending = !isAscending; // Toggle sorting order
-
-    var caret = document.getElementById("userCaret");
-    if (isAscending) {
-        caret.classList.remove("fa-caret-down");
-        caret.classList.add("fa-caret-up");
-    } else {
-        caret.classList.remove("fa-caret-up");
-        caret.classList.add("fa-caret-down");
-    }
-
-    rows.sort((a, b) => {
-        var cellA = a.cells[columnIndex].textContent.trim();
-        var cellB = b.cells[columnIndex].textContent.trim();
-        return isAscending
-            ? cellA.localeCompare(cellB) // Ascending sort
-            : cellB.localeCompare(cellA); // Descending sort
-    });
-
-    // Re-append the sorted rows to the table body to maintain styling
-    var tbody = table.querySelector('tbody');
-    rows.forEach(row => tbody.appendChild(row)); // Append sorted rows
-}
 
 // Search Function
 function filterTable() {
@@ -116,19 +88,16 @@ function openUserDetailsTab(userId, userName) {
     // Activate the new tab
     $('#' + tabId + 'Tab').tab('show');
 
-    // Load the user details via AJAX
-    $.ajax({
-        url: '/UserManagement/GetUserDetails',
-        type: 'GET',
-        data: { userId: userId },
-        success: function (data) {
+    // Fetch user details
+    fetch(`/UserManagement/GetUserDetails?userId=${userId}`)
+        .then(response => response.text())
+        .then(data => {
             $('#' + tabId).html(data);
-        },
-        error: function () {
+        })
+        .catch(() => {
             console.log("User ID: " + userId);
             $('#' + tabId).html('<div class="ms-5 me-5 text-danger">Error loading user details</div>');
-        }
-    });
+        });
 }
 
 function closeUserDetailsTab() {
@@ -164,20 +133,16 @@ function openCreateUserPane() {
 
     $('#' + tabId + 'Tab').tab('show');
 
-    $.ajax({
-        url: '/UserManagement/_CreateUser',
-        type: 'GET',
-        success: function (data) {
+    // Fetch the Create User form
+    fetch('/UserManagement/_CreateUser')
+        .then(response => response.text())
+        .then(data => {
             $('#' + tabId).html(data);
-        },
-        error: function () {
+        })
+        .catch(() => {
             $('#' + tabId).html('<div class="ms-5 me-5 text-danger">Error loading Create User form</div>');
-        }
-    });
+        });
 }
-
-
-
 
 function closeCreateUser() {
     // Find the create user tab
@@ -192,3 +157,39 @@ function closeCreateUser() {
     // Activate the user list tab
     $('#userListTab').tab('show');
 }
+
+
+
+
+
+// NOT IN USE
+
+//// Table Sorting Function
+
+//var isAscending = false;
+//function sortTable(columnIndex) {
+//    var table = document.getElementById("userTable");
+//    var rows = Array.from(table.getElementsByTagName("tr")).slice(1); // Get all rows except the header
+//    isAscending = !isAscending; // Toggle sorting order
+
+//    var caret = document.getElementById("userCaret");
+//    if (isAscending) {
+//        caret.classList.remove("fa-caret-down");
+//        caret.classList.add("fa-caret-up");
+//    } else {
+//        caret.classList.remove("fa-caret-up");
+//        caret.classList.add("fa-caret-down");
+//    }
+
+//    rows.sort((a, b) => {
+//        var cellA = a.cells[columnIndex].textContent.trim();
+//        var cellB = b.cells[columnIndex].textContent.trim();
+//        return isAscending
+//            ? cellA.localeCompare(cellB) // Ascending sort
+//            : cellB.localeCompare(cellA); // Descending sort
+//    });
+
+//    // Re-append the sorted rows to the table body to maintain styling
+//    var tbody = table.querySelector('tbody');
+//    rows.forEach(row => tbody.appendChild(row)); // Append sorted rows
+//}
