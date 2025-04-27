@@ -16,6 +16,7 @@ namespace OrderMgmtRevision.Data
         public DbSet<Shipment> Shipments { get; set; }
         public DbSet<UserLog> UserLogs { get; set; }
         public DbSet<ShipmentStatusHistory> ShipmentStatusHistories { get; set; }
+        public DbSet<WorkOrder> WorkOrders { get; set; }
         public DbSet<UserInvoice> UserInvoices { get; set; }
 
         // Configure model

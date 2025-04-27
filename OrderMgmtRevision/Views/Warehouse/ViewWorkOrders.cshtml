@@ -1,0 +1,38 @@
+﻿@model IEnumerable<OrderMgmtRevision.Models.WorkOrder>
+
+@{
+    ViewData["Title"] = "Work Orders";
+}
+
+<h2>Work Orders for @ViewBag.WarehouseName</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>Type</th>
+            <th>Created At</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="4" class="text-center">No work orders found.</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.Description</td>
+                    <td>@order.Type</td>
+                    <td>@order.CreatedAt.ToString("g")</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderMgmtRevision.Data;
 
@@ -11,9 +12,11 @@ using OrderMgmtRevision.Data;
 namespace OrderMgmtRevision.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250422190022_AddWorkOrders")]
+    partial class AddWorkOrders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -336,38 +339,6 @@ namespace OrderMgmtRevision.Migrations
                     b.HasIndex("ShipmentID");
 
                     b.ToTable("ShipmentStatusHistories");
-                });
-
-            modelBuilder.Entity("OrderMgmtRevision.Models.UserInvoice", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("InvoiceAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("ShipmentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId1")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ShipmentId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("UserInvoices");
                 });
 
             modelBuilder.Entity("OrderMgmtRevision.Models.UserLog", b =>
@@ -868,27 +839,6 @@ namespace OrderMgmtRevision.Migrations
                     b.Navigation("Shipment");
                 });
 
-            modelBuilder.Entity("OrderMgmtRevision.Models.UserInvoice", b =>
-                {
-                    b.HasOne("OrderMgmtRevision.Models.Shipment", "Shipment")
-                        .WithMany()
-                        .HasForeignKey("ShipmentId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("User", null)
-                        .WithMany("UserInvoices")
-                        .HasForeignKey("UserId1");
-
-                    b.Navigation("Shipment");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("OrderMgmtRevision.Models.UserLog", b =>
                 {
                     b.HasOne("User", "User")
@@ -900,8 +850,6 @@ namespace OrderMgmtRevision.Migrations
                     b.Navigation("User");
                 });
 
-<<<<<<< Updated upstream
-=======
             modelBuilder.Entity("OrderMgmtRevision.Models.WorkOrder", b =>
                 {
                     b.HasOne("OrderMgmtRevision.Models.Warehouse", "Warehouse")
@@ -918,12 +866,9 @@ namespace OrderMgmtRevision.Migrations
                     b.Navigation("StatusHistory");
                 });
 
->>>>>>> Stashed changes
             modelBuilder.Entity("User", b =>
                 {
                     b.Navigation("Logs");
-
-                    b.Navigation("UserInvoices");
                 });
 #pragma warning restore 612, 618
         }

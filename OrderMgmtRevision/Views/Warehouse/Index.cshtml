@@ -7,69 +7,91 @@
 }
 
 <div class="warehouse-container ms-5 me-5">
-  <h2 class="text-center mb-4 pt-4">@Localizer["Warehouses"]</h2>
-  <div class="d-flex justify-content-start mb-2">
-    <button class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#createWarehouseModal">@Localizer["Create"]</button>
-    <button id="btnEdit" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>@Localizer["Edit"]</button>
-    <button id="btnDelete" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#deleteWarehouseModal" disabled>@Localizer["Delete"]</button>
-    <input type="text" id="searchBar" class="form-control-sm me-2" placeholder="@Localizer["Search by Name"]" onkeyup="filterTable()" />
-  </div>
+    <h2 class="text-center mb-4 pt-4">@Localizer["Warehouses"]</h2>
+    <div class="d-flex justify-content-start mb-2">
+<<<<<<< Updated upstream
+        <button class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#createUserModal">@Localizer["Create"]</button>
+        <button id="btnEdit" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>@Localizer["Edit"]</button>
+        <button id="btnDelete" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>@Localizer["Delete"]</button>
+=======
+        <button class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#createWarehouseModal">@Localizer["Create"]</button>
+        <button id="btnEdit" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>@Localizer["Edit"]</button>
+        <button id="btnDelete" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#deleteWarehouseModal" disabled>@Localizer["Delete"]</button>
+>>>>>>> Stashed changes
+        <input type="text" id="searchBar" class="form-control-sm me-2" placeholder="@Localizer["Search by Name"]" onkeyup="filterTable()" />
+    </div>
 
-      <table class="table table-striped">
-    <thead>
-        <tr>
-            <th>
-              <input type="checkbox" id="selectAll" onclick="toggleAll(this);">
-            </th>
-            <th>@Localizer["Warehouse Code"]</th>
-            <th>@Localizer["Name"]</th>
-            <th>@Localizer["Address"]</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var warehouse in Model)
-        {
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <td>
-                  <input type="checkbox" class="warehouse-checkbox" value="@warehouse.WarehouseID" onclick="toggleButtons();">
-                </td>
-                <td>@warehouse.WarehouseID</td>
-                <td>@warehouse.WarehouseName</td>
-                <td>@warehouse.Address</td>
-               
+                <th>
+                    <input type="checkbox" id="selectAll" onclick="toggleAll(this);">
+                </th>
+                <th>@Localizer["Warehouse Code"]</th>
+                <th>@Localizer["Name"]</th>
+                <th>@Localizer["Address"]</th>
+<<<<<<< Updated upstream
+=======
+                <th>@Localizer["Actions"]</th>
+>>>>>>> Stashed changes
             </tr>
-        }
-    </tbody>
-  </table>
+        </thead>
+        <tbody>
+            @foreach (var warehouse in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" class="warehouse-checkbox" value="@warehouse.WarehouseID" onclick="toggleButtons();">
+                    </td>
+                    <td>@warehouse.WarehouseID</td>
+                    <td>@warehouse.WarehouseName</td>
+                    <td>@warehouse.Address</td>
+<<<<<<< Updated upstream
+=======
+                    <td>
+                        <a asp-action="CreateWorkOrder" asp-route-warehouseId="@warehouse.WarehouseID" class="btn btn-sm btn-outline-success me-1">
+                            @Localizer["New Work Order"]
+                        </a>
+                        <a asp-action="ViewWorkOrders" asp-route-warehouseId="@warehouse.WarehouseID" class="btn btn-sm btn-outline-info">
+                            @Localizer["View Work Orders"]
+                        </a>
+                    </td>
+>>>>>>> Stashed changes
+                </tr>
+            }
+        </tbody>
+    </table>
+<<<<<<< Updated upstream
+=======
 
-  <div class="modal fade" id="createWarehouseModal" tabindex="-1">
-      <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title" id="createWarehouseModal">Create Warehouse</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                  <partial name="CreateWarehouse" model="new Warehouse()" />
-              </div>
-          </div>
-      </div>
-  </div>
+    <div class="modal fade" id="createWarehouseModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createWarehouseModal">Create Warehouse</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <partial name="CreateWarehouse" model="new Warehouse()" />
+                </div>
+            </div>
+        </div>
+    </div>
 
-  <div class="modal fade" id="deleteWarehouseModal" tabindex="-1">
-      <div class="modal-dialog">
-          <div class="modal-content">
-              <div class="modal-header">
-                  <h5 class="modal-title" id="deleteWarehouseModal">Are you sure you want to delete this warehouse?</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                  <partial name="DeleteWarehouse" />
-              </div>
-          </div>
-      </div>
-  </div>
-
+    <div class="modal fade" id="deleteWarehouseModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteWarehouseModal">Are you sure you want to delete this warehouse?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <partial name="DeleteWarehouse" />
+                </div>
+            </div>
+        </div>
+    </div>
+>>>>>>> Stashed changes
 </div>
 
 <script src="~/js/warehouses.js"></script>
