@@ -12,26 +12,31 @@ namespace OrderMgmtRevision.Controllers
     {
         private readonly StripeService _stripeService;
         private readonly UserManager<User> _userManager;
+        private readonly ILogService _logService;
 
-        public InvoiceController(StripeService stripeService, UserManager<User> userManager)
+        public InvoiceController(StripeService stripeService, UserManager<User> userManager, ILogService logService)
         {
             _stripeService = stripeService;
             _userManager = userManager;
+            _logService = logService;
         }
 
         public IActionResult Index()
         {
-            var model = new StripePaymentModel
-            {
-                Amount = 1000 // example, need to pass in value after invoices implemented (cents)
-            };
-            return View(model);
+            return View();
         }
 
-        [HttpGet]
+        private string GetClientIp()
+        {
+            return HttpContext.Connection.RemoteIpAddress?.ToString();
+        }
+
+        [HttpPost]
         [Authorize] // Ensure the user is logged in
         public async Task<IActionResult> DirectCheckout(long amount)
         {
+            string ipAddress = GetClientIp();
+
             try
             {
                 // Get the current user's email
@@ -52,6 +57,7 @@ namespace OrderMgmtRevision.Controllers
                 HttpContext.Session.SetString("AccessGranted", "true");
 
                 string checkoutUrl = await _stripeService.CreateDirectCheckoutSessionAsync(userEmail, amount, successUrl, cancelUrl);
+                await _logService.LogUserActivityAsync(user.Id, $"Started checkout session.", ipAddress);
                 return Redirect(checkoutUrl);
             }
             catch (Exception ex)
@@ -61,8 +67,9 @@ namespace OrderMgmtRevision.Controllers
             }
         }
 
-        public IActionResult PaymentSuccess(string sessionId)
+        public async Task<IActionResult> PaymentSuccess(string sessionId)
         {
+            string ipAddress = GetClientIp();
             // Check if the session is valid
             var access = HttpContext.Session.GetString("AccessGranted");
             if (access != "true")
@@ -73,12 +80,36 @@ namespace OrderMgmtRevision.Controllers
             // Optional: Remove session after accessing the page
             HttpContext.Session.Remove("AccessGranted");
 
+            var user = await _userManager.GetUserAsync(User);
+            if (user != null && user.AccountBalance > 0)
+            {
+                // Reset the account balance to zero after successful payment
+                var oldAccountBalance = user.AccountBalance;
+                user.AccountBalance = 0;
+
+                // Save the changes to the database
+                var result = await _userManager.UpdateAsync(user);
+
+                if (result.Succeeded)
+                {
+                    TempData["Toast"] = "success|Payment successful. Your account balance has been updated.";
+                    await _logService.LogUserActivityAsync(user.Id, $"Successfully paid invoice amount ${(oldAccountBalance/100)?.ToString("F2")}.", ipAddress);
+                }
+                else
+                {
+                    TempData["Toast"] = "error|Payment was processed but we couldn't update your account balance. Please contact support.";
+                    await _logService.LogUserActivityAsync(user.Id, "[CRITICAL] Was unable to pay invoice, payment was processed.", ipAddress);
+                }
+            }
+
             ViewBag.SessionId = sessionId;
             return View("PaymentSuccess");
         }
 
-        public IActionResult PaymentCancel(string sessionId)
+        public async Task<IActionResult> PaymentCancel(string sessionId)
         {
+            string ipAddress = GetClientIp();
+            var user = await _userManager.GetUserAsync(User);
             // Check if the session is valid
             var access = HttpContext.Session.GetString("AccessGranted");
             if (access != "true")
@@ -88,6 +119,9 @@ namespace OrderMgmtRevision.Controllers
 
             // Optional: Remove session after accessing the page
             HttpContext.Session.Remove("AccessGranted");
+
+            TempData["Toast"] = "error|Payment was cancelled. Your account balance remains unchanged.";
+            await _logService.LogUserActivityAsync(user.Id, "Payment for invoice cancelled.", ipAddress);
 
             return View("PaymentCancel");
         }

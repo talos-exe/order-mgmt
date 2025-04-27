@@ -8,6 +8,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using OrderMgmtRevision.Data;
 using X.PagedList.Extensions;
+using System.Reflection.Metadata.Ecma335;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using NuGet.Common;
+using Stripe;
 
 
 namespace OrderMgmtRevision.Controllers
@@ -21,16 +25,19 @@ namespace OrderMgmtRevision.Controllers
         private readonly UserManager<User> _userManager;
         private readonly AppDbContext _context;
         private readonly List<ShipmentViewModel> _shipments;
+        private readonly ILogService _logService;
+
 
         // Inject IStringLocalizer for localization
-        public ShippingController(IWebHostEnvironment env, IStringLocalizer<ShippingController> localizer, ShippoService shippoService, UserManager<User> userManager, AppDbContext context)
+        public ShippingController(IWebHostEnvironment env, IStringLocalizer<ShippingController> localizer, ShippoService shippoService, UserManager<User> userManager, AppDbContext context, ILogService logService)
         {
             _env = env;
             _localizer = localizer; // Store the localizer
             _shippoService = shippoService;
             _userManager = userManager;
             _context = context;
-         }
+            _logService = logService;
+        }
 
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, string statusFilter, int? page)
         {
@@ -172,16 +179,106 @@ namespace OrderMgmtRevision.Controllers
             return HttpContext.Connection.RemoteIpAddress?.ToString();
         }
 
+
+        private async Task<bool> SendUserShippingInvoice(User userAccount, decimal chargeAmount, Shipment shipment)
+        {
+            if (userAccount != null)
+            {
+                try
+                {
+                    var invoice = new UserInvoice
+                    {
+                        Shipment = shipment,
+                        ShipmentId = shipment.ShipmentID,
+                        InvoiceAmount = chargeAmount,
+                        UserId = userAccount.Id,
+                        Description = $"Invoice Amount {chargeAmount} created due to shipment {shipment.ShipmentID}, charged to user {userAccount.UserName}"
+                    };
+
+                    userAccount.AccountBalance += chargeAmount;
+
+                    _context.Add(invoice);
+                    int saveResult = _context.SaveChanges();
+                    await _logService.LogUserActivityAsync(userAccount.Id, $"Invoice amount ${(invoice.InvoiceAmount/100).ToString("F2")} created from shipment ID {shipment.ShipmentID}", GetClientIp());
+                    return saveResult > 0;
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine("SendUserShippingInvoice Error: " + ex.ToString());
+                    return false;
+                }
+            }
+            return false;
+        }
+
         [HttpGet]
         public async Task<IActionResult> _CreateShipmentRequest()
         {
             var model = new ShippingRequestViewModel
             {
                 ProductList = await _context.Products.ToListAsync(),
-                Warehouses = await _context.Warehouses.ToListAsync()
+                Warehouses = await _context.Warehouses.ToListAsync(),
+                StateList = GetStateSelectList()
             };
 
             return PartialView("_CreateShipmentRequest", model);
+        }
+
+        private List<SelectListItem> GetStateSelectList()
+        {
+            return new List<SelectListItem>
+            {
+                new SelectListItem { Text = "Alabama", Value = "AL" },
+                new SelectListItem { Text = "Alaska", Value = "AK" },
+                new SelectListItem { Text = "Arizona", Value = "AZ" },
+                new SelectListItem { Text = "Arkansas", Value = "AR" },
+                new SelectListItem { Text = "California", Value = "CA" },
+                new SelectListItem { Text = "Colorado", Value = "CO" },
+                new SelectListItem { Text = "Connecticut", Value = "CT" },
+                new SelectListItem { Text = "Delaware", Value = "DE" },
+                new SelectListItem { Text = "Florida", Value = "FL" },
+                new SelectListItem { Text = "Georgia", Value = "GA" },
+                new SelectListItem { Text = "Hawaii", Value = "HI" },
+                new SelectListItem { Text = "Idaho", Value = "ID" },
+                new SelectListItem { Text = "Illinois", Value = "IL" },
+                new SelectListItem { Text = "Indiana", Value = "IN" },
+                new SelectListItem { Text = "Iowa", Value = "IA" },
+                new SelectListItem { Text = "Kansas", Value = "KS" },
+                new SelectListItem { Text = "Kentucky", Value = "KY" },
+                new SelectListItem { Text = "Louisiana", Value = "LA" },
+                new SelectListItem { Text = "Maine", Value = "ME" },
+                new SelectListItem { Text = "Maryland", Value = "MD" },
+                new SelectListItem { Text = "Massachusetts", Value = "MA" },
+                new SelectListItem { Text = "Michigan", Value = "MI" },
+                new SelectListItem { Text = "Minnesota", Value = "MN" },
+                new SelectListItem { Text = "Mississippi", Value = "MS" },
+                new SelectListItem { Text = "Missouri", Value = "MO" },
+                new SelectListItem { Text = "Montana", Value = "MT" },
+                new SelectListItem { Text = "Nebraska", Value = "NE" },
+                new SelectListItem { Text = "Nevada", Value = "NV" },
+                new SelectListItem { Text = "New Hampshire", Value = "NH" },
+                new SelectListItem { Text = "New Jersey", Value = "NJ" },
+                new SelectListItem { Text = "New Mexico", Value = "NM" },
+                new SelectListItem { Text = "New York", Value = "NY" },
+                new SelectListItem { Text = "North Carolina", Value = "NC" },
+                new SelectListItem { Text = "North Dakota", Value = "ND" },
+                new SelectListItem { Text = "Ohio", Value = "OH" },
+                new SelectListItem { Text = "Oklahoma", Value = "OK" },
+                new SelectListItem { Text = "Oregon", Value = "OR" },
+                new SelectListItem { Text = "Pennsylvania", Value = "PA" },
+                new SelectListItem { Text = "Rhode Island", Value = "RI" },
+                new SelectListItem { Text = "South Carolina", Value = "SC" },
+                new SelectListItem { Text = "South Dakota", Value = "SD" },
+                new SelectListItem { Text = "Tennessee", Value = "TN" },
+                new SelectListItem { Text = "Texas", Value = "TX" },
+                new SelectListItem { Text = "Utah", Value = "UT" },
+                new SelectListItem { Text = "Vermont", Value = "VT" },
+                new SelectListItem { Text = "Virginia", Value = "VA" },
+                new SelectListItem { Text = "Washington", Value = "WA" },
+                new SelectListItem { Text = "West Virginia", Value = "WV" },
+                new SelectListItem { Text = "Wisconsin", Value = "WI" },
+                new SelectListItem { Text = "Wyoming", Value = "WY" }
+            };
         }
 
         [HttpPost]
@@ -196,7 +293,7 @@ namespace OrderMgmtRevision.Controllers
                 Amount = r.Amount,
                 Currency = r.Currency,
                 EstimatedDays = r.EstimatedDays
-            }).ToList(); // <--- this is important!
+            }).ToList();
             System.Diagnostics.Debug.WriteLine("Shippo rate results when clicking shipment: " + JsonConvert.SerializeObject(result));
 
             return Json(result);
@@ -213,6 +310,12 @@ namespace OrderMgmtRevision.Controllers
             string userName = user?.UserName ?? "Unknown";
             string ipAddress = GetClientIp();
             string logMessage = "";
+
+            Models.Product? originalProductObj = await _context.Products.FindAsync(model.ProductID);
+            decimal originalHeight = (decimal)originalProductObj.Height;
+            decimal originalWidth = (decimal)originalProductObj.Width;
+            decimal originalLength = (decimal)originalProductObj.Length;
+            decimal originalWeight = (decimal)originalProductObj.Weight;
 
             System.Diagnostics.Debug.WriteLine("CreateShippingRequest called with Rate JSON: " + selectedRateJson);
 
@@ -245,6 +348,13 @@ namespace OrderMgmtRevision.Controllers
 
             var source = await _context.Warehouses.FindAsync(model.SourceWarehouseId);
 
+            if (model.Weight != originalWeight || model.Length != originalLength || model.Height != originalHeight || model.Width != originalWidth)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid data submitted. You cannot modify Product values yourself.");
+                await _logService.LogUserActivityAsync(userId, $"User {user.UserName} attempted product property forgery.", ipAddress);
+                return View(model);
+            }
+
             var request = new ShippingRequest
             {
                 FromName = source.WarehouseName,
@@ -267,12 +377,12 @@ namespace OrderMgmtRevision.Controllers
                 Height = model.Height
             };
 
-            ShippingRate selectedRate = null;
+            Models.ShippingRate selectedRate = null;
             if (!string.IsNullOrEmpty(selectedRateJson))
             {
                 try
                 {
-                    selectedRate = JsonConvert.DeserializeObject<ShippingRate>(selectedRateJson);
+                    selectedRate = JsonConvert.DeserializeObject<Models.ShippingRate>(selectedRateJson);
                 }
                 catch (Exception ex)
                 {
@@ -320,6 +430,8 @@ namespace OrderMgmtRevision.Controllers
                 CreatedBy = userName
             };
 
+            int costInCents = (int)(selectedRate.Amount * 100);
+
             try
             {
                 _context.Shipments.Add(shipment);
@@ -327,12 +439,26 @@ namespace OrderMgmtRevision.Controllers
                 // Check result - should be > 0 if successful
                 if (result > 0)
                 {
-                    TempData["SuccessMessage"] = "Shipment created successfully with tracking number: " + shipment.TrackingNumber;
+                    var invoiceSend = SendUserShippingInvoice(user, costInCents, shipment);
+                    if (await invoiceSend == true)
+                    {
+                        TempData["SuccessMessage"] = "Shipment created successfully with tracking number: " + shipment.TrackingNumber + ". Your account was billed a new invoice";
+                        await _logService.LogUserActivityAsync(userId, $"Created shipment (ID: {shipment.ShipmentID})", GetClientIp());
+                        return RedirectToAction("Index", "Shipping");
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("Invoice came back " + invoiceSend.ToString() + "Invoice debug: User: " + user.UserName + "Selected rate: " + selectedRate.Amount + " shipment ID: " + shipment.ShipmentID);
+                        TempData["Error"] = "Unable to charge user with Selected Rate: $" + selectedRate.Amount + ". No shipment was created and your account was not charged.";
+                        await _logService.LogUserActivityAsync(userId, "Created shipment but unable to charge user.", GetClientIp());
+                    }
                 }
                 else
                 {
                     TempData["Error"] = "No changes were saved to the database.";
+                    return RedirectToAction("Index", "Shipping");
                 }
+
                 return RedirectToAction("Index", "Shipping");
             }
             catch (Exception ex)
@@ -383,6 +509,13 @@ namespace OrderMgmtRevision.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CancelShipment (int id)
         {
+            bool isAdmin = await IsUserAdmin();
+            var user = await _userManager.GetUserAsync(User);
+            string userId = user?.Id ?? "Unknown";
+            string userName = user?.UserName ?? "Unknown";
+            string ipAddress = GetClientIp();
+
+
             var shipment = await _context.Shipments
                 .Include(s => s.Label)
                 .Include(s => s.Tracking)
@@ -414,6 +547,7 @@ namespace OrderMgmtRevision.Controllers
                 _context.Shipments.Update(shipment);
                 await _context.SaveChangesAsync();
                 TempData["SuccessMessage"] = "Shipment cancelled successfully.";
+                await _logService.LogUserActivityAsync(userId, $"Shipment (ID: {shipment.ShipmentID}) cancelled successfully.", GetClientIp());
             }
             catch (Exception ex)
             {
@@ -426,6 +560,41 @@ namespace OrderMgmtRevision.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ValidateAddress(string street, string city = "", string state = "", string zip = "", string country = "")
+        {
+            try
+            {
+                // Create address data - only require street1 for validation
+                var addressData = new Dictionary<string, object>
+                {
+                    { "street1", street },
+                    { "validate", true },
+                    { "country", string.IsNullOrEmpty(country) ? "US" : country }
+                };
+
+                // Add optional fields only if provided and not empty
+                if (!string.IsNullOrEmpty(city)) addressData.Add("city", city);
+                if (!string.IsNullOrEmpty(state)) addressData.Add("state", state);
+                if (!string.IsNullOrEmpty(zip)) addressData.Add("zip", zip);
+
+                // Call Shippo API to validate address
+                var validation = await _shippoService.ValidateAddressAsync(addressData);
+
+                // Return validation results and suggestions
+                return Json(new
+                {
+                    isValid = validation.IsValid,
+                    suggestions = validation.Suggestions
+                });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine("Address validation error: " + ex.Message);
+                return Json(new { error = ex.Message, suggestions = new List<object>() });
+            }
         }
 
     }

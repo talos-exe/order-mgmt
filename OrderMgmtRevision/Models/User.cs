@@ -28,4 +28,6 @@ public class User : IdentityUser
 
     public List<UserLog>? Logs { get; set; } = new List<UserLog>();
 
+    public List<UserInvoice> UserInvoices { get; set; }
+
 }

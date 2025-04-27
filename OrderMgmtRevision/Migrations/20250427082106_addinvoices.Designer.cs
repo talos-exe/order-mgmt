@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderMgmtRevision.Data;
 
@@ -11,9 +12,11 @@ using OrderMgmtRevision.Data;
 namespace OrderMgmtRevision.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250427082106_addinvoices")]
+    partial class addinvoices
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -338,38 +341,6 @@ namespace OrderMgmtRevision.Migrations
                     b.ToTable("ShipmentStatusHistories");
                 });
 
-            modelBuilder.Entity("OrderMgmtRevision.Models.UserInvoice", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("InvoiceAmount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("ShipmentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UserId1")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ShipmentId");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("UserInvoices");
-                });
-
             modelBuilder.Entity("OrderMgmtRevision.Models.UserLog", b =>
                 {
                     b.Property<int>("Id")
@@ -477,6 +448,11 @@ namespace OrderMgmtRevision.Migrations
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -547,6 +523,34 @@ namespace OrderMgmtRevision.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator().HasValue("User");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("OrderMgmtRevision.Models.UserInvoice", b =>
+                {
+                    b.HasBaseType("User");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("InvoiceAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("ShipmentID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasIndex("ShipmentID");
+
+                    b.HasIndex("UserId");
+
+                    b.HasDiscriminator().HasValue("UserInvoice");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -839,27 +843,6 @@ namespace OrderMgmtRevision.Migrations
                     b.Navigation("Shipment");
                 });
 
-            modelBuilder.Entity("OrderMgmtRevision.Models.UserInvoice", b =>
-                {
-                    b.HasOne("OrderMgmtRevision.Models.Shipment", "Shipment")
-                        .WithMany()
-                        .HasForeignKey("ShipmentId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("User", null)
-                        .WithMany("UserInvoices")
-                        .HasForeignKey("UserId1");
-
-                    b.Navigation("Shipment");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("OrderMgmtRevision.Models.UserLog", b =>
                 {
                     b.HasOne("User", "User")
@@ -867,6 +850,23 @@ namespace OrderMgmtRevision.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OrderMgmtRevision.Models.UserInvoice", b =>
+                {
+                    b.HasOne("OrderMgmtRevision.Models.Shipment", "Shipment")
+                        .WithMany()
+                        .HasForeignKey("ShipmentID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("User", "User")
+                        .WithMany("UserInvoices")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Shipment");
 
                     b.Navigation("User");
                 });

@@ -102,12 +102,6 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label asp-for="ToStreet">Recipient Address *</label>
-                        <input asp-for="ToStreet" class="form-control" type="text" />
-                        <span asp-validation-for="ToStreet" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group mb-3">
                         <label asp-for="ToCity">Recipient City *</label>
                         <input asp-for="ToCity" class="form-control" type="text" />
                         <span asp-validation-for="ToCity" class="text-danger"></span>
@@ -115,7 +109,9 @@
 
                     <div class="form-group mb-3">
                         <label asp-for="ToState">Recipient State *</label>
-                        <input asp-for="ToState" class="form-control" type="text" />
+                        <select asp-for="ToState" class="form-control" asp-items="Model.StateList">
+                            <option value="">-- Select State --</option>
+                        </select>
                         <span asp-validation-for="ToState" class="text-danger"></span>
                     </div>
 
@@ -124,6 +120,14 @@
                         <input asp-for="ToZip" class="form-control" type="text" />
                         <span asp-validation-for="ToZip" class="text-danger"></span>
                     </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="ToStreet">Recipient Address *</label>
+                        <input asp-for="ToStreet" id="toStreetInput" class="form-control" type="text" />
+                        <div id="addressSuggestions" class="list-group mt-2" style="display:none;"></div>
+                        <span asp-validation-for="ToStreet" class="text-danger"></span>
+                    </div>
+
                     <div class="form-group mb-3">
                         <label asp-for="ToCountryCode">Recipient Country Code *</label>
                         <input asp-for="ToCountryCode" class="form-control" type="text" />
@@ -203,6 +207,90 @@
             $('#FromEmail').val(selected.data('email'));
         }
     });
+
+    let typingTimer;
+    const doneTypingInterval = 500;
+
+    $('#toStreetInput').on('input', function() {
+        clearTimeout(typingTimer);
+
+        const addressInput = $(this).val();
+        if (addressInput.length > 5) {
+            typingTimer = setTimeout(function() {
+                validateAddress(addressInput);
+            }, doneTypingInterval);
+        } else {
+            $('#addressSuggestions').hide();
+        }
+    });
+
+    function validateAddress(addressInput) {
+        const city = $('#ToCity').val();
+        const state = $('#ToState').val();
+        const zip = $('#ToZip').val();
+        const country = $('#ToCountryCode').val();
+
+        showLoader(true);
+
+        $.ajax({
+            url: '@Url.Action("ValidateAddress", "Shipping")',
+            type: 'POST',
+            data: {
+                street: addressInput,
+                city: city,
+                state: state,
+                zip: zip,
+                country: country
+            },
+            success: function(result) {
+                if (result && result.suggestions && result.suggestions.length > 0) {
+                    displayAddressSuggestions(result.suggestions);
+                } else {   
+                    $('#addressSuggestions').empty().show().append('<div class="list-group-item">No address found</div>');
+                }
+                showLoader(false);
+            },
+            error: function(error) {
+                console.error('Address validation error:', error);
+                showLoader(false);
+            }
+        });
+    }
+
+    function displayAddressSuggestions(suggestions) {
+        const container = $('#addressSuggestions');
+        container.empty();
+
+        suggestions.forEach(suggestion => {
+            const formatted = suggestion.street1 +
+                (suggestion.street2 ? ', ' + suggestion.street2 : '') +
+                ', ' + suggestion.city +
+                ', ' + suggestion.state +
+                ' ' + suggestion.zip;
+
+            const item = $('<button>')
+                .addClass('list-group-item list-group-item-action')
+                .text(formatted)
+                .on('click', function(e) {
+                    e.preventDefault();
+                    // Fill in all address fields with the selected address
+                    $('#toStreetInput').val(suggestion.street1);
+                    $('#ToCity').val(suggestion.city);
+                    $('#ToState').val(suggestion.state);
+                    $('#ToZip').val(suggestion.zip);
+                    $('#ToCountryCode').val(suggestion.country);
+
+                    // Hide suggestions
+                    container.hide();
+
+                    return false;
+                });
+
+            container.append(item);
+        });
+
+        container.show();
+    }
 
     $('#nextButton').on('click', function () {
         // Validate manually

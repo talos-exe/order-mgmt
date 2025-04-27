@@ -46,25 +46,27 @@
                     <div class="card border-0 shadow-sm">
                         <div class="card-body text-center">
                             <i class="bi bi-wallet2 fs-3 text-warning"></i>
-                            <h5 class="mt-2">Account Invoice:</h5>
+                            <h5 class="mt-2">Account Invoice</h5>
 
-                            @if (Model.AccountBalance == null || Model.AccountBalance == 0)
-                            {
-                                <p class="fs-4 fw-bold text-success">All Paid Up</p>
-                                <!-- Disabled button if balance is 0 or null -->
-                                <a href="javascript:void(0);" class="btn btn-success btn-lg w-100 shadow-sm disabled">
-                                    <i class="bi bi-credit-card me-2"></i> Pay with Stripe
-                                </a>
-                            }
-                            else
-                            {
-                                <p class="fs-4 fw-bold text-success">$@Model.AccountBalance</p>
-                                <!-- Active button if there's a balance -->
-                                <a href="@Url.Action("DirectCheckout", "Invoice", new { amount = Model.AccountBalance })"
-                                   class="btn btn-success btn-lg w-100 shadow-sm">
-                                    <i class="bi bi-credit-card me-2"></i> Pay with Stripe
-                                </a>
-                            }
+                            <form method="post" asp-action="DirectCheckout" asp-controller="Invoice">
+                                @* Hidden field to pass the account balance securely *@
+                                <input type="hidden" name="amount" value="@(Convert.ToInt64(Model.AccountBalance ?? 0))" />
+
+                                @if (Model.AccountBalance == null || Model.AccountBalance == 0)
+                                {
+                                    <p class="fs-4 fw-bold text-success">All Paid Up</p>
+                                    <a href="javascript:void(0);" class="btn btn-success btn-lg w-100 shadow-sm disabled">
+                                        <i class="bi bi-credit-card me-2"></i> Pay with Stripe
+                                    </a>
+                                }
+                                else
+                                {
+                                    <p class="fs-4 fw-bold text-success">$@((Model.AccountBalance / 100)?.ToString("F2") ?? "0.00")</p>
+                                    <button type="submit" class="btn btn-success btn-lg w-100 shadow-sm">
+                                        <i class="bi bi-credit-card me-2"></i> Pay with Stripe
+                                    </button>
+                                }
+                            </form>
                         </div>
                     </div>
                 </div>

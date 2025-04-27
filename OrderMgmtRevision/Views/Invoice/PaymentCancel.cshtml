@@ -11,7 +11,22 @@
         <p>Your payment was cancelled.</p>
         <p>We couldn't process your payment. Please try again or contact support if the issue persists.</p>
 
-        <a href="@Url.Action("Index", "Invoice")" class="btn btn-danger mt-3">Try Again</a>
+        <a href="@Url.Action("Index", "Settings")" class="btn btn-danger mt-3">Try Again</a>
         <a href="@Url.Action("Index", "Dashboard")" class="btn btn-secondary mt-3">Return to Dashboard</a>
     </div>
 </div>
+<div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+</div>
+
+<script src="~/js/stripe.js"></script>
+
+@if (TempData["Toast"] != null)
+{
+    var toastData = TempData["Toast"].ToString().Split('|');
+    var toastType = toastData[0];
+    var toastMessage = toastData[1];
+
+    <script>
+        showToastFromTempData('@toastMessage', '@toastType');
+    </script>
+}

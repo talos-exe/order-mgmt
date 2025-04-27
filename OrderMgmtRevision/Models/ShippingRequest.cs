@@ -33,7 +33,7 @@ namespace OrderMgmtRevision.Models
         public string ToZip { get; set; }
 
         [Required(ErrorMessage = "A country code is required.")]
-        public string ToCountryCode { get; set; } = "US";
+        public string ToCountryCode { get; set; }
 
         public string? ToPhone { get; set; } = "Not Given";
 

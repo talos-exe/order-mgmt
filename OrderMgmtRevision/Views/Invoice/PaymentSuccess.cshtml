@@ -16,3 +16,19 @@
         <a href="@Url.Action("Index", "Dashboard")" class="btn btn-primary mt-3">Return to Dashboard</a>
     </div>
 </div>
+
+<div id="toast-container" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+</div>
+
+<script src="~/js/stripe.js"></script>
+
+@if (TempData["Toast"] != null)
+{
+    var toastData = TempData["Toast"].ToString().Split('|');
+    var toastType = toastData[0];
+    var toastMessage = toastData[1];
+
+    <script>
+        showToastFromTempData('@toastMessage', '@toastType');
+    </script>
+}

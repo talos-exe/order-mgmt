@@ -1,142 +1,50 @@
-//document.addEventListener('DOMContentLoaded', () => {
-//    const form = document.getElementById('payment-form');
-//    const stripePublishableKey = form.dataset.stripeKey;
-//    const stripe = Stripe(stripePublishableKey);
+function showToast(message, type = 'success') {
+    const toastContainer = document.getElementById('toast-container');
 
-//    const elements = stripe.elements();
-//    const cardElement = elements.create('card');
-//    cardElement.mount('#card-element');
+    // Create toast element
+    const toastEl = document.createElement('div');
+    toastEl.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : 'danger'} border-0`;
+    toastEl.setAttribute('role', 'alert');
+    toastEl.setAttribute('aria-live', 'assertive');
+    toastEl.setAttribute('aria-atomic', 'true');
 
-//    const amount = parseInt(form.dataset.amount);
-//    let customerId = null;
+    // Create the toast structure
+    const flexDiv = document.createElement('div');
+    flexDiv.className = 'd-flex';
 
-//    function showToast(title, message) {
-//        const toastEl = document.getElementById('resultToast');
-//        if (!toastEl) {
-//            console.warn('Toast element not found.');
-//            alert(`${title}: ${message}`);
-//            return;
-//        }
+    const toastBody = document.createElement('div');
+    toastBody.className = 'toast-body';
+    toastBody.textContent = message; // Using textContent instead of innerHTML
 
-//        const toastHeader = toastEl.querySelector('.toast-header-text');
-//        const toastBody = toastEl.querySelector('.toast-body');
-//        const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+    const closeButton = document.createElement('button');
+    closeButton.className = 'btn-close btn-close-white me-2 m-auto';
+    closeButton.setAttribute('type', 'button');
+    closeButton.setAttribute('data-bs-dismiss', 'toast');
+    closeButton.setAttribute('aria-label', 'Close');
 
-//        toastHeader.textContent = title;
-//        toastBody.textContent = message;
-//        toast.show();
-//    }
+    // Assemble the elements
+    flexDiv.appendChild(toastBody);
+    flexDiv.appendChild(closeButton);
+    toastEl.appendChild(flexDiv);
 
-//    function showLoader(show) {
-//        const loader = document.getElementById('loading-overlay');
-//        if (loader) loader.style.display = show ? 'flex' : 'none';
-//    }
+    // Add to container
+    toastContainer.appendChild(toastEl);
 
-//    // Save payment method
-//    form.addEventListener('submit', async (event) => {
-//        event.preventDefault();
-//        showLoader(true);
+    // Initialize and show toast
+    const toast = new bootstrap.Toast(toastEl, {
+        autohide: true,
+        delay: 5000
+    });
+    toast.show();
 
-//        const { paymentMethod, error } = await stripe.createPaymentMethod({
-//            type: 'card',
-//            card: cardElement,
-//        });
+    // Remove from DOM after hiding
+    toastEl.addEventListener('hidden.bs.toast', () => {
+        toastEl.remove();
+    });
+}
 
-//        if (error) {
-//            showLoader(false);
-//            document.getElementById('card-errors').textContent = error.message;
-//            return;
-//        }
-
-//        try {
-//            const response = await fetch('/Invoice/SavePaymentMethod', {
-//                method: 'POST',
-//                headers: { 'Content-Type': 'application/json' },
-//                body: JSON.stringify({ paymentMethodId: paymentMethod.id })
-//            });
-
-//            const data = await response.json();
-//            showLoader(false);
-
-//            if (data.success) {
-//                customerId = data.customerId;
-//                showToast('Success!', 'Payment Method Saved Successfully.');
-//                document.getElementById('checkout-card').disabled = false;
-//                document.getElementById('checkout-ach').disabled = false;
-//            } else {
-//                showToast('Something went wrong', data.message || 'Unknown error');
-//            }
-//        } catch (err) {
-//            showLoader(false);
-//            showToast('Something went wrong', err.message);
-//        }
-//    });
-
-//    // Checkout with card
-//    document.getElementById('checkout-card').addEventListener('click', async () => {
-//        if (!customerId) {
-//            alert('Please save a payment method first.');
-//            return;
-//        }
-
-//        showLoader(true);
-//        try {
-//            const response = await fetch('/Invoice/CreateCheckoutSession', {
-//                method: 'POST',
-//                headers: { 'Content-Type': 'application/json' },
-//                body: JSON.stringify({
-//                    customerId: customerId,
-//                    amount: amount,
-//                    paymentType: 'card'
-//                })
-//            });
-
-//            const data = await response.json();
-//            showLoader(false);
-
-//            if (data.success) {
-//                stripe.redirectToCheckout({ sessionId: data.sessionId });
-//            } else {
-//                console.error('Checkout session creation failed:', data);
-//                showToast('Something went wrong', data.message || 'Unable to create checkout session');
-//            }
-//        } catch (err) {
-//            showLoader(false);
-//            showToast('Something went wrong', err.message);
-//        }
-//    });
-
-//    // Checkout with ACH
-//    document.getElementById('checkout-ach').addEventListener('click', async () => {
-//        if (!customerId) {
-//            alert('Please save a payment method first.');
-//            return;
-//        }
-
-//        showLoader(true);
-//        try {
-//            const response = await fetch('/Invoice/CreateCheckoutSession', {
-//                method: 'POST',
-//                headers: { 'Content-Type': 'application/json' },
-//                body: JSON.stringify({
-//                    customerId: customerId,
-//                    amount: amount,
-//                    paymentType: 'ach'
-//                })
-//            });
-
-//            const data = await response.json();
-//            showLoader(false);
-
-//            if (data.success) {
-//                stripe.redirectToCheckout({ sessionId: data.sessionId });
-//            } else {
-//                console.error('Checkout session creation failed:', data);
-//                showToast('Something went wrong', data.message || 'Unable to create checkout session');
-//            }
-//        } catch (err) {
-//            showLoader(false);
-//            showToast('Something went wrong', err.message);
-//        }
-//    });
-//});
+function showToastFromTempData(message, type) {
+    document.addEventListener('DOMContentLoaded', function () {
+        showToast(message, type);
+    });
+}
