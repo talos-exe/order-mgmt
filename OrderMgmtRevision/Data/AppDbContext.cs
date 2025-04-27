@@ -15,6 +15,11 @@ namespace OrderMgmtRevision.Data
         public DbSet<Inventory> InventoryAll { get; set; }
         public DbSet<Shipment> Shipments { get; set; }
         public DbSet<UserLog> UserLogs { get; set; }
+<<<<<<< Updated upstream
+=======
+        public DbSet<ShipmentStatusHistory> ShipmentStatusHistories { get; set; }
+        public DbSet<WorkOrder> WorkOrders { get; set; }
+>>>>>>> Stashed changes
 
         // Configure model
         protected override void OnModelCreating(ModelBuilder modelBuilder)
