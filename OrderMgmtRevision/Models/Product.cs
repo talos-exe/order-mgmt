@@ -9,7 +9,6 @@ namespace OrderMgmtRevision.Models
     public class Product
     {
         [Key]
-        [BindNever]
         public string? ProductID { get; set; } // Product ID
 
         [Required (ErrorMessage = "Product name/title is required.")]

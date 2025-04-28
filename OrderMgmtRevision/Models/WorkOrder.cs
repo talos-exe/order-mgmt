@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -13,6 +14,7 @@ namespace OrderMgmtRevision.Models
         public int WarehouseId { get; set; }
 
         [ForeignKey("WarehouseId")]
+        [ValidateNever]
         public Warehouse Warehouse { get; set; }
 
         [Required]

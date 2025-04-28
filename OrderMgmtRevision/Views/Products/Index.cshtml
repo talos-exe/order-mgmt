@@ -90,7 +90,7 @@
         <div class="ms-5 me-5">
             <div class="d-flex justify-content-start mb-2">
                 <button id="btnCreate" class="btn btn-primary btn-sm me-2" onclick="openCreateProductPane()">@Localizer["Create"]</button>
-                <button id="btnEdit" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>@Localizer["Edit"]</button>
+                <button id="btnEdit" class="btn btn-primary btn-sm me-2" onclick="openEditSelectedProduct()" disabled>@Localizer["Edit"]</button>
                 <button id="btnDelete" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>@Localizer["Delete"]</button>
                 @using (Html.BeginForm("Index", "Products", FormMethod.Get)) {
                         <input type="text" id="searchBar" class="form-control-sm me-2" name="searchString" value="@ViewBag.CurrentFilter" onkeyup="filterTable()" />

@@ -6,6 +6,19 @@
 
 <h2>Create Work Order</h2>
 
+@if (TempData["Errors"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show ms-5 me-5" role="alert">
+        <ul>
+            @foreach (var error in (TempData["Errors"] as IEnumerable<string> ?? new List<string>()))
+            {
+                <li>@error</li>
+            }
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
 <form asp-action="CreateWorkOrder" asp-controller="Warehouse" method="post">
     <input type="hidden" name="WarehouseId" value="@ViewBag.WarehouseId" />
 

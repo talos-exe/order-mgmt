@@ -137,6 +137,26 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/additional-methods.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        function toggleDropdown(dropdown) {
+            dropdown.classList.toggle('show');
+
+            var isExpanded = dropdown.classList.contains('show');
+            dropdown.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+        }
+
+        function updateAriaExpanded() {
+            var dropdownToggle = document.getElementById('userDropdown');
+            if (dropdownToggle) {
+                toggleDropdown(userDropdown);
+            }
+
+            var langDropdown = document.getElementById('langDropdown');
+            if (langDropdown) {
+                toggleDropdown(langDropdown);
+            }
+        }
+
+
          function updateLanguage(language) {
             const langCode = language === 'English' ? 'en' : 'zh';
             const returnUrl = window.location.pathname;
@@ -144,6 +164,8 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
+            var dropdownToggle = document.getElementById('userDropdown');
+            var langDropdown = document.getElementById('langDropdown');
             const cookies = document.cookie.split('; ');
             const cultureCookie = cookies.find(c => c.startsWith('.AspNetCore.Culture='));
 
@@ -165,6 +187,18 @@
             if (label) {
                 label.textContent = lang.startsWith('zh') ? '中文' : 'English';
             }
+
+            if (dropdownToggle) {
+                dropdownToggle.addEventListener('click', function() {
+                    toggleDropdown(dropdownToggle);
+                })
+            }
+
+            if (langDropdown) {
+            langDropdown.addEventListener('click', function() {
+                toggleDropdown(langDropdown);
+            });
+        }
         });
     </script>
 

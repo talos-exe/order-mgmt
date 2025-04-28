@@ -96,6 +96,60 @@ function closeCreateProduct() {
     $('#productListTab').tab('show');
 }
 
+function openEditProductPane(productId, productName) {
+    closeEditProduct();
+
+    var tabId = 'editProduct-' + productId;
+    var newTab = $('<li class="nav-item">' +
+        '<a class="nav-link" id="' + tabId + 'Tab" data-bs-toggle="tab" href="#' + tabId + '">' +
+        'Edit Product: ' + productName +
+        '</a>' +
+        '</li>');
+
+    $('#productTabs').append(newTab);
+
+    var newPane = $('<div class="tab-pane fade" id="' + tabId + '">' +
+        '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>' +
+        '</div>');
+    $('.tab-content').append(newPane);
+
+    $('#' + tabId + 'Tab').tab('show');
+
+    fetch(`/Products/_EditProduct?productId=${productId}`)
+        .then(response => response.text())
+        .then(data => {
+            $('#' + tabId).html(data);
+        })
+        .catch(() => {
+            $('#' + tabId).html('<div class="ms-5 me-5 text-danger">Error loading edit product form</div>');
+        });
+}
+
+function closeEditProduct() {
+    // Find any user details tab
+    $('a[id^="editProduct-"][id$="Tab"]').each(function () {
+        var tabId = $(this).attr('href');
+        // Remove the tab and its content
+        $(this).parent().remove();
+        $(tabId).remove();
+    });
+
+    // Activate the user list tab
+    $('#productListTab').tab('show');
+}
+
+function openEditSelectedProduct() {
+    var selectedCheckboxes = document.querySelectorAll('.product-checkbox:checked');
+
+    if (selectedCheckboxes.length === 1) {
+        var selectedRow = selectedCheckboxes[0].closest('tr');
+        var productId = selectedCheckboxes[0].value;
+        var productName = selectedRow.cells[2].innerText;
+
+        openEditProductPane(productId, productName);
+    }
+}
+
 function closeProductDetailsTab() {
     $('a[id^="productDetails-"][id$="Tab"]').each(function () {
         var tabId = $(this).attr('href');

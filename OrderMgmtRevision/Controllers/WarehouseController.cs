@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OrderMgmtRevision.Data;
 using OrderMgmtRevision.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace OrderMgmtRevision.Controllers
 {
@@ -54,9 +55,35 @@ namespace OrderMgmtRevision.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateWorkOrder(WorkOrder workOrder)
         {
+            ViewBag.WarehouseId = workOrder.WarehouseId;
             if (!ModelState.IsValid)
             {
-                ViewBag.WarehouseId = workOrder.WarehouseId;
+                var errors = ModelState
+                 .Where(x => x.Value.Errors.Count > 0)
+                 .Select(x => new {
+                     Property = x.Key,
+                     ErrorMessages = x.Value.Errors.Select(e => e.ErrorMessage).ToList()
+                 })
+                 .ToList();
+
+                // Create a list to store formatted error messages
+                var errorMessages = new List<string>();
+
+                // Format each error message
+                foreach (var error in errors)
+                {
+                    foreach (var message in error.ErrorMessages)
+                    {
+                        // Add property name if available
+                        if (!string.IsNullOrEmpty(error.Property))
+                            errorMessages.Add($"{error.Property}: {message}");
+                        else
+                            errorMessages.Add(message);
+                    }
+                }
+
+                // Store the error messages in TempData
+                TempData["Errors"] = errorMessages;
                 return View(workOrder);
             }
 

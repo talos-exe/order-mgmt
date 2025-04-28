@@ -252,7 +252,128 @@ namespace OrderMgmtRevision.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<IActionResult> _EditProduct(string productId)
+        {
+            var product = await _dbContext.Products.FindAsync(productId);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return PartialView("_EditProduct", product);
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProduct(Product model)
+        {
+            bool isAdmin = await IsUserAdmin();
+            var user = await _userManager.GetUserAsync(User);
+            string userId = user?.Id ?? "Unknown";
+            string userName = user?.UserName ?? "Unknown";
+            string ipAddress = GetClientIp();
+            string logMessage = "";
+
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                TempData["Error"] = "Invalid model state. Errors: " + string.Join(" | ", errors);
+                logMessage = isAdmin ? $"[Administrator] Failed product edit; invalid model state." : $"Failed product edit; invalid model state.";
+                await _logService.LogUserActivityAsync(userId, logMessage, ipAddress);
+                return RedirectToAction("Index", "Products");
+            }
+
+            var existingProduct = await _dbContext.Products.FindAsync(model.ProductID);
+            if (existingProduct == null)
+            {
+                TempData["Error"] = "Product not found.";
+                return RedirectToAction("Index", "Products");
+            }
+
+            // Update fields
+            existingProduct.ProductName = model.ProductName;
+            existingProduct.Description = model.Description;
+            existingProduct.SKU = model.SKU;
+            existingProduct.Price = model.Price;
+            existingProduct.Cost = model.Cost;
+            existingProduct.Stock = model.Stock;
+            existingProduct.Weight = model.Weight;
+            existingProduct.Width = model.Width;
+            existingProduct.Length = model.Length;
+            existingProduct.Height = model.Height;
+            existingProduct.UpdatedAt = DateTime.UtcNow;
+
+            try
+            {
+                _dbContext.Products.Update(existingProduct);
+                await _dbContext.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Product updated successfully.";
+                logMessage = isAdmin
+                    ? $"[Administrator] {userName} edited product {existingProduct.ProductName} | SKU: {existingProduct.SKU}"
+                    : $"User {userName} edited product {existingProduct.ProductName} | SKU: {existingProduct.SKU}";
+                await _logService.LogUserActivityAsync(userId, logMessage, ipAddress);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "An error occurred while updating the product.";
+                await _logService.LogUserActivityAsync(userId, $"Failed to update product. Error: {ex.Message}", ipAddress);
+            }
+
+            return RedirectToAction("Index", "Products");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> _DeleteProduct(string productId)
+        {
+            var product = await _dbContext.Products.FindAsync(productId);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            return PartialView("_DeleteProduct", product);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteProduct(string productId)
+        {
+            bool isAdmin = await IsUserAdmin();
+            var user = await _userManager.GetUserAsync(User);
+            string userId = user?.Id ?? "Unknown";
+            string userName = user?.UserName ?? "Unknown";
+            string ipAddress = GetClientIp();
+            string logMessage = "";
+
+            try
+            {
+                var product = await _dbContext.Products.FindAsync(productId);
+                if (product == null)
+                {
+                    TempData["Error"] = "Product not found.";
+                    return RedirectToAction("Index", "Products");
+                }
+
+                string productName = product.ProductName;
+                string productSKU = product.SKU;
+
+                _dbContext.Products.Remove(product);
+                await _dbContext.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Product deleted successfully.";
+                logMessage = isAdmin
+                    ? $"[Administrator] {userName} deleted product {productName} | SKU: {productSKU}"
+                    : $"User {userName} deleted product {productName} | SKU: {productSKU}";
+
+                await _logService.LogUserActivityAsync(userId, logMessage, ipAddress);
+                return RedirectToAction("Index", "Products");
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "An error occurred while deleting the product.";
+                await _logService.LogUserActivityAsync(userId, $"Failed to delete product. Error: {ex.Message}", ipAddress);
+                return RedirectToAction("Index", "Products");
+            }
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetProductDetails(string productId)
@@ -287,8 +408,5 @@ namespace OrderMgmtRevision.Controllers
 
             return PartialView("_ProductDetails", productViewModel);
         }
-
-        //public async Task<IActionResult> EditProductAsync()
-
     }
 }

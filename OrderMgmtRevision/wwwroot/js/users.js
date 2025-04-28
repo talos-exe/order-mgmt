@@ -129,7 +129,6 @@ function openUserDetailsTab(userId, userName) {
             $('#' + tabId).html(data);
         })
         .catch(() => {
-            console.log("User ID: " + userId);
             $('#' + tabId).html('<div class="ms-5 me-5 text-danger">Error loading user details</div>');
         });
 }
