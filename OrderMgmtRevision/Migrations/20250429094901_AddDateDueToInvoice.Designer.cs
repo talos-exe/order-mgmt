@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderMgmtRevision.Data;
 
@@ -11,9 +12,11 @@ using OrderMgmtRevision.Data;
 namespace OrderMgmtRevision.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250429094901_AddDateDueToInvoice")]
+    partial class AddDateDueToInvoice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -350,9 +353,6 @@ namespace OrderMgmtRevision.Migrations
                     b.Property<DateTime>("DateDue")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DatePaid")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -361,9 +361,6 @@ namespace OrderMgmtRevision.Migrations
 
                     b.Property<bool>("IsPaid")
                         .HasColumnType("bit");
-
-                    b.Property<string>("PaymentReference")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ShipmentId")
                         .HasColumnType("int");

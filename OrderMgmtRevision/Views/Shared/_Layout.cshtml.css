@@ -101,22 +101,19 @@ html, body {
 }
 
 .main-content {
-  width: 100%;
-  main
-    {
+    width: 100%;
     margin-left: 200px;
-    height: 1500px;
     background-color: #F5F5F5;
     padding-top: 50px;
     background-color: #F5F5F5;
     overflow: visible;
-    }
+    padding-bottom: 50px;
 }
 
 .topbar {
     position: fixed;
     top: 0;
-    margin-left: 200px;
+    margin-left: 0px;
     width: calc(100% - 200px);
     background-color: #07183D;
     color: #ffffffcc;
@@ -128,6 +125,7 @@ html, body {
     padding: 0 15px;
     white-space: nowrap;
     text-overflow: ellipsis;
+    z-index: 1030;
 }
 
 .tab-item {

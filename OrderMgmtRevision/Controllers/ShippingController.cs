@@ -191,7 +191,11 @@ namespace OrderMgmtRevision.Controllers
                         Shipment = shipment,
                         ShipmentId = shipment.ShipmentID,
                         InvoiceAmount = chargeAmount,
+                        DateCreated = DateTime.UtcNow,
+                        DateDue = DateTime.UtcNow.AddDays(7),
+                        IsPaid = false,
                         UserId = userAccount.Id,
+                        User = userAccount,
                         Description = $"Invoice Amount {chargeAmount} created due to shipment {shipment.ShipmentID}, charged to user {userAccount.UserName}"
                     };
 
@@ -309,7 +313,6 @@ namespace OrderMgmtRevision.Controllers
             string userId = user?.Id ?? "Unknown";
             string userName = user?.UserName ?? "Unknown";
             string ipAddress = GetClientIp();
-            string logMessage = "";
 
             Models.Product? originalProductObj = await _context.Products.FindAsync(model.ProductID);
             decimal originalHeight = (decimal)originalProductObj.Height;
@@ -434,29 +437,57 @@ namespace OrderMgmtRevision.Controllers
 
             try
             {
-                _context.Shipments.Add(shipment);
-                var result = await _context.SaveChangesAsync();
-                // Check result - should be > 0 if successful
-                if (result > 0)
+                // Begin database transaction - ensures both shipment and invoice are created or neither is
+                using (var transaction = await _context.Database.BeginTransactionAsync())
                 {
-                    var invoiceSend = SendUserShippingInvoice(user, costInCents, shipment);
-                    if (await invoiceSend == true)
+                    try
                     {
-                        TempData["SuccessMessage"] = "Shipment created successfully with tracking number: " + shipment.TrackingNumber + ". Your account was billed a new invoice";
-                        await _logService.LogUserActivityAsync(userId, $"Created shipment (ID: {shipment.ShipmentID})", GetClientIp());
-                        return RedirectToAction("Index", "Shipping");
+                        // Add the shipment but don't save changes yet
+                        _context.Shipments.Add(shipment);
+                        await _context.SaveChangesAsync();
+
+                        // Now create the invoice
+                        var invoice = new UserInvoice
+                        {
+                            Shipment = shipment,
+                            ShipmentId = shipment.ShipmentID,
+                            InvoiceAmount = costInCents,
+                            DateCreated = DateTime.UtcNow,
+                            DateDue = DateTime.UtcNow.AddDays(7),
+                            IsPaid = false,
+                            UserId = user.Id,
+                            User = user,
+                            PaymentReference = "",
+                            Description = $"Invoice Amount {costInCents} created due to shipment {shipment.ShipmentID}, charged to user {user.UserName}"
+                        };
+
+                        user.AccountBalance += costInCents;
+
+                        _context.Add(invoice);
+                        int saveResult = await _context.SaveChangesAsync();
+
+                        if (saveResult > 0)
+                        {
+                            // Only commit the transaction if both operations succeeded
+                            await transaction.CommitAsync();
+
+                            TempData["SuccessMessage"] = "Shipment created successfully with tracking number: " + shipment.TrackingNumber + ". Your account was billed a new invoice";
+                            await _logService.LogUserActivityAsync(userId, $"Created shipment (ID: {shipment.ShipmentID})", GetClientIp());
+                        }
+                        else
+                        {
+                            // If invoice save failed, roll back the transaction
+                            await transaction.RollbackAsync();
+                            TempData["Error"] = "Unable to charge user with Selected Rate: $" + selectedRate.Amount + ". No shipment was created and your account was not charged.";
+                            await _logService.LogUserActivityAsync(userId, "Failed to create invoice for shipment.", GetClientIp());
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        System.Diagnostics.Debug.WriteLine("Invoice came back " + invoiceSend.ToString() + "Invoice debug: User: " + user.UserName + "Selected rate: " + selectedRate.Amount + " shipment ID: " + shipment.ShipmentID);
-                        TempData["Error"] = "Unable to charge user with Selected Rate: $" + selectedRate.Amount + ". No shipment was created and your account was not charged.";
-                        await _logService.LogUserActivityAsync(userId, "Created shipment but unable to charge user.", GetClientIp());
+                        // Roll back the transaction if any operation failed
+                        await transaction.RollbackAsync();
+                        throw; // Re-throw to be caught by outer try-catch
                     }
-                }
-                else
-                {
-                    TempData["Error"] = "No changes were saved to the database.";
-                    return RedirectToAction("Index", "Shipping");
                 }
 
                 return RedirectToAction("Index", "Shipping");
@@ -469,9 +500,9 @@ namespace OrderMgmtRevision.Controllers
                 {
                     TempData["Errors"] = new List<string> { ex.InnerException.Message };
                 }
+                await _logService.LogUserActivityAsync(userId, $"Error creating shipment or invoice: {ex.Message}", GetClientIp());
                 return RedirectToAction("Index", "Shipping");
             }
-
         }
 
         [HttpGet]

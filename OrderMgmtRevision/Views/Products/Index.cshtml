@@ -125,6 +125,21 @@
                                     <a class="btn-sm btn-primary" style="cursor: pointer" onclick="openProductDetailsTab('@product.ProductID', '@product.ProductName')">@Localizer["View Details"]</a>
                                 </td>
                             </tr>
+
+                            <div class="modal fade" id="deleteProductModal-@product.ProductID" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteProductModalLabel-@product.ProductID">Delete Product</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p id="deleteWarning">Are you sure you want to delete the product <strong>@product.SKU</strong>? This action cannot be undone.</p>
+                                            <partial name="_DeleteProduct" model="@product" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         }
                     </tbody>
                 </table>

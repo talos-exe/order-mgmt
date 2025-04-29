@@ -1,5 +1,7 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model OrderMgmtRevision.Models.Product
+
+<form method="post" asp-action="DeleteProduct" asp-controller="Products">
+    <input type="hidden" asp-for="ProductID" />
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+</form>

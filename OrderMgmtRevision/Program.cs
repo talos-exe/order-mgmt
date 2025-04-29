@@ -119,6 +119,7 @@ builder.Services.AddTransient<IEmailService, EmailService>();
 builder.Services.AddSingleton<FedExService>();
 builder.Services.AddHttpClient<ShippoService>();
 builder.Services.AddScoped<ILogService, LogService>();
+builder.Services.AddHostedService<InvoiceCheckerService>();
 builder.Services.AddHttpClient<StripeService>();
 builder.Services.AddSession();
 
