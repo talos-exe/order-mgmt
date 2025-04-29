@@ -1,10 +1,11 @@
 ﻿@model OrderMgmtRevision.Models.WorkOrder
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Create Work Order";
+    ViewData["Title"] = Localizer["Create Work Order"];
 }
 
-<h2>Create Work Order</h2>
+<h2>@Localizer["Create Work Order"]</h2>
 
 @if (TempData["Errors"] != null)
 {
@@ -23,18 +24,18 @@
     <input type="hidden" name="WarehouseId" value="@ViewBag.WarehouseId" />
 
     <div class="form-group">
-        <label asp-for="Description"></label>
+        <label asp-for="Description">@Localizer["Description"]</label>
         <textarea asp-for="Description" class="form-control"></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Type"></label>
+        <label asp-for="Type">@Localizer["Type"]</label>
         <input asp-for="Type" class="form-control" />
         <span asp-validation-for="Type" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary">@Localizer["Submit"]</button>
 </form>
 
 @section Scripts {

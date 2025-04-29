@@ -1,25 +1,26 @@
 ﻿@model IEnumerable<OrderMgmtRevision.Models.WorkOrder>
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @{
-    ViewData["Title"] = "Work Orders";
+    ViewData["Title"] = Localizer["Work Orders"];
 }
 
-<h2>Work Orders for @ViewBag.WarehouseName</h2>
+<h2>@Localizer["Work Orders for"] @ViewBag.WarehouseName</h2>
 
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Description</th>
-            <th>Type</th>
-            <th>Created At</th>
+            <th>@Localizer["ID"]</th>
+            <th>@Localizer["Description"]</th>
+            <th>@Localizer["Type"]</th>
+            <th>@Localizer["Created At"]</th>
         </tr>
     </thead>
     <tbody>
         @if (!Model.Any())
         {
             <tr>
-                <td colspan="4" class="text-center">No work orders found.</td>
+                <td colspan="4" class="text-center">@Localizer["No work orders found."]</td>
             </tr>
         }
         else

@@ -117,25 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Create" xml:space="preserve">
-    <value> 创建</value>
+  <data name="-- Select State --" xml:space="preserve">
+    <value>-- 选择州/省 --</value>
   </data>
-  <data name="Create Password" xml:space="preserve">
-    <value>创建密码</value>
+  <data name="Amount" xml:space="preserve">
+    <value>费用</value>
   </data>
-  <data name="Create User" xml:space="preserve">
-    <value>创建用户</value>
+  <data name="Create Shipping Request" xml:space="preserve">
+    <value>创建发货请求</value>
   </data>
-  <data name="Email address" xml:space="preserve">
-    <value>邮箱地址</value>
+  <data name="Next: Choose Rates" xml:space="preserve">
+    <value>下一步：选择运费</value>
   </data>
-  <data name="Full Name" xml:space="preserve">
-    <value>全名</value>
+  <data name="Product" xml:space="preserve">
+    <value>产品</value>
   </data>
-  <data name="Is Admin" xml:space="preserve">
-    <value>是管理员</value>
+  <data name="Provider" xml:space="preserve">
+    <value>物流公司</value>
   </data>
-  <data name="Username" xml:space="preserve">
-    <value>用户名</value>
+  <data name="Recipient Address" xml:space="preserve">
+    <value>收件地址</value>
+  </data>
+  <data name="Recipient City" xml:space="preserve">
+    <value>收件城市</value>
+  </data>
+  <data name="Recipient Country Code" xml:space="preserve">
+    <value>国家代码</value>
+  </data>
+  <data name="Recipient Phone Number (Optional)" xml:space="preserve">
+    <value>收件电话（可选）</value>
+  </data>
+  <data name="Recipient State" xml:space="preserve">
+    <value>收件州/省</value>
+  </data>
+  <data name="Recipient Zip/Postal Code" xml:space="preserve">
+    <value>邮政编码</value>
+  </data>
+  <data name="Select a Shipping Rate" xml:space="preserve">
+    <value>选择运费</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>服务</value>
+  </data>
+  <data name="Shipment Details" xml:space="preserve">
+    <value>发货详情</value>
+  </data>
+  <data name="Shipment Name" xml:space="preserve">
+    <value>发货名称</value>
+  </data>
+  <data name="To Address" xml:space="preserve">
+    <value>收件地址</value>
+  </data>
+  <data name="Warehouse" xml:space="preserve">
+    <value>仓库</value>
   </data>
 </root>

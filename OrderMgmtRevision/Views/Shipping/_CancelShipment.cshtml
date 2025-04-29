@@ -1,8 +1,13 @@
 ﻿@model OrderMgmtRevision.Models.ShipmentViewModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 <form method="post" asp-action="CancelShipment" asp-controller="Shipping">
     @Html.AntiForgeryToken()
     <input type="hidden" name="id" value="@Model.ShipmentID" asp-for="ShipmentID" />
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
-    <button type="submit" class="btn btn-danger">Yes, Cancel</button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        @Localizer["No"]
+    </button>
+    <button type="submit" class="btn btn-danger">
+        @Localizer["Yes, Cancel"]
+    </button>
 </form>

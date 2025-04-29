@@ -117,25 +117,67 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Create" xml:space="preserve">
-    <value> 创建</value>
+  <data name="Created At" xml:space="preserve">
+    <value>创建时间</value>
   </data>
-  <data name="Create Password" xml:space="preserve">
-    <value>创建密码</value>
+  <data name="Created By" xml:space="preserve">
+    <value>创建人</value>
   </data>
-  <data name="Create User" xml:space="preserve">
-    <value>创建用户</value>
+  <data name="Destination Address" xml:space="preserve">
+    <value>收件地址</value>
   </data>
-  <data name="Email address" xml:space="preserve">
-    <value>邮箱地址</value>
+  <data name="Destination City" xml:space="preserve">
+    <value>收件城市</value>
   </data>
-  <data name="Full Name" xml:space="preserve">
-    <value>全名</value>
+  <data name="Destination Phone" xml:space="preserve">
+    <value>收件电话</value>
   </data>
-  <data name="Is Admin" xml:space="preserve">
-    <value>是管理员</value>
+  <data name="Destination State" xml:space="preserve">
+    <value>收件州/省</value>
   </data>
-  <data name="Username" xml:space="preserve">
-    <value>用户名</value>
+  <data name="Destination Zip" xml:space="preserve">
+    <value>收件邮编</value>
+  </data>
+  <data name="Download Label (PDF)" xml:space="preserve">
+    <value>下载标签（PDF）</value>
+  </data>
+  <data name="Estimated Days To Destination" xml:space="preserve">
+    <value>预计送达天数</value>
+  </data>
+  <data name="Last Updated" xml:space="preserve">
+    <value>最近更新时间</value>
+  </data>
+  <data name="Product Shipped" xml:space="preserve">
+    <value>发货产品</value>
+  </data>
+  <data name="Recipient Name" xml:space="preserve">
+    <value>收件人姓名</value>
+  </data>
+  <data name="Shipment Cost" xml:space="preserve">
+    <value>运费</value>
+  </data>
+  <data name="Shipment Details for" xml:space="preserve">
+    <value>发货详情</value>
+  </data>
+  <data name="ShipmentID" xml:space="preserve">
+    <value>发货编号</value>
+  </data>
+  <data name="Shipping Provider" xml:space="preserve">
+    <value>物流供应商</value>
+  </data>
+  <data name="Shipping Service" xml:space="preserve">
+    <value>运输服务</value>
+  </data>
+  <data name="Tracking Number" xml:space="preserve">
+    <value>追踪号码</value>
+  </data>
+  <data name="Tracking Url" xml:space="preserve">
+    <value>追踪链接</value>
+  </data>
+  <data name="Warehouse Source Address" xml:space="preserve">
+    <value>发货仓库地址</value>
+  </data>
+  <data name="Warehouse Source Name" xml:space="preserve">
+    <value>发货仓库名称</value>
   </data>
 </root>

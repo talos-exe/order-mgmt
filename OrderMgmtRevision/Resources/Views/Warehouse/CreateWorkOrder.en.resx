@@ -117,25 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Create" xml:space="preserve">
-    <value> 创建</value>
+  <data name="Create Work Order" xml:space="preserve">
+    <value>Create Work Order</value>
   </data>
-  <data name="Create Password" xml:space="preserve">
-    <value>创建密码</value>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
   </data>
-  <data name="Create User" xml:space="preserve">
-    <value>创建用户</value>
+  <data name="Submit" xml:space="preserve">
+    <value>Submit</value>
   </data>
-  <data name="Email address" xml:space="preserve">
-    <value>邮箱地址</value>
-  </data>
-  <data name="Full Name" xml:space="preserve">
-    <value>全名</value>
-  </data>
-  <data name="Is Admin" xml:space="preserve">
-    <value>是管理员</value>
-  </data>
-  <data name="Username" xml:space="preserve">
-    <value>用户名</value>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
   </data>
 </root>

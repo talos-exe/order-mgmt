@@ -1,19 +1,20 @@
 ﻿@model List<ShippingRate>
 @using System.Globalization
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 <div class="ms-5 me-5 mt-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4>Available Shipping Rates</h4>
+        <h4>@Localizer["Available Shipping Rates"]</h4>
         <a asp-action="Index" class="btn-close" aria-label="Close"></a>
     </div>
 
     <table class="table table-striped table-bordered">
         <thead class="table-light">
             <tr>
-                <th>Provider</th>
-                <th>Service</th>
-                <th>Price</th>
-                <th>Estimated Days</th>
+                <th>@Localizer["Provider"]</th>
+                <th>@Localizer["Service"]</th>
+                <th>@Localizer["Price"]</th>
+                <th>@Localizer["Estimated Days"]</th>
             </tr>
         </thead>
         <tbody>
@@ -23,7 +24,7 @@
                     <td>@rate.Provider</td>
                     <td>@rate.Service</td>
                     <td>
-                        @rate.Amount.ToString("C", System.Globalization.CultureInfo.CreateSpecificCulture("en-US")) @rate.Currency
+                        @rate.Amount.ToString("C", CultureInfo.CreateSpecificCulture("en-US")) @rate.Currency
                     </td>
                     <td>@rate.EstimatedDays</td>
                 </tr>
@@ -32,6 +33,6 @@
     </table>
 
     <div class="text-end mt-3">
-        <a asp-action="Index" class="btn btn-secondary">Back</a>
+        <a asp-action="Index" class="btn btn-secondary">@Localizer["Back"]</a>
     </div>
 </div>
