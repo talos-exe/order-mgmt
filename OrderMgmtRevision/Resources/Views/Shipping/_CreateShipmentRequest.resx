@@ -117,25 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Create" xml:space="preserve">
-    <value> 创建</value>
+  <data name="-- Select State --" xml:space="preserve">
+    <value>-- Select State --</value>
   </data>
-  <data name="Create Password" xml:space="preserve">
-    <value>创建密码</value>
+  <data name="Amount" xml:space="preserve">
+    <value>Amount</value>
   </data>
-  <data name="Create User" xml:space="preserve">
-    <value>创建用户</value>
+  <data name="Create Shipping Request" xml:space="preserve">
+    <value>Create Shipping Request</value>
   </data>
-  <data name="Email address" xml:space="preserve">
-    <value>邮箱地址</value>
+  <data name="Next: Choose Rates" xml:space="preserve">
+    <value>Next: Choose Rates</value>
   </data>
-  <data name="Full Name" xml:space="preserve">
-    <value>全名</value>
+  <data name="Product" xml:space="preserve">
+    <value>Product</value>
   </data>
-  <data name="Is Admin" xml:space="preserve">
-    <value>是管理员</value>
+  <data name="Provider" xml:space="preserve">
+    <value>Provider</value>
   </data>
-  <data name="Username" xml:space="preserve">
-    <value>用户名</value>
+  <data name="Recipient Address" xml:space="preserve">
+    <value>Recipient Address</value>
+  </data>
+  <data name="Recipient City" xml:space="preserve">
+    <value>Recipient City</value>
+  </data>
+  <data name="Recipient Country Code" xml:space="preserve">
+    <value>Recipient Country Code</value>
+  </data>
+  <data name="Recipient Phone Number (Optional)" xml:space="preserve">
+    <value>Recipient Phone Number (Optional)</value>
+  </data>
+  <data name="Recipient State" xml:space="preserve">
+    <value>Recipient State</value>
+  </data>
+  <data name="Recipient Zip/Postal Code" xml:space="preserve">
+    <value>Recipient Zip/Postal Code</value>
+  </data>
+  <data name="Select a Shipping Rate" xml:space="preserve">
+    <value>Select a Shipping Rate</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Service</value>
+  </data>
+  <data name="Shipment Details" xml:space="preserve">
+    <value>Shipment Details</value>
+  </data>
+  <data name="Shipment Name" xml:space="preserve">
+    <value>Shipment Name</value>
+  </data>
+  <data name="To Address" xml:space="preserve">
+    <value>To Address</value>
+  </data>
+  <data name="Warehouse" xml:space="preserve">
+    <value>Warehouse</value>
   </data>
 </root>

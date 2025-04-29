@@ -1,7 +1,12 @@
 ﻿@model OrderMgmtRevision.Models.Product
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 <form method="post" asp-action="DeleteProduct" asp-controller="Products">
     <input type="hidden" asp-for="ProductID" />
-    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        @Localizer["Cancel"]
+    </button>
+    <button type="submit" class="btn btn-danger">
+        @Localizer["Yes, Delete"]
+    </button>
 </form>
