@@ -7,7 +7,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace OrderMgmtRevision.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class WarehouseController : Controller
     {
         private readonly AppDbContext _context;
