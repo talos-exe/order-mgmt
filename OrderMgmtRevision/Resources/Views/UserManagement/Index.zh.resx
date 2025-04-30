@@ -117,26 +117,53 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Account Invoice" xml:space="preserve">
+    <value>账户发票</value>
+  </data>
   <data name="Action" xml:space="preserve">
     <value>操作</value>
+  </data>
+  <data name="Active User?" xml:space="preserve">
+    <value>是否激活用户</value>
   </data>
   <data name="Are you sure you want to delete all logs? This action cannot be undone." xml:space="preserve">
     <value>您确定要删除所有日志吗？此操作无法撤销。</value>
   </data>
+  <data name="Are you sure you want to delete the user {0}? This action cannot be undone." xml:space="preserve">
+    <value>确定要删除用户 {0} 吗？此操作无法撤销。</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>取消</value>
+  </data>
+  <data name="Clear All Logs" xml:space="preserve">
+    <value>清除所有日志</value>
   </data>
   <data name="Confirm Log Clearance" xml:space="preserve">
     <value>确认清除日志</value>
   </data>
+  <data name="Confirmed User?" xml:space="preserve">
+    <value>是否已确认用户</value>
+  </data>
   <data name="Create" xml:space="preserve">
     <value>新增</value>
+  </data>
+  <data name="Create User" xml:space="preserve">
+    <value>创建用户</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>删除</value>
   </data>
+  <data name="Delete User" xml:space="preserve">
+    <value>删除用户</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>编辑</value>
+  </data>
+  <data name="Edit Profile" xml:space="preserve">
+    <value>编辑资料</value>
+  </data>
+  <data name="Edit User" xml:space="preserve">
+    <value>编辑用户</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>电子邮件</value>
@@ -150,20 +177,44 @@
   <data name="IP Address" xml:space="preserve">
     <value>IP 地址</value>
   </data>
+  <data name="Last Login" xml:space="preserve">
+    <value>上次登录</value>
+  </data>
   <data name="Log Id" xml:space="preserve">
     <value>日志 ID</value>
+  </data>
+  <data name="More" xml:space="preserve">
+    <value>更多</value>
+  </data>
+  <data name="My Account" xml:space="preserve">
+    <value>我的账户</value>
   </data>
   <data name="Next" xml:space="preserve">
     <value>下一页</value>
   </data>
+  <data name="Page" xml:space="preserve">
+    <value>页</value>
+  </data>
   <data name="Previous" xml:space="preserve">
     <value>上一页</value>
+  </data>
+  <data name="Products Added" xml:space="preserve">
+    <value>添加的产品</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>角色</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>搜索</value>
   </data>
   <data name="Search by Log Id or Username" xml:space="preserve">
     <value>按日志 ID 或用户名搜索</value>
   </data>
   <data name="Search by Username" xml:space="preserve">
     <value>按用户名搜索</value>
+  </data>
+  <data name="Shipments Made" xml:space="preserve">
+    <value>发出的运输</value>
   </data>
   <data name="Timestamp" xml:space="preserve">
     <value>时间戳</value>
@@ -182,6 +233,9 @@
   </data>
   <data name="Username" xml:space="preserve">
     <value>用户名</value>
+  </data>
+  <data name="View Invoices" xml:space="preserve">
+    <value>查看发票</value>
   </data>
   <data name="Yes, Clear Logs" xml:space="preserve">
     <value>是的，清除日志</value>

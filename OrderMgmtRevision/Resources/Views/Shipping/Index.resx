@@ -192,4 +192,55 @@
   <data name="Shipping" xml:space="preserve">
     <value>Shipping</value>
   </data>
+  <data name="No shipments found" xml:space="preserve">
+    <value>No shipments found</value>
+  </data>
+  <data name="Shipments" xml:space="preserve">
+    <value>Shipments</value>
+  </data>
+  <data name="Inbound Shipments" xml:space="preserve">
+    <value>Inbound Shipments</value>
+  </data>
+  <data name="Currently Inbound" xml:space="preserve">
+    <value>Currently Inbound</value>
+  </data>
+  <data name="Outbound Shipments" xml:space="preserve">
+    <value>Outbound Shipments</value>
+  </data>
+  <data name="Shipping to Customers" xml:space="preserve">
+    <value>Shipping to Customers</value>
+  </data>
+  <data name="Shipping Requests" xml:space="preserve">
+    <value>Shipping Requests</value>
+  </data>
+  <data name="Search by tracking number or name" xml:space="preserve">
+    <value>Search by tracking number or name</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="All Shipments" xml:space="preserve">
+    <value>All Shipments</value>
+  </data>
+  <data name="Cancelled Only" xml:space="preserve">
+    <value>Cancelled Only</value>
+  </data>
+  <data name="All Except Cancelled" xml:space="preserve">
+    <value>All Except Cancelled</value>
+  </data>
+  <data name="Shipping Requests / Rates" xml:space="preserve">
+    <value>Shipping Requests / Rates</value>
+  </data>
+  <data name="Page" xml:space="preserve">
+    <value>Page</value>
+  </data>
+  <data name="Shipment ID" xml:space="preserve">
+    <value>Shipment ID</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Create Shipping Request" xml:space="preserve">
+    <value>Create Shipping Request</value>
+  </data>
 </root>

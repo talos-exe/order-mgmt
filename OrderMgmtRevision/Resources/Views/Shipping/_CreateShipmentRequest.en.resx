@@ -126,6 +126,12 @@
   <data name="Create Shipping Request" xml:space="preserve">
     <value>Create Shipping Request</value>
   </data>
+  <data name="Height" xml:space="preserve">
+    <value>Height</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>Length</value>
+  </data>
   <data name="Next: Choose Rates" xml:space="preserve">
     <value>Next: Choose Rates</value>
   </data>
@@ -170,5 +176,11 @@
   </data>
   <data name="Warehouse" xml:space="preserve">
     <value>Warehouse</value>
+  </data>
+  <data name="Weight" xml:space="preserve">
+    <value>Weight</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>Width</value>
   </data>
 </root>
