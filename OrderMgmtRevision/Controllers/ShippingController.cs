@@ -600,6 +600,15 @@ namespace OrderMgmtRevision.Controllers
                 return RedirectToAction("Index");
             }
 
+            bool isPaid = await _context.UserInvoices
+            .AnyAsync(i => i.Shipment.ShipmentID == id && i.IsPaid);
+
+            if (isPaid)
+            {
+                TempData["Error"] = "This shipment cannot be cancelled because the invoice is already paid. Contact an administrator for assistance.";
+                return RedirectToAction("Index");
+            }
+
             System.Diagnostics.Debug.WriteLine($"Attempting to cancel label with ID: {shipment.Label.LabelObjectId}");
             
             try
@@ -616,10 +625,20 @@ namespace OrderMgmtRevision.Controllers
                 shipment.Tracking.Status = "CANCELLED";
                 shipment.Tracking.StatusDate = DateTime.UtcNow.ToString("yyy-MM-ddTHH:mm:ssZ");
 
+                var invoice = await _context.UserInvoices
+                .FirstOrDefaultAsync(i => i.Shipment.ShipmentID == shipment.ShipmentID && !i.IsPaid);
+
+                if (invoice != null)
+                {
+                    user.AccountBalance -= invoice.InvoiceAmount;
+                    _context.UserInvoices.Remove(invoice); // or mark as cancelled
+                    await _context.SaveChangesAsync();
+                }
+
                 _context.Shipments.Update(shipment);
                 await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Shipment cancelled successfully.";
-                await _logService.LogUserActivityAsync(userId, $"Shipment (ID: {shipment.ShipmentID}) cancelled successfully.", GetClientIp());
+                TempData["SuccessMessage"] = "Shipment cancelled successfully. The invoice generated for this shipment has been refunded, and your account is no longer charged.";
+                await _logService.LogUserActivityAsync(userId, $"Shipment (ID: {shipment.ShipmentID}) cancelled successfully. Invoice refunded.", GetClientIp());
             }
             catch (Exception ex)
             {
