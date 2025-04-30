@@ -12,6 +12,7 @@ using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NuGet.Common;
 using Stripe;
+using Stripe.Climate;
 
 
 namespace OrderMgmtRevision.Controllers
@@ -41,6 +42,11 @@ namespace OrderMgmtRevision.Controllers
 
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, string statusFilter, int? page)
         {
+            var user = await _userManager.GetUserAsync(User);
+            string userName = user?.UserName ?? "Unknown";
+            bool isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+
+
             ViewBag.CurrentSort = sortOrder;
             ViewBag.StatusFilter = statusFilter;
             ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -70,6 +76,11 @@ namespace OrderMgmtRevision.Controllers
                 .Include(s => s.Label) // Include shipping label details
                 .Include(s => s.Tracking) // Include tracking details
                 .AsQueryable();
+
+            if (!isAdmin)
+            {
+                shipmentQuery = shipmentQuery.Where(s => s.CreatedBy == userName);
+            }
 
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -158,6 +169,8 @@ namespace OrderMgmtRevision.Controllers
 
             int pageSize = 15;
             int pageNumber = (page ?? 1);
+
+            ViewBag.ShippingOutbound = await shipmentQuery.CountAsync();
 
             return View(shipmentViewModels.ToPagedList(pageNumber, pageSize));
         }

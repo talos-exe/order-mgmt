@@ -80,6 +80,10 @@ namespace OrderMgmtRevision.Controllers
         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
 
+            var user = await _userManager.GetUserAsync(User);
+            string userName = user?.UserName ?? "Unknown";
+            bool isAdmin = await IsUserAdmin();
+
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.SKUSortParm = sortOrder == "SKU" ? "sku_desc" : "SKU";
@@ -98,8 +102,8 @@ namespace OrderMgmtRevision.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            var products = from p in _dbContext.Products
-                           select p;
+            var products = _dbContext.Products.AsQueryable();
+            if (!isAdmin) { products = products.Where(p => p.CreatedBy == userName); }
 
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -144,8 +148,8 @@ namespace OrderMgmtRevision.Controllers
             int pageSize = 20;
             int pageNumber = (page ?? 1);
 
-            ViewBag.TotalProducts = await _dbContext.Products.CountAsync();
-            ViewBag.TotalShipped = await _dbContext.Products.SumAsync(p => p.ShipAmount ?? 0);
+            ViewBag.TotalProducts = await products.CountAsync();
+            ViewBag.TotalShipped = await products.SumAsync(p => p.ShipAmount ?? 0);
 
             return View(products.ToPagedList(pageNumber, pageSize));
         }
