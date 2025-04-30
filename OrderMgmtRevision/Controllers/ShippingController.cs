@@ -288,9 +288,35 @@ namespace OrderMgmtRevision.Controllers
         [HttpPost]
         public async Task<IActionResult> GetRates(ShippingRequestViewModel request)
         {
-            var rates = await _shippoService.GetShippingRatesAsync(request); // however you're getting these
+            ModelState.Remove("Warehouses");
+            ModelState.Remove("ProductList");
 
-            var result = rates.Select(r => new {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                .SelectMany(v => v.Errors)
+                .Select(e => e.ErrorMessage)
+                .ToList();
+
+                return BadRequest(new { errors });
+            }
+
+            var product = await _context.Products.FindAsync(request.ProductID);
+            if (product == null)
+            {
+                return BadRequest("Invalid product selected");
+            }
+
+            // Ensure we're using server-side values, not client-provided ones
+            request.Weight = (decimal)product.Weight;
+            request.Length = (decimal)product.Length;
+            request.Width = (decimal)product.Width;
+            request.Height = (decimal)product.Height;
+
+            var rates = await _shippoService.GetShippingRatesAsync(request);
+
+            // Store rates in session to verify selection later
+            var sanitizedRates = rates.Select(r => new {
                 RateObjectId = r.RateObjectId,
                 Provider = r.Provider,
                 Service = r.Service,
@@ -298,15 +324,17 @@ namespace OrderMgmtRevision.Controllers
                 Currency = r.Currency,
                 EstimatedDays = r.EstimatedDays
             }).ToList();
-            System.Diagnostics.Debug.WriteLine("Shippo rate results when clicking shipment: " + JsonConvert.SerializeObject(result));
 
-            return Json(result);
+            // Store valid rate IDs and amounts in TempData or Session for validation during submission
+            HttpContext.Session.SetString("ValidRates", JsonConvert.SerializeObject(sanitizedRates));
+
+            return Json(sanitizedRates);
 
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateShippingRequest(ShippingRequestViewModel model, string selectedRateJson)
+        public async Task<IActionResult> CreateShippingRequest(ShippingRequestViewModel model, string selectedRateId)
         {
             bool isAdmin = await IsUserAdmin();
             var user = await _userManager.GetUserAsync(User);
@@ -315,12 +343,16 @@ namespace OrderMgmtRevision.Controllers
             string ipAddress = GetClientIp();
 
             Models.Product? originalProductObj = await _context.Products.FindAsync(model.ProductID);
-            decimal originalHeight = (decimal)originalProductObj.Height;
-            decimal originalWidth = (decimal)originalProductObj.Width;
-            decimal originalLength = (decimal)originalProductObj.Length;
-            decimal originalWeight = (decimal)originalProductObj.Weight;
+            if (originalProductObj == null)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid product selected.");
+                return View(model);
+            }
 
-            System.Diagnostics.Debug.WriteLine("CreateShippingRequest called with Rate JSON: " + selectedRateJson);
+            model.Weight = (decimal)originalProductObj.Weight;
+            model.Height = (decimal)originalProductObj.Height;
+            model.Length = (decimal)originalProductObj.Length;
+            model.Width = (decimal)originalProductObj.Width;
 
             ModelState.Remove("Warehouses");
             ModelState.Remove("ProductList");
@@ -344,19 +376,18 @@ namespace OrderMgmtRevision.Controllers
             if (!ModelState.IsValid)
             {
                 // Repopulate dropdown lists
-                model.ProductList = await _context.Products.ToListAsync();
-                model.Warehouses = await _context.Warehouses.ToListAsync();
-                return View("Index", model);
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                TempData["Errors"] = errors;
+                return RedirectToAction("Index", "Shipping");
             }
 
             var source = await _context.Warehouses.FindAsync(model.SourceWarehouseId);
-
-            if (model.Weight != originalWeight || model.Length != originalLength || model.Height != originalHeight || model.Width != originalWidth)
+            if (source == null)
             {
-                ModelState.AddModelError(string.Empty, "Invalid data submitted. You cannot modify Product values yourself.");
-                await _logService.LogUserActivityAsync(userId, $"User {user.UserName} attempted product property forgery.", ipAddress);
+                ModelState.AddModelError(string.Empty, "Invalid warehouse selected");
                 return View(model);
             }
+
 
             var request = new ShippingRequest
             {
@@ -380,27 +411,24 @@ namespace OrderMgmtRevision.Controllers
                 Height = model.Height
             };
 
-            Models.ShippingRate selectedRate = null;
-            if (!string.IsNullOrEmpty(selectedRateJson))
+            string validRatesJson = HttpContext.Session.GetString("ValidRates");
+            if (string.IsNullOrEmpty(validRatesJson))
             {
-                try
-                {
-                    selectedRate = JsonConvert.DeserializeObject<Models.ShippingRate>(selectedRateJson);
-                }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine("Error deserializing rate: " + ex.Message);
-                }
+                TempData["Error"] = "Your session has expired. Please try again.";
+                return RedirectToAction("Index");
             }
 
-            System.Diagnostics.Debug.WriteLine("Selected rate chosen: " + JsonConvert.SerializeObject(selectedRate));
+            var validRates = JsonConvert.DeserializeObject<List<Models.ShippingRate>>(validRatesJson);
+            var selectedRate = validRates?.FirstOrDefault(r => r.RateObjectId == selectedRateId);
 
             if (selectedRate == null)
             {
-                TempData["Error"] = "Selected rate not found.";
-                return RedirectToAction("Index", "Shipping");
+                await _logService.LogUserActivityAsync(userId, $"User {userName} attempted to use an invalid rate ID: {selectedRateId}", ipAddress);
+                TempData["Error"] = "Selected shipping rate is invalid. Please try again.";
+                return RedirectToAction("Index");
             }
 
+            // Create label using validated rate ID
             var label = await _shippoService.CreateLabelAsync(selectedRate.RateObjectId);
             var trackingNumber = string.IsNullOrWhiteSpace(label.TrackingNumber) ? "NOTGIVEN" : label.TrackingNumber;
 

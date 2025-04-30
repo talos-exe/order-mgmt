@@ -408,5 +408,39 @@ namespace OrderMgmtRevision.Controllers
 
             return PartialView("_ProductDetails", productViewModel);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProductDetailsForShipment(string productId)
+        {
+            var product = await _dbContext.Products.FindAsync(productId);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            var productViewModel = await _dbContext.Products
+                .Where(p => p.ProductID.ToString() == productId)
+                .Select(p => new Product
+                {
+                    ProductID = p.ProductID,
+                    ProductName = p.ProductName,
+                    Description = p.Description,
+                    SKU = p.SKU,
+                    Price = p.Price,
+                    Cost = p.Cost,
+                    Stock = p.Stock,
+                    Height = p.Height,
+                    Width = p.Width,
+                    Length = p.Length,
+                    Weight = p.Weight,
+                    CreatedAt = p.CreatedAt,
+                    UpdatedAt = p.UpdatedAt,
+                    CreatedBy = p.CreatedBy,
+                    ShipAmount = p.ShipAmount
+                })
+                .FirstOrDefaultAsync();
+
+            return Json(productViewModel);
+        }
     }
 }

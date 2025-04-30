@@ -103,5 +103,31 @@ namespace OrderMgmtRevision.Controllers
             ViewBag.WarehouseName = (await _context.Warehouses.FindAsync(warehouseId))?.WarehouseName;
             return View(workOrders);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetWarehouseDetails(int warehouseId)
+        {
+            var warehouse = await _context.Warehouses
+                .Where(w => w.WarehouseID == warehouseId)
+                .Select(w => new
+                {
+                    address = w.Address,
+                    city = w.City,
+                    state = w.State,
+                    zip = w.Zip,
+                    country = w.CountryCode,
+                    phone = w.PhoneNumber,
+                    email = w.WarehouseEmail,
+                    name = w.WarehouseName
+                })
+                .FirstOrDefaultAsync();
+
+            if (warehouse == null)
+            {
+                return NotFound();
+            }
+
+            return Json(warehouse);
+        }
     }
 }
