@@ -132,6 +132,12 @@
   <data name="Description" xml:space="preserve">
     <value>Description</value>
   </data>
+  <data name="Height (in)" xml:space="preserve">
+    <value>Height (in)</value>
+  </data>
+  <data name="Length (in)" xml:space="preserve">
+    <value>Length (in)</value>
+  </data>
   <data name="Price" xml:space="preserve">
     <value>Price</value>
   </data>
@@ -140,5 +146,11 @@
   </data>
   <data name="SKU (Stock Keeping Unit)" xml:space="preserve">
     <value>SKU (Stock Keeping Unit)</value>
+  </data>
+  <data name="Weight(lbs) of product" xml:space="preserve">
+    <value>Weight(lbs) of product</value>
+  </data>
+  <data name="Width (in)" xml:space="preserve">
+    <value>Width (in)</value>
   </data>
 </root>

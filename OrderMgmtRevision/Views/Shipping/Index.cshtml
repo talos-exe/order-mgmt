@@ -22,12 +22,12 @@
 <div class="summary-container">
     <div class="summary-item">
         <div class="item-title">
-            Inbound Shipments
+            @Localizer["Inbound Shipments"]
         </div>
         <div class="item-content">
             <div class="label-value-block">
                 <div class="item-label">
-                    Currently Inbound
+                    @Localizer["Currently Inbound"]
                 </div>
                 <div class="item-value">
                     0
@@ -37,12 +37,12 @@
     </div>
     <div class="summary-item">
         <div class="item-title">
-            Outbound Shipments
+            @Localizer["Outbound Shipments"]
         </div>
         <div class="item-content">
             <div class="label-value-block">
                 <div class="item-label">
-                    Shipping to Customers
+                    @Localizer["Shipping to Customers"]
                 </div>
                 <div class="item-value">
                     @ViewBag.ShippingOutbound
@@ -55,10 +55,10 @@
 
 <ul class="nav nav-tabs ms-5 me-5" id="shippingTabs">
     <li class="nav-item">
-        <a class="nav-link active" id="shippingListTab" data-bs-toggle="tab" href="#shippingList">Shipments</a>
+        <a class="nav-link active" id="shippingListTab" data-bs-toggle="tab" href="#shippingList">@Localizer["Shipments"]</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" id="shippingRequestsTab" data-bs-toggle="tab" href="#shippingRequests">Shipping Requests</a>
+        <a class="nav-link" id="shippingRequestsTab" data-bs-toggle="tab" href="#shippingRequests">@Localizer["Shipping Requests"]</a>
     </li>
 </ul>
 
@@ -102,17 +102,17 @@
                     @Localizer["Create Shipping Order"]
                 </button>
                 <button id="btnCancel" class="btn btn-danger btn-sm me-2" data-bs-toggle="modal" disabled>
-                    @Localizer["Cancel"]
+                    @Localizer["Cancel"] 
                 </button>
                 <!-- Search Bar -->
                 @using (Html.BeginForm("Index", "Shipping", FormMethod.Get))
                 {
-                    <input type="text" id="searchBar" class="form-control-sm me-2" name="searchString" value="@ViewBag.CurrentFilter" placeholder="Search by tracking number or name" onkeyup="filterTable()" />
-                    <input type="submit" class="btn btn-primary btn-sm me-2" value="Search" />
+                    <input type="text" id="searchBar" class="form-control-sm me-2" name="searchString" value="@ViewBag.CurrentFilter" placeholder="@Localizer["Search by tracking number or name"]" onkeyup="filterTable()" />
+                    <input type="submit" class="btn btn-primary btn-sm me-2" value=@Localizer["Search"] />
                     <select name="statusFilter" class="form-select-sm me-2" onchange="this.form.submit()">
-                        <option value="">All Shipments</option>
-                        <option value="cancelled" selected="@(ViewBag.StatusFilter == "cancelled")">Cancelled Only</option>
-                        <option value="notcancelled" selected="@(ViewBag.StatusFilter == "notcancelled")">All Except Cancelled</option>
+                        <option value="">@Localizer["All Shipments"]</option>
+                        <option value="cancelled" selected="@(ViewBag.StatusFilter == "cancelled")">@Localizer["Cancelled Only"]</option>
+                        <option value="notcancelled" selected="@(ViewBag.StatusFilter == "notcancelled")">@Localizer["All Except Cancelled"]</option>
                     </select>
                 }
             </div>
@@ -122,8 +122,8 @@
                     <thead class="table-light">
                         <tr>
                             <th><input type="checkbox" id="selectAll" onclick="toggleAll(this);"></th>
-                            <th>Shipment ID</th>
-                            <th>Status</th>
+                            <th>@Localizer["Shipment ID"]"</th>
+                            <th>@Localizer["Status"]"</th>
                             <th>@Html.ActionLink(Localizer["Tracking Number"].Value, "Index", new { sortOrder = ViewBag.TrackingSortParm, currentFilter = ViewBag.CurrentFilter })</th>
                             <th>@Html.ActionLink(Localizer["Name"].Value, "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })</th>
                             <th>@Html.ActionLink(Localizer["Address"].Value, "Index", new { sortOrder = ViewBag.AddressSortParm, currentFilter = ViewBag.CurrentFilter })</th>
@@ -185,7 +185,7 @@
                         else
                         {
                             <tr>
-                                <td colspan="10" class="text-center">No shipments found</td>
+                                <td colspan="10" class="text-center">@Localizer["No shipments found"]"</td>
                             </tr>
                         }
                     </tbody>
@@ -222,7 +222,7 @@
                     </div>
 
                     <div class="ms-3">
-                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                        @Localizer["Page"] @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
                     </div>
                 </div>
             </div>
@@ -231,7 +231,7 @@
 
     <div class="tab-pane fade" id="shippingRequests">
         <div class="ms-5 me-5">
-            <h4>Shipping Requests / Rates</h4>
+            <h4>@Localizer["Shipping Requests / Rates"]</h4>
 
             <div class="table-responsive">
                 <table class="table table-striped table-sm table-hover align-middle" id="shiprequestTable">

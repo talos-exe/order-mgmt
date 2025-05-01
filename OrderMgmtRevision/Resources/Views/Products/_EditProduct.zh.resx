@@ -129,6 +129,9 @@
   <data name="Edit Product" xml:space="preserve">
     <value>编辑产品</value>
   </data>
+  <data name="Edit Product:" xml:space="preserve">
+    <value>编辑产品:</value>
+  </data>
   <data name="Height (in)" xml:space="preserve">
     <value>高度（英寸）</value>
   </data>

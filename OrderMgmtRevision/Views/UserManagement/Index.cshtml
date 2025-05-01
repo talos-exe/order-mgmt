@@ -52,10 +52,10 @@
                 <button id="btnCreate" class="btn btn-primary btn-sm me-2" onclick="openCreateUserPane()">@Localizer["Create"]</button>
                 <button id="btnEdit" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>@Localizer["Edit"]</button>
                 <button id="btnDelete" class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" disabled>@Localizer["Delete"]</button>
-                <!-- Search Bar -->
-                @using (Html.BeginForm("Index", "UserManagement", FormMethod.Get)) {
+                @using (Html.BeginForm("Index", "UserManagement", FormMethod.Get))
+                {
                     <input type="text" id="searchBar" class="form-control-sm me-2" name="searchString" value="@ViewBag.CurrentFilter" onkeyup="filterTable()" />
-                    <input type="submit" class="btn btn-primary btn-sm me-2" value="Search" />
+                    <input type="submit" class="btn btn-primary btn-sm me-2" value="@Localizer["Search"]" />
                 }
             </div>
 
@@ -63,65 +63,39 @@
                 <table class="table table-striped table-sm table-hover align-middle" id="userTable">
                     <thead class="table-light">
                         <tr>
-                            <th>
-                                <input type="checkbox" id="selectAll" onclick="toggleAll(this);">
-                            </th>
+                            <th><input type="checkbox" id="selectAll" onclick="toggleAll(this);"></th>
                             <th>@Html.ActionLink(Localizer["Username"].Value, "Index", new { sortOrder = ViewBag.UserNameSortParm, currentFilter = ViewBag.CurrentFilter })</th>
                             <th>@Html.ActionLink(Localizer["Email"].Value, "Index", new { sortOrder = ViewBag.EmailSortParm, currentFilter = ViewBag.CurrentFilter })</th>
                             <th>@Html.ActionLink(Localizer["Full Name"].Value, "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })</th>
                             <th>@Html.ActionLink(Localizer["ID"].Value, "Index", new { sortOrder = ViewBag.IdSortParm, currentFilter = ViewBag.CurrentFilter })</th>
-                            <th>Role</th>
-                            <th>Confirmed User?</th>
-                            <th>Active User?</th>
-                            <th>More</th>
+                            <th>@Localizer["Role"]</th>
+                            <th>@Localizer["Confirmed User?"]</th>
+                            <th>@Localizer["Active User?"]</th>
+                            <th>@Localizer["More"]</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var user in Model)
                         {
                             <tr onclick="toggleButtons(this)">
-                                <td>
-                                    <input type="checkbox" class="user-checkbox" value="@user.Id" onclick="toggleButtons();">
-                                </td>
+                                <td><input type="checkbox" class="user-checkbox" value="@user.Id" onclick="toggleButtons();"></td>
                                 <td>@Html.DisplayFor(modelItem => user.UserName)</td>
                                 <td>@Html.DisplayFor(modelItem => user.Email)</td>
                                 <td>@Html.DisplayFor(modelItem => user.FullName)</td>
                                 <td>@Html.DisplayFor(modelItem => user.Id)</td>
-                                <td>@if (user.IsAdmin){
-                                    <span>Admin</span>
-                                } else { <span>User</span>}
-                                </td>
-                                <td>
-                                    @if (user.IsConfirmed)
-                                    {
-                                        <span class="badge bg-success">YES</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-danger">NO</span>
-                                    }
-                                </td>
-                                <td>
-                                    @if (user.IsActive)
-                                    {
-                                        <span class="badge bg-success">YES</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-danger">NO</span>
-                                    }
-                                </td>
+                                <td>@(user.IsAdmin ? Localizer["Admin"] : Localizer["User"])</td>
+                                <td><span class="badge @(user.IsConfirmed ? "bg-success" : "bg-danger")">@Localizer[user.IsConfirmed ? "YES" : "NO"]</span></td>
+                                <td><span class="badge @(user.IsActive ? "bg-success" : "bg-danger")">@Localizer[user.IsActive ? "YES" : "NO"]</span></td>
                                 <td>
                                     <a class="btn-sm btn-primary" style="cursor: pointer" onclick="openUserDetailsTab('@user.Id', '@user.UserName')">@Localizer["View Details"]</a>
                                 </td>
                             </tr>
-                            
-                            <!-- Edit User Modal -->
+
                             <div class="modal fade" id="editUserModal-@user.Id" tabindex="-1">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="editUserModalLabel-@user.Id">Edit User</h5>
+                                            <h5 class="modal-title">@Localizer["Edit User"]</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body">
@@ -131,51 +105,28 @@
                                 </div>
                             </div>
 
-                            <!-- Delete User Modal -->
                             <div class="modal fade" id="deleteUserModal-@user.Id" tabindex="-1">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title" id="deleteUserModalLabel-@user.Id">Delete User</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            <h5 class="modal-title">@Localizer["Delete User"]</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <p id="deleteWarning">Are you sure you want to delete the user <strong>@user.UserName</strong>? This action cannot be undone.</p>
+                                            <p>@Localizer["Are you sure you want to delete the user {0}? This action cannot be undone.", user.UserName]</p>
                                             <partial name="_DeleteUser" model="@user" />
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Modals here unchanged -->
                         }
-
-                        @* <div class="modal fade" id="createUserModal" tabindex="-1"> *@
-                        @*     <div class="modal-dialog"> *@
-                        @*         <div class="modal-content"> *@
-                        @*             <div class="modal-header"> *@
-                        @*                 <h5 class="modal-title" id="createUserModal">Create User</h5> *@
-                        @*                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> *@
-                        @*             </div> *@
-                        @*             <div class="modal-body"> *@
-                        @*                 <partial name="_CreateUser" model="new UserViewModel()" /> *@
-                        @*             </div> *@
-                        @*         </div> *@
-                        @*     </div> *@
-                        @* </div> *@
-                        
                     </tbody>
                 </table>
                 <div class="d-flex justify-content-center mt-3">
                     <div>
                         @if (Model.HasPreviousPage)
                         {
-                            <a class="btn btn-secondary btn-sm"
-                               href="@Url.Action("Index", new {
-                               page = Model.PageNumber - 1,
-                               sortOrder = ViewBag.CurrentSort,
-                               currentFilter = ViewBag.CurrentFilter,
-                               activeTab = "userList"
-                           })">&lt;</a>
+                            <a class="btn btn-secondary btn-sm" href="@Url.Action("Index", new { page = Model.PageNumber - 1, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, activeTab = "userList" })">&lt;</a>
                         }
                         else
                         {
@@ -184,22 +135,15 @@
 
                         @if (Model.HasNextPage)
                         {
-                            <a class="btn btn-secondary btn-sm"
-                               href="@Url.Action("Index", new {
-                               page = Model.PageNumber + 1,
-                               sortOrder = ViewBag.CurrentSort,
-                               currentFilter = ViewBag.CurrentFilter,
-                               activeTab = "userList"
-                           })">&gt;</a>
+                            <a class="btn btn-secondary btn-sm" href="@Url.Action("Index", new { page = Model.PageNumber + 1, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, activeTab = "userList" })">&gt;</a>
                         }
                         else
                         {
                             <button class="btn btn-secondary btn-sm" disabled>&gt;</button>
                         }
                     </div>
-
                     <div class="ms-3">
-                        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                        @Localizer["Page {0} of {1}", Model.PageNumber, Model.PageCount]
                     </div>
                 </div>
             </div>
@@ -246,14 +190,7 @@
                     <div>
                         @if (ViewBag.LogsPagedList.HasPreviousPage)
                         {
-                            <a class="btn btn-secondary btn-sm"
-                               href="@Url.Action("Index", new {
-                               logPage = ViewBag.LogsPagedList.PageNumber - 1,
-                               page = Model.PageNumber,
-                               sortOrder = ViewBag.CurrentSort,
-                               currentFilter = ViewBag.CurrentFilter,
-                               activeTab = "userLogs"
-                              })">&lt;</a>
+                            <a class="btn btn-secondary btn-sm" href="@Url.Action("Index", new { logPage = ViewBag.LogsPagedList.PageNumber - 1, page = Model.PageNumber, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, activeTab = "userLogs" })">&lt;</a>
                         }
                         else
                         {
@@ -262,23 +199,15 @@
 
                         @if (ViewBag.LogsPagedList.HasNextPage)
                         {
-                            <a class="btn btn-secondary btn-sm"
-                               href="@Url.Action("Index", new {
-                               logPage = ViewBag.LogsPagedList.PageNumber + 1,
-                               page = Model.PageNumber,
-                               sortOrder = ViewBag.CurrentSort,
-                               currentFilter = ViewBag.CurrentFilter,
-                               activeTab = "userLogs"
-                              })">&gt;</a>
+                            <a class="btn btn-secondary btn-sm" href="@Url.Action("Index", new { logPage = ViewBag.LogsPagedList.PageNumber + 1, page = Model.PageNumber, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, activeTab = "userLogs" })">&gt;</a>
                         }
                         else
                         {
                             <button class="btn btn-secondary btn-sm" disabled>&gt;</button>
                         }
                     </div>
-
                     <div class="ms-3">
-                        Page @(ViewBag.LogsPagedList.PageCount < ViewBag.LogsPagedList.PageNumber ? 0 : ViewBag.LogsPagedList.PageNumber) of @ViewBag.LogsPagedList.PageCount
+                        @Localizer["Page {0} of {1}", ViewBag.LogsPagedList.PageNumber, ViewBag.LogsPagedList.PageCount]
                     </div>
                 </div>
             </div>
@@ -306,6 +235,8 @@
     </div>
 </div>
 
-@section Scripts{<script src="~/js/users.js"></script>}
+@section Scripts {
+    <script src="~/js/users.js"></script>
+}
 
 

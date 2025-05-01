@@ -132,6 +132,9 @@
   <data name="Create" xml:space="preserve">
     <value>创建</value>
   </data>
+  <data name="Create Product" xml:space="preserve">
+    <value>创建产品</value>
+  </data>
   <data name="Created At" xml:space="preserve">
     <value>创建时间</value>
   </data>
@@ -143,6 +146,12 @@
   </data>
   <data name="Edit" xml:space="preserve">
     <value>编辑</value>
+  </data>
+  <data name="Edit Product" xml:space="preserve">
+    <value>编辑产品</value>
+  </data>
+  <data name="Edit Product:" xml:space="preserve">
+    <value>编辑产品:</value>
   </data>
   <data name="More" xml:space="preserve">
     <value>更多</value>

@@ -38,7 +38,6 @@
   <ItemGroup>
     <Folder Include="Migrations\" />
     <Folder Include="Resources\Views\Invoice\" />
-    <Folder Include="Resources\Views\Settings\" />
     <Folder Include="wwwroot\labels\" />
   </ItemGroup>
 

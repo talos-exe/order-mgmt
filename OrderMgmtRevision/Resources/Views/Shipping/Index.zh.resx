@@ -148,7 +148,7 @@
     <value>电话</value>
   </data>
   <data name="Cancel " xml:space="preserve">
-    <value>Cancel</value>
+    <value>取消</value>
   </data>
   <data name="Are you sure you want to cancel shipment" xml:space="preserve">
     <value>您确定要取消货运吗？</value>
@@ -191,5 +191,56 @@
   </data>
   <data name="Shipping" xml:space="preserve">
     <value>运输</value>
+  </data>
+  <data name="No shipments found" xml:space="preserve">
+    <value>未找到运输记录</value>
+  </data>
+  <data name="Shipments" xml:space="preserve">
+    <value>运输记录</value>
+  </data>
+  <data name="Inbound Shipments" xml:space="preserve">
+    <value>入库运输</value>
+  </data>
+  <data name="Currently Inbound" xml:space="preserve">
+    <value>当前入库</value>
+  </data>
+  <data name="Outbound Shipments" xml:space="preserve">
+    <value>出库运输</value>
+  </data>
+  <data name="Shipping to Customers" xml:space="preserve">
+    <value>正在发往客户</value>
+  </data>
+  <data name="Shipping Requests" xml:space="preserve">
+    <value>运输请求</value>
+  </data>
+  <data name="Search by tracking number or name" xml:space="preserve">
+    <value>按追踪号码或姓名搜索</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="All Shipments" xml:space="preserve">
+    <value>所有运输记录</value>
+  </data>
+  <data name="Cancelled Only" xml:space="preserve">
+    <value>仅显示已取消</value>
+  </data>
+  <data name="All Except Cancelled" xml:space="preserve">
+    <value>除取消外全部</value>
+  </data>
+  <data name="Shipping Requests / Rates" xml:space="preserve">
+    <value>运输请求 / 运费</value>
+  </data>
+  <data name="Page" xml:space="preserve">
+    <value>页</value>
+  </data>
+  <data name="Shipment ID" xml:space="preserve">
+    <value>运输编号</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>状态</value>
+  </data>
+  <data name="Create Shipping Request" xml:space="preserve">
+    <value>创建发货请求</value>
   </data>
 </root>

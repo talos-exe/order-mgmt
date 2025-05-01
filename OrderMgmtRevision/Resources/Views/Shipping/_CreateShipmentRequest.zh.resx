@@ -126,6 +126,12 @@
   <data name="Create Shipping Request" xml:space="preserve">
     <value>创建发货请求</value>
   </data>
+  <data name="Height" xml:space="preserve">
+    <value>高度</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>长度</value>
+  </data>
   <data name="Next: Choose Rates" xml:space="preserve">
     <value>下一步：选择运费</value>
   </data>
@@ -170,5 +176,11 @@
   </data>
   <data name="Warehouse" xml:space="preserve">
     <value>仓库</value>
+  </data>
+  <data name="Weight" xml:space="preserve">
+    <value>重量</value>
+  </data>
+  <data name="Width" xml:space="preserve">
+    <value>宽度</value>
   </data>
 </root>

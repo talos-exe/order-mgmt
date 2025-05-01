@@ -117,40 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Amount # in stock" xml:space="preserve">
-    <value>库存数量</value>
+  <data name="Account Invoice" xml:space="preserve">
+    <value>账户发票</value>
   </data>
-  <data name="Cost" xml:space="preserve">
-    <value>成本</value>
+  <data name="Edit Profile" xml:space="preserve">
+    <value>编辑资料</value>
   </data>
-  <data name="Create (button)" xml:space="preserve">
-    <value>创建</value>
+  <data name="Last Login" xml:space="preserve">
+    <value>上次登录</value>
   </data>
-  <data name="Create Product" xml:space="preserve">
-    <value>创建产品</value>
+  <data name="My Account" xml:space="preserve">
+    <value>我的账户</value>
   </data>
-  <data name="Description" xml:space="preserve">
-    <value>描述</value>
+  <data name="Products Added" xml:space="preserve">
+    <value>添加的产品</value>
   </data>
-  <data name="Height (in)" xml:space="preserve">
-    <value>高度（英寸）</value>
+  <data name="Shipments Made" xml:space="preserve">
+    <value>发出的运输</value>
   </data>
-  <data name="Length (in)" xml:space="preserve">
-    <value>长度（英寸）</value>
-  </data>
-  <data name="Price" xml:space="preserve">
-    <value>价格</value>
-  </data>
-  <data name="Product Name" xml:space="preserve">
-    <value>产品名称</value>
-  </data>
-  <data name="SKU (Stock Keeping Unit)" xml:space="preserve">
-    <value>库存单位 (SKU)</value>
-  </data>
-  <data name="Weight(lbs) of product" xml:space="preserve">
-    <value>产品重量（磅）</value>
-  </data>
-  <data name="Width (in)" xml:space="preserve">
-    <value>宽度（英寸）</value>
+  <data name="View Invoices" xml:space="preserve">
+    <value>查看发票</value>
   </data>
 </root>

@@ -117,26 +117,53 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Account Invoice" xml:space="preserve">
+    <value>Account Invoice</value>
+  </data>
   <data name="Action" xml:space="preserve">
     <value>Action</value>
+  </data>
+  <data name="Active User?" xml:space="preserve">
+    <value>Active User?</value>
   </data>
   <data name="Are you sure you want to delete all logs? This action cannot be undone." xml:space="preserve">
     <value>Are you sure you want to delete all logs? This action cannot be undone.</value>
   </data>
+  <data name="Are you sure you want to delete the user {0}? This action cannot be undone." xml:space="preserve">
+    <value>Are you sure you want to delete the user {0}? This action cannot be undone.</value>
+  </data>
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
+  </data>
+  <data name="Clear All Logs" xml:space="preserve">
+    <value>Clear All Logs</value>
   </data>
   <data name="Confirm Log Clearance" xml:space="preserve">
     <value>Confirm Log Clearance</value>
   </data>
+  <data name="Confirmed User?" xml:space="preserve">
+    <value>Confirmed User?</value>
+  </data>
   <data name="Create" xml:space="preserve">
     <value>Create</value>
+  </data>
+  <data name="Create User" xml:space="preserve">
+    <value>Create User</value>
   </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
+  <data name="Delete User" xml:space="preserve">
+    <value>Delete User</value>
+  </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
+  </data>
+  <data name="Edit Profile" xml:space="preserve">
+    <value>Edit Profile</value>
+  </data>
+  <data name="Edit User" xml:space="preserve">
+    <value>Edit User</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
@@ -150,20 +177,44 @@
   <data name="IP Address" xml:space="preserve">
     <value>IP Address</value>
   </data>
+  <data name="Last Login" xml:space="preserve">
+    <value>Last Login</value>
+  </data>
   <data name="Log Id" xml:space="preserve">
     <value>Log Id</value>
+  </data>
+  <data name="More" xml:space="preserve">
+    <value>More</value>
+  </data>
+  <data name="My Account" xml:space="preserve">
+    <value>My Account</value>
   </data>
   <data name="Next" xml:space="preserve">
     <value>Next</value>
   </data>
+  <data name="Page" xml:space="preserve">
+    <value>Page</value>
+  </data>
   <data name="Previous" xml:space="preserve">
     <value>Previous</value>
+  </data>
+  <data name="Products Added" xml:space="preserve">
+    <value>Products Added</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
   </data>
   <data name="Search by Log Id or Username" xml:space="preserve">
     <value>Search by Log Id or Username</value>
   </data>
   <data name="Search by Username" xml:space="preserve">
     <value>Search by Username</value>
+  </data>
+  <data name="Shipments Made" xml:space="preserve">
+    <value>Shipments Made</value>
   </data>
   <data name="Timestamp" xml:space="preserve">
     <value>Timestamp</value>
@@ -182,6 +233,9 @@
   </data>
   <data name="Username" xml:space="preserve">
     <value>Username</value>
+  </data>
+  <data name="View Invoices" xml:space="preserve">
+    <value>View Invoices</value>
   </data>
   <data name="Yes, Clear Logs" xml:space="preserve">
     <value>Yes, Clear Logs</value>
