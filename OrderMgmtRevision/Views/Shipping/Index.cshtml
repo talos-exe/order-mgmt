@@ -20,7 +20,7 @@
 
 
 <div class="summary-container">
-    <div class="summary-item">
+    <div class="summary-item card shadow-sm">
         <div class="item-title">
             @Localizer["Inbound Shipments"]
         </div>
@@ -35,7 +35,7 @@
             </div>
         </div>
     </div>
-    <div class="summary-item">
+    <div class="summary-item card shadow-sm">
         <div class="item-title">
             @Localizer["Outbound Shipments"]
         </div>
@@ -122,8 +122,8 @@
                     <thead class="table-light">
                         <tr>
                             <th><input type="checkbox" id="selectAll" onclick="toggleAll(this);"></th>
-                            <th>@Localizer["Shipment ID"]"</th>
-                            <th>@Localizer["Status"]"</th>
+                            <th>@Localizer["Shipment ID"]</th>
+                            <th>@Localizer["Status"]</th>
                             <th>@Html.ActionLink(Localizer["Tracking Number"].Value, "Index", new { sortOrder = ViewBag.TrackingSortParm, currentFilter = ViewBag.CurrentFilter })</th>
                             <th>@Html.ActionLink(Localizer["Name"].Value, "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })</th>
                             <th>@Html.ActionLink(Localizer["Address"].Value, "Index", new { sortOrder = ViewBag.AddressSortParm, currentFilter = ViewBag.CurrentFilter })</th>
@@ -132,7 +132,6 @@
                             <th>@Html.ActionLink(Localizer["Postal Code"].Value, "Index", new { sortOrder = ViewBag.PostalCodeSortParm, currentFilter = ViewBag.CurrentFilter })</th>
                             <th>@Html.ActionLink(Localizer["Country"].Value, "Index", new { sortOrder = ViewBag.CountrySortParm, currentFilter = ViewBag.CurrentFilter })</th>
                             <th>@Localizer["Phone"]</th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -185,7 +184,7 @@
                         else
                         {
                             <tr>
-                                <td colspan="10" class="text-center">@Localizer["No shipments found"]"</td>
+                                <td colspan="10" class="text-center">@Localizer["No shipments found"]</td>
                             </tr>
                         }
                     </tbody>
