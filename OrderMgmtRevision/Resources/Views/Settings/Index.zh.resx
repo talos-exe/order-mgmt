@@ -120,8 +120,17 @@
   <data name="Account Invoice" xml:space="preserve">
     <value>账户发票</value>
   </data>
+  <data name="Active" xml:space="preserve">
+    <value>积极</value>
+  </data>
+  <data name="Delete your account" xml:space="preserve">
+    <value>删除您的帐户</value>
+  </data>
   <data name="Edit Profile" xml:space="preserve">
     <value>编辑资料</value>
+  </data>
+  <data name="Enable 2FA" xml:space="preserve">
+    <value>启用 2FA</value>
   </data>
   <data name="Last Login" xml:space="preserve">
     <value>上次登录</value>
@@ -131,6 +140,9 @@
   </data>
   <data name="Products Added" xml:space="preserve">
     <value>添加的产品</value>
+  </data>
+  <data name="Rest Password" xml:space="preserve">
+    <value>重置密码</value>
   </data>
   <data name="Shipments Made" xml:space="preserve">
     <value>发出的运输</value>

@@ -117,8 +117,35 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Active Invoices" xml:space="preserve">
+    <value>Active Invoices</value>
+  </data>
+  <data name="Actively Shipped" xml:space="preserve">
+    <value>Actively Shipped</value>
+  </data>
+  <data name="Carrier Name" xml:space="preserve">
+    <value>Carrier Name</value>
+  </data>
+  <data name="Fee" xml:space="preserve">
+    <value>Fee</value>
+  </data>
+  <data name="Invoices" xml:space="preserve">
+    <value>Invoices</value>
+  </data>
   <data name="Last Updated" xml:space="preserve">
     <value>Last Updated</value>
+  </data>
+  <data name="Most Popular Carrier" xml:space="preserve">
+    <value>Most Popular Carrier</value>
+  </data>
+  <data name="Most Shipped Product" xml:space="preserve">
+    <value>Most Shipped Product</value>
+  </data>
+  <data name="Outbound" xml:space="preserve">
+    <value>Outbound</value>
+  </data>
+  <data name="Product" xml:space="preserve">
+    <value>Product</value>
   </data>
   <data name="Products Sold Over Time" xml:space="preserve">
     <value>Products Sold Over Time</value>
@@ -126,7 +153,16 @@
   <data name="Sales ($)" xml:space="preserve">
     <value>Sales ($)</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Shipments Outbound" xml:space="preserve">
+    <value>Shipments Outbound</value>
+  </data>
   <data name="Top Shippers" xml:space="preserve">
     <value>Top Shippers</value>
+  </data>
+  <data name="Total Products" xml:space="preserve">
+    <value>Total Products</value>
   </data>
 </root>

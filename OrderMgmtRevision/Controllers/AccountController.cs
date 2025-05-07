@@ -5,6 +5,7 @@ using OrderMgmtRevision.Services;
 using System.Security.Claims;
 using NuGet.Common;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OrderMgmtRevision.Controllers
 {
@@ -169,8 +170,15 @@ namespace OrderMgmtRevision.Controllers
 
         public IActionResult ForgotPasswordConfirmation() => View();
 
-        public IActionResult ResetPassword(string token, string email) =>
-            View(new ResetPasswordViewModel { Token = token, Email = email });
+        public IActionResult ResetPassword(string token, string email)
+        {
+            if (token == null || email == null)
+            {
+                return NotFound();
+            }
+            return View(new ResetPasswordViewModel { Token = token, Email = email });
+        }
+            
 
         [HttpPost]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
@@ -184,12 +192,13 @@ namespace OrderMgmtRevision.Controllers
 
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
-                return RedirectToAction("ResetPasswordConfirmation");
+                return NotFound();
 
             var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
             if (result.Succeeded)
             {
                 await _logService.LogUserActivityAsync(user.Id, "Password Reset", GetClientIp());
+                TempData["ResetPasswordConfirmation"] = true;
                 return RedirectToAction("ResetPasswordConfirmation");
             }
 
@@ -199,7 +208,14 @@ namespace OrderMgmtRevision.Controllers
             return View(model);
         }
 
-        public IActionResult ResetPasswordConfirmation() => View();
+        public IActionResult ResetPasswordConfirmation()
+        {
+            if (TempData["ResetPasswordConfirmation"] == null)
+            {
+                return NotFound();
+            }
+            return View();
+        }
 
         public async Task<IActionResult> Enable2FA()
         {
@@ -243,6 +259,7 @@ namespace OrderMgmtRevision.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Verify2FA(string code)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -264,6 +281,7 @@ namespace OrderMgmtRevision.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> VerifyEmailCode(string emailCode)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -283,9 +301,131 @@ namespace OrderMgmtRevision.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult TwoFactorEnabled()
         {
             return View();
+        }
+
+        [Authorize]
+        public IActionResult DeleteMyAccount() => View();
+
+        [HttpPost]
+        [ValidateAntiForgeryToken] // Add CSRF protection
+        [Authorize] // Ensures the user is authenticated
+        public async Task<IActionResult> DeleteMyAccount(string password, string confirmDelete)
+        {
+            // Debug verification
+            if (string.IsNullOrEmpty(password))
+            {
+                ModelState.AddModelError("password", "Password is required");
+            }
+
+            bool isConfirmed = confirmDelete == "on";
+            if (!isConfirmed)
+            {
+                ModelState.AddModelError("confirmDelete", "You must check the confirmation box.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(); // Return to the view with validation errors
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                // Add debug info
+                ModelState.AddModelError("", "User not found. Please login again.");
+                return View();
+            }
+
+            // Verify the password is correct
+            var isPasswordValid = await _userManager.CheckPasswordAsync(user, password);
+            if (!isPasswordValid)
+            {
+                ModelState.AddModelError("password", "Incorrect password. Please try again.");
+                return View();
+            }
+
+            try
+            {
+                // Log the account deletion attempt
+                await _logService.LogUserActivityAsync(user.Id, "Account Deletion Requested", GetClientIp());
+
+                // Perform the deletion
+                var result = await _userManager.DeleteAsync(user);
+
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignOutAsync();
+                    TempData["AccountDeleted"] = true;
+                    return RedirectToAction("AccountDeleted", "Account");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Add exception handling
+                ModelState.AddModelError("", $"Error during account deletion: {ex.Message}");
+            }
+
+            return View();
+        }
+
+        public IActionResult AccountDeleted()
+        {
+            if (TempData["AccountDeleted"] == null)
+            {
+                return NotFound();
+            }
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult ChangePassword() => View();
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+
+            if (result.Succeeded)
+            {
+                // Update the LastPasswordChange timestamp
+                user.LastPasswordChange = DateTime.UtcNow;
+                await _userManager.UpdateAsync(user);
+
+                // Log the password change
+                await _logService.LogUserActivityAsync(user.Id, "Password Changed", GetClientIp());
+
+                // Show success message
+                TempData["SuccessMessage"] = "Your password has been changed successfully.";
+                return RedirectToAction("Index", "Settings");
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+
+            return View(model);
         }
 
         public IActionResult Index()

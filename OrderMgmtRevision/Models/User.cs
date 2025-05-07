@@ -26,6 +26,11 @@ public class User : IdentityUser
 
     public bool IsAdmin {  get; set; }
 
+    public int? ProductsActive { get; set; } = 0;
+    public int? ProductsTotal { get; set; } = 0;
+    public int? ShipmentsActive { get; set; } = 0;
+    public int? ShipmentsTotal { get; set; } = 0;
+
     public List<UserLog>? Logs { get; set; } = new List<UserLog>();
 
     public List<UserInvoice> UserInvoices { get; set; }

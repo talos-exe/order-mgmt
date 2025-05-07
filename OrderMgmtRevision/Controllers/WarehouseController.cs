@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OrderMgmtRevision.Data;
 using OrderMgmtRevision.Models;
+using OrderMgmtRevision.Services;
+using Stripe;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace OrderMgmtRevision.Controllers
@@ -11,9 +14,13 @@ namespace OrderMgmtRevision.Controllers
     public class WarehouseController : Controller
     {
         private readonly AppDbContext _context;
-        public WarehouseController(AppDbContext context)
+        private readonly UserManager<User> _userManager;
+        private readonly ILogService _logService;
+        public WarehouseController(AppDbContext context, UserManager<User> userManager, ILogService logService)
         {
             _context = context;
+            _userManager = userManager;
+            _logService = logService;
         }
 
         public async Task<IActionResult> Index()
@@ -52,9 +59,31 @@ namespace OrderMgmtRevision.Controllers
             return View();
         }
 
+        private async Task<bool> IsUserAdmin()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return false;
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+            return roles.Contains("Admin");
+        }
+
+        private string GetClientIp()
+        {
+            return HttpContext.Connection.RemoteIpAddress?.ToString();
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> CreateWorkOrder(WorkOrder workOrder)
         {
+            var user = await _userManager.GetUserAsync(User);
+            string userName = user?.UserName ?? "Unknown";
+            bool isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+
             ViewBag.WarehouseId = workOrder.WarehouseId;
             if (!ModelState.IsValid)
             {
@@ -65,6 +94,11 @@ namespace OrderMgmtRevision.Controllers
                      ErrorMessages = x.Value.Errors.Select(e => e.ErrorMessage).ToList()
                  })
                  .ToList();
+
+                if (double.IsNaN(workOrder.Fee))
+                {
+                    ModelState.AddModelError("Fee", "Fee cannot be text.");
+                }
 
                 // Create a list to store formatted error messages
                 var errorMessages = new List<string>();
@@ -86,18 +120,25 @@ namespace OrderMgmtRevision.Controllers
                 TempData["Errors"] = errorMessages;
                 return View(workOrder);
             }
+            workOrder.CreatedBy = userName;
 
             _context.WorkOrders.Add(workOrder);
             await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "New workorder has been created.";
+            await _logService.LogUserActivityAsync(user.Id, $"New workorder {workOrder.Id} has been created.", GetClientIp());
 
             return RedirectToAction("ViewWorkOrders", new { warehouseId = workOrder.WarehouseId });
         }
 
         public async Task<IActionResult> ViewWorkOrders(int warehouseId)
         {
+            var user = await _userManager.GetUserAsync(User);
+            string userName = user?.UserName ?? "Unknown";
+            bool isAdmin = await _userManager.IsInRoleAsync(user, "Admin");
+
             var workOrders = await _context.WorkOrders
                 .Include(w => w.Warehouse)
-                .Where(w => w.WarehouseId == warehouseId)
+                .Where(w => w.WarehouseId == warehouseId && w.CreatedBy == user.UserName)
                 .ToListAsync();
 
             ViewBag.WarehouseName = (await _context.Warehouses.FindAsync(warehouseId))?.WarehouseName;

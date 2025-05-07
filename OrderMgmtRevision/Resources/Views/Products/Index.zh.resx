@@ -171,6 +171,9 @@
   <data name="Ready To Be Shipped" xml:space="preserve">
     <value>待发货</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>搜索</value>
+  </data>
   <data name="Search by SKU" xml:space="preserve">
     <value>按 SKU 搜索</value>
   </data>

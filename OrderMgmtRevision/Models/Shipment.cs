@@ -49,7 +49,7 @@ namespace OrderMgmtRevision.Models
 
         public string CreatedBy { get; set; } = "System";
 
-        public ICollection<ShipmentStatusHistory> StatusHistory {  get; set; }
+        public List<ShipmentStatusHistory> ShipmentLogs {  get; set; }
 
 
     }

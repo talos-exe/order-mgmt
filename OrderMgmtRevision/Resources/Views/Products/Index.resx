@@ -171,6 +171,9 @@
   <data name="Ready To Be Shipped" xml:space="preserve">
     <value>Ready To Be Shipped</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
   <data name="Search by SKU" xml:space="preserve">
     <value>Search by SKU</value>
   </data>

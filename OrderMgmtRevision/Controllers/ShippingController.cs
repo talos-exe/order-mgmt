@@ -40,7 +40,7 @@ namespace OrderMgmtRevision.Controllers
             _logService = logService;
         }
 
-        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, string statusFilter, int? page)
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, string statusFilter, int? page, int? logPage)
         {
             var user = await _userManager.GetUserAsync(User);
             string userName = user?.UserName ?? "Unknown";
@@ -49,6 +49,7 @@ namespace OrderMgmtRevision.Controllers
 
             ViewBag.CurrentSort = sortOrder;
             ViewBag.StatusFilter = statusFilter;
+            ViewBag.IDSortParm = sortOrder == "ID" ? "id_desc" : "ID";
             ViewBag.NameSortParm = string.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewBag.TrackingSortParm = sortOrder == "Tracking" ? "tracking_desc" : "Tracking";
             ViewBag.AddressSortParm = sortOrder == "Address" ? "address_desc" : "Address";
@@ -75,6 +76,7 @@ namespace OrderMgmtRevision.Controllers
                 .Include(s => s.ShippingRequest) // Include the shippingrequest
                 .Include(s => s.Label) // Include shipping label details
                 .Include(s => s.Tracking) // Include tracking details
+                .Include(s => s.ShipmentLogs) //Include logs
                 .AsQueryable();
 
             if (!isAdmin)
@@ -85,6 +87,7 @@ namespace OrderMgmtRevision.Controllers
             if (!string.IsNullOrEmpty(searchString))
             {
                 shipmentQuery = shipmentQuery.Where(s =>
+                s.ShipmentID.ToString().Contains(searchString) || 
                 s.ShipmentName.Contains(searchString) ||
                 s.TrackingNumber.Contains(searchString) ||
                 s.ShippingRequest.ToStreet.Contains(searchString) ||
@@ -106,6 +109,12 @@ namespace OrderMgmtRevision.Controllers
             // Sorting
             switch (sortOrder)
             {
+                case "ID":
+                    shipmentQuery = shipmentQuery.OrderBy(s => s.ShipmentID);
+                    break;
+                case "id_desc":
+                    shipmentQuery = shipmentQuery.OrderByDescending(s => s.ShipmentID);
+                    break;
                 case "name_desc":
                     shipmentQuery = shipmentQuery.OrderByDescending(s => s.ShipmentName);
                     break;
@@ -146,7 +155,7 @@ namespace OrderMgmtRevision.Controllers
                     shipmentQuery = shipmentQuery.OrderByDescending(s => s.ShippingRequest.ToZip);
                     break;
                 default:
-                    shipmentQuery = shipmentQuery.OrderBy(s => s.ShipmentName);
+                    shipmentQuery = shipmentQuery.OrderBy(s => s.ShipmentID);
                     break;
             }
 
@@ -164,13 +173,24 @@ namespace OrderMgmtRevision.Controllers
                 State = s.ShippingRequest?.ToState,
                 PhoneNumber = s.ShippingRequest?.ToPhone,
                 PostalCode = s.ShippingRequest?.ToZip,
-                Status = s.Status
+                Status = s.Status,
+                ShipmentLogs = s.ShipmentLogs ?? new List<ShipmentStatusHistory>()
             }).ToList();
 
-            int pageSize = 15;
-            int pageNumber = (page ?? 1);
+            var shipmentLogsList = shipmentViewModels.SelectMany(s => s.ShipmentLogs)
+                .OrderByDescending(s => s.Timestamp)
+                .ToList();
 
-            ViewBag.ShippingOutbound = await shipmentQuery.CountAsync();
+            int pageSize = 15;
+            int shipmentLogPageSize = 20;
+            int pageNumber = (page ?? 1);
+            int shipmentLogPageNumber = (logPage ?? 1);
+
+            ViewBag.ShippingOutbound = await shipmentQuery.Where(s => s.CreatedBy == userName && s.Status == "CREATED")
+                                            .Distinct()
+                                            .CountAsync();
+
+            ViewBag.ShipmentLogs = shipmentLogsList.ToPagedList(shipmentLogPageNumber, shipmentLogPageSize);
 
             return View(shipmentViewModels.ToPagedList(pageNumber, pageSize));
         }
@@ -505,6 +525,22 @@ namespace OrderMgmtRevision.Controllers
                         user.AccountBalance += costInCents;
 
                         _context.Add(invoice);
+
+                        var shipmentLog = new ShipmentStatusHistory 
+                        { 
+                            ShipmentID = shipment.ShipmentID,
+                            Shipment = shipment,
+                            Status = "CREATED",
+                            Note = "Created new shipment.",
+                            Location = "Currently at " + shipment.SourceWarehouse.Address,
+                            Timestamp = DateTime.UtcNow
+                        };
+
+                        _context.Add(shipmentLog);
+
+                        user.ShipmentsActive++;
+                        user.ShipmentsTotal++;
+
                         int saveResult = await _context.SaveChangesAsync();
 
                         if (saveResult > 0)
@@ -570,7 +606,8 @@ namespace OrderMgmtRevision.Controllers
                     ShippingRequest = s.ShippingRequest,
                     Label = s.Label,
                     GeneratedAt = s.GeneratedAt,
-                    UpdatedAt = s.UpdatedAt
+                    UpdatedAt = s.UpdatedAt,
+                    CreatedBy = s.CreatedBy
                 })
                 .FirstOrDefaultAsync();
 
@@ -624,6 +661,16 @@ namespace OrderMgmtRevision.Controllers
                 shipment.Status = "CANCELLED";
                 shipment.Tracking.Status = "CANCELLED";
                 shipment.Tracking.StatusDate = DateTime.UtcNow.ToString("yyy-MM-ddTHH:mm:ssZ");
+                var shipmentLog = new ShipmentStatusHistory
+                {
+                    ShipmentID = shipment.ShipmentID,
+                    Shipment = shipment,
+                    Status = "CANCELLED",
+                    Note = "Cancelled shipment " + shipment.ShipmentID,
+                    Location = "Cancelled.",
+                    Timestamp = DateTime.UtcNow
+                };
+
 
                 var invoice = await _context.UserInvoices
                 .FirstOrDefaultAsync(i => i.Shipment.ShipmentID == shipment.ShipmentID && !i.IsPaid);
@@ -636,6 +683,8 @@ namespace OrderMgmtRevision.Controllers
                 }
 
                 _context.Shipments.Update(shipment);
+                _context.Add(shipmentLog);
+                user.ShipmentsActive--;
                 await _context.SaveChangesAsync();
                 TempData["SuccessMessage"] = "Shipment cancelled successfully. The invoice generated for this shipment has been refunded, and your account is no longer charged.";
                 await _logService.LogUserActivityAsync(userId, $"Shipment (ID: {shipment.ShipmentID}) cancelled successfully. Invoice refunded.", GetClientIp());

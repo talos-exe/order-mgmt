@@ -16,5 +16,6 @@
         public string? Status { get; set; } = "UNKNOWN";
 
         public Shipment Shipment { get; set; } = new Shipment();
+        public List<ShipmentStatusHistory> ShipmentLogs { get; set; }
     }
 }

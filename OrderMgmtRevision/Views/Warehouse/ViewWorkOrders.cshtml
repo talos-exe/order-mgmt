@@ -5,8 +5,19 @@
     ViewData["Title"] = Localizer["Work Orders"];
 }
 
-<h2>@Localizer["Work Orders for"] @ViewBag.WarehouseName</h2>
 
+
+<div class="ms-5 me-5 mt-3">
+    <div class="d-flex justify-content-between mb-3">
+        <h2>@Localizer["Work Orders for"] @ViewBag.WarehouseName</h2>
+    </div>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show ms-5 me-5" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
 <table class="table table-striped">
     <thead>
         <tr>
@@ -14,6 +25,7 @@
             <th>@Localizer["Description"]</th>
             <th>@Localizer["Type"]</th>
             <th>@Localizer["Created At"]</th>
+            <th>@Localizer["Fee"]</th>
         </tr>
     </thead>
     <tbody>
@@ -32,8 +44,10 @@
                     <td>@order.Description</td>
                     <td>@order.Type</td>
                     <td>@order.CreatedAt.ToString("g")</td>
+                    <td>$@order.Fee</td>
                 </tr>
             }
         }
     </tbody>
 </table>
+</div>

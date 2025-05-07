@@ -120,8 +120,17 @@
   <data name="Account Invoice" xml:space="preserve">
     <value>Account Invoice</value>
   </data>
+  <data name="Active" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="Delete your account" xml:space="preserve">
+    <value>Delete your account</value>
+  </data>
   <data name="Edit Profile" xml:space="preserve">
     <value>Edit Profile</value>
+  </data>
+  <data name="Enable 2FA" xml:space="preserve">
+    <value>Enable 2FA</value>
   </data>
   <data name="Last Login" xml:space="preserve">
     <value>Last Login</value>
@@ -131,6 +140,9 @@
   </data>
   <data name="Products Added" xml:space="preserve">
     <value>Products Added</value>
+  </data>
+  <data name="Rest Password" xml:space="preserve">
+    <value>Reset Password</value>
   </data>
   <data name="Shipments Made" xml:space="preserve">
     <value>Shipments Made</value>

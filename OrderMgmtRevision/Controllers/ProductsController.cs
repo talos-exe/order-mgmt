@@ -234,6 +234,9 @@ namespace OrderMgmtRevision.Controllers
                 ShipAmount = 0
             };
 
+            user.ProductsActive++;
+            user.ProductsTotal++;
+
             // Create errors and post
 
             try
@@ -359,6 +362,8 @@ namespace OrderMgmtRevision.Controllers
 
                 string productName = product.ProductName;
                 string productSKU = product.SKU;
+
+                user.ProductsActive--;
 
                 _dbContext.Products.Remove(product);
                 await _dbContext.SaveChangesAsync();

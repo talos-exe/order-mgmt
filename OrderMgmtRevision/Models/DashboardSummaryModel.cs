@@ -7,5 +7,5 @@ public class SummaryItem
 public class LabelValue
 {
     public string Label { get; set; }
-    public int Value { get; set; }
+    public string Value { get; set; }
 }

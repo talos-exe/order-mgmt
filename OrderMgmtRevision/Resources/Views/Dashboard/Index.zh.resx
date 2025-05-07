@@ -117,8 +117,35 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Active Invoices" xml:space="preserve">
+    <value>有效发票</value>
+  </data>
+  <data name="Actively Shipped" xml:space="preserve">
+    <value>主动发货</value>
+  </data>
+  <data name="Carrier Name" xml:space="preserve">
+    <value>运营商名称</value>
+  </data>
+  <data name="Fee" xml:space="preserve">
+    <value>费</value>
+  </data>
+  <data name="Invoices" xml:space="preserve">
+    <value>发票</value>
+  </data>
   <data name="Last Updated" xml:space="preserve">
     <value>最近更新</value>
+  </data>
+  <data name="Most Popular Carrier" xml:space="preserve">
+    <value>最受欢迎的运营商</value>
+  </data>
+  <data name="Most Shipped Product" xml:space="preserve">
+    <value>出货量最大的产品</value>
+  </data>
+  <data name="Outbound" xml:space="preserve">
+    <value>出境</value>
+  </data>
+  <data name="Product" xml:space="preserve">
+    <value>产品</value>
   </data>
   <data name="Products Sold Over Time" xml:space="preserve">
     <value>产品销售趋势</value>
@@ -126,7 +153,16 @@
   <data name="Sales ($)" xml:space="preserve">
     <value>销售额（$）</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="Shipments Outbound" xml:space="preserve">
+    <value>出库货物</value>
+  </data>
   <data name="Top Shippers" xml:space="preserve">
     <value>主要承运商</value>
+  </data>
+  <data name="Total Products" xml:space="preserve">
+    <value>产品总数</value>
   </data>
 </root>

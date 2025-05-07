@@ -15,7 +15,7 @@ namespace OrderMgmtRevision.Data
         public DbSet<Inventory> InventoryAll { get; set; }
         public DbSet<Shipment> Shipments { get; set; }
         public DbSet<UserLog> UserLogs { get; set; }
-        public DbSet<ShipmentStatusHistory> ShipmentStatusHistories { get; set; }
+        public DbSet<ShipmentStatusHistory> ShipmentLogs { get; set; }
         public DbSet<WorkOrder> WorkOrders { get; set; }
         public DbSet<UserInvoice> UserInvoices { get; set; }
 
@@ -56,7 +56,7 @@ namespace OrderMgmtRevision.Data
             });
 
             modelBuilder.Entity<Shipment>()
-                .HasMany(s => s.StatusHistory)
+                .HasMany(s => s.ShipmentLogs)
                 .WithOne(h => h.Shipment)
                 .HasForeignKey(h => h.ShipmentID)
                 .OnDelete(DeleteBehavior.Cascade);
